@@ -3,33 +3,57 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Sakkola</title>
+    <title>@ViewData["Title"]Mercado Sakkola</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Sakkola.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="shortcut icon" href="./img/Logo-White.png" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Sakkola</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+        <div class="header-sakkola py-2 text-white">
+            <div class="container d-flex align-items-center justify-content-between">
+                <!--logo-->
+                <a class="navar-brand text-white fw-bold fs-3 me-3" asp-area="" asp-controller="home" asp-action="Index">
+                    <img src="./img/Logo-Escrito-White.png" class="logo-header"/>
+                </a>
+                <!-- barra de pesquisovist -->
+                <form class="flex-grow-1 mx-4" asp-controller="futuros-prods" aps-action="futuro-buscar" method="get">
+                    <div class="input-group"
+                        <input type="search" class="form-control rounded-pill px-3 pe-5" placeholder="buscar produtos" name="search"/>
+                        <button class="btn btn-search-icon position-absolute end-0 top-50 translate-middle-y z-3 border-0 bg-transparent" type="submit">
+                            <i class="bi bi-search text-danger"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="d-flex align-items-center gap-3 fs-4">
+                    <a asp-controller="carrinho" asp-action="Index" class="text-white">
+                        <i class="bi bi-cart3"></i>
+                    </a>
+                    <a asp-controller="continha" asp-action="login" class="text-white">
+                        <i class="bi bi-person-circle"></i>
+                    </a>
                 </div>
             </div>
+        </div>
+        <nav class="header-sakkola-2 py-2">
+            <div class="container d-flex justify-content-end">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-0 fs-6 fw-semibold" asp-controller="Home" asp-action="Index">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-0 fs-6 fw-semibold">Categorias</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-0 fs-6 fw-semibold" asp-controller="promo" asp-action="NataLinda">Promoções</a>
+                    </li>
+                </ul>
+            </div>
         </nav>
+
     </header>
     <div class="container">
         <main role="main" class="pb-3">

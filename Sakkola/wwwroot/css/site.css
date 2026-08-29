@@ -1,3 +1,14 @@
+:root {
+    --olho-maconhado: #F21F05;
+    --batom-de-paty: #F2053B;
+    --verdinha: #188B12;
+    --menstruacao: #C80C0C;
+    --proletariado: #000000;
+    --burgues-safadote: #ffffff;
+    --suquinho-de-laranja: #FF7843;
+    --vulva-da-estelar: #F24806;
+}
+
 html {
   font-size: 14px;
 }
@@ -20,7 +31,32 @@ html {
 body {
   margin-bottom: 60px;
 }
+.header-sakkola{
+    background-color: var(--olho-maconhado);
+}
+.header-sakkola-2 {
+    background-color: var(--menstruacao);
+}
 
+/* bordinha redondinha barra de busquinha */
+.input-group .form-control {
+    height: 42px;
+    border-radius: 50rem !important;
+    border: none;
+}
+.input-group .form-control:focus {
+    cursor: pointer;
+}
+
+/* carrinho e perfil */
+.header-nav .nav-link:hover {
+    text-decoration: underline;
+}
+.logo-header {
+    max-height: 45px; /* altura de acordo com a logo */
+    width: auto;
+    display: block;
+}
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);
   text-align: end;

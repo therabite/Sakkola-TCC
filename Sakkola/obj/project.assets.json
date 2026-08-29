@@ -8,23 +8,23 @@
     "net10.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Jucy\\.nuget\\packages\\": {},
+    "C:\\Users\\Notebook-PC\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Jucy\\source\\repos\\Sakkola\\Sakkola\\Sakkola.csproj",
+      "projectUniqueName": "C:\\Users\\Notebook-PC\\source\\repos\\Sakkola-TCC\\Sakkola\\Sakkola.csproj",
       "projectName": "Sakkola",
-      "projectPath": "C:\\Users\\Jucy\\source\\repos\\Sakkola\\Sakkola\\Sakkola.csproj",
-      "packagesPath": "C:\\Users\\Jucy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Jucy\\source\\repos\\Sakkola\\Sakkola\\obj\\",
+      "projectPath": "C:\\Users\\Notebook-PC\\source\\repos\\Sakkola-TCC\\Sakkola\\Sakkola.csproj",
+      "packagesPath": "C:\\Users\\Notebook-PC\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Notebook-PC\\source\\repos\\Sakkola-TCC\\Sakkola\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Jucy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Notebook-PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
