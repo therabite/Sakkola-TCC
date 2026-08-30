@@ -14,21 +14,21 @@
 <body>
     <header>
         <div class="header-sakkola py-2 text-white">
-            <div class="container d-flex align-items-center justify-content-between">
+            <div class="py-2 d-flex align-items-center justify-content-between mx-4">
                 <!--logo-->
                 <a class="navar-brand text-white fw-bold fs-3 me-3" asp-area="" asp-controller="home" asp-action="Index">
-                    <img src="./img/Logo-Escrito-White.png" class="logo-header"/>
+                    <img src="./img/Logo-Escrito-White.png" class="logo-header ms-0 justify-content-start"/>
                 </a>
                 <!-- barra de pesquisovist -->
-                <form class="flex-grow-1 mx-4" asp-controller="futuros-prods" aps-action="futuro-buscar" method="get">
-                    <div class="input-group"
+                <form class="flex-grow-1 mx-5" asp-controller="futuros-prods" aps-action="futuro-buscar" method="get">
+                    <div class="input-group">
                         <input type="search" class="form-control rounded-pill px-3 pe-5" placeholder="buscar produtos" name="search"/>
                         <button class="btn btn-search-icon position-absolute end-0 top-50 translate-middle-y z-3 border-0 bg-transparent" type="submit">
                             <i class="bi bi-search text-danger"></i>
                         </button>
                     </div>
                 </form>
-                <div class="d-flex align-items-center gap-3 fs-4">
+                <div class="ms-5 justify-content-end d-flex align-items-center gap-3 fs-4">
                     <a asp-controller="carrinho" asp-action="Index" class="text-white">
                         <i class="bi bi-cart3"></i>
                     </a>
@@ -38,17 +38,17 @@
                 </div>
             </div>
         </div>
-        <nav class="header-sakkola-2 py-2">
-            <div class="container d-flex justify-content-end">
-                <ul class="nav">
+        <nav class="header-sakkola-2">
+            <div class="me-0 gap-0 container d-flex justify-content-end">
+                <ul class="nav links-font-header py-1 gap-2">
                     <li class="nav-item">
-                        <a class="nav-link text-white py-0 fs-6 fw-semibold" asp-controller="Home" asp-action="Index">Início</a>
+                        <a class="nav-link text-white py-0 px-1 fw-semibold" asp-controller="Home" asp-action="Index">Início</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white py-0 fs-6 fw-semibold">Categorias</a>
+                        <a class="nav-link text-white py-0 px-1 fw-semibold">Categorias</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white py-0 fs-6 fw-semibold" asp-controller="promo" asp-action="NataLinda">Promoções</a>
+                        <a class="nav-link text-white py-0 px-1 fw-semibold" asp-controller="promo" asp-action="NataLinda">Promoções</a>
                     </li>
                 </ul>
             </div>
@@ -61,10 +61,36 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Sakkola - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="mb-0 pb-0 header-sakkola footer">
+        <div class="d-flex align-items-center justify-content-between mx-4">
+            <!--logo footer-->
+            <a class="navar-brand text-white fw-bold me-3" asp-area="" asp-controller="home" asp-action="Index">
+                <img src="./img/Logo-Escrito-White.png" class="logo-footer ms-0 justify-content-start" />
+            </a>
+            <div class="ms-5 gap-4 justify-content-end d-flex align-items-center gap-3 fs-5">
+                <a asp-controller="carrinho" asp-action="Index" class="text-white">
+                    <i class="bi bi-geo-alt"></i>
+                </a>
+                <a asp-controller="continha" asp-action="login" class="text-white">
+                    <i class="bi bi-telephone"></i>
+                </a>
+                <a asp-controller="continha" asp-action="login" class="text-white">
+                    <i class="bi bi-instagram"></i>
+                </a>
+            </div>
         </div>
+        <nav class="footer-nav d-flex align-items-center justify-content-center header-sakkola-2 text-white">
+            <div class="container d-flex justify-content-center">
+                <ul class="nav">
+                    <li>
+                        <a class="font-footer nav-link text-white p-0 opacity-75">&copy; 2026 Copyright</a>
+                    </li>
+                    <li>
+                        <a class="font-footer nav-link text-white py-0">Sakkola.com</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

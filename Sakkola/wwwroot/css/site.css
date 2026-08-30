@@ -47,19 +47,46 @@ body {
 .input-group .form-control:focus {
     cursor: pointer;
 }
-
-/* carrinho e perfil */
-.header-nav .nav-link:hover {
-    text-decoration: underline;
+.links-font-header {
+    font-size: 16px;
+    margin: 0;
 }
+.links-font-header .nav-link {
+   padding-left: 4px;
+   padding-right: 4px;
+}
+
 .logo-header {
     max-height: 45px; /* altura de acordo com a logo */
     width: auto;
     display: block;
 }
+.logo-footer {
+    max-height: 35px; /* altura de acordo com a logo */
+    width: auto;
+    display: block;
+}
+/* faixa vermelha */
+.footer-nav {
+    height: 20px;
+    min-height: 20px;
+    max-height: 20px;
+    padding: 0;
+    margin: 0;
+ 
+    overflow: hidden;
+}
+/* link copyright*/
+.font-footer {
+    font-size: 0.75rem;
+    line-height: 1;
+    padding: 8px;
+    margin: 0;
+}
+
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+    color: var(--bs-secondary-color);
+    text-align: end;
 }
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
