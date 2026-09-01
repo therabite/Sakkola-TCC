@@ -66,6 +66,19 @@ body {
     width: auto;
     display: block;
 }
+.banner-container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow: hidden;
+}
+.banner-full {
+    width:100%;
+    height:auto;
+    display:block;
+    object-fit:cover; /*garante o tamanho da imagem sem distorce-la*/
+}
+
 /* faixa vermelha */
 .footer-nav {
     height: 20px;

@@ -1,3 +1,4 @@
+C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\wwwroot\img\Logo-White.png
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\favicon.ico
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\js\site.js
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css

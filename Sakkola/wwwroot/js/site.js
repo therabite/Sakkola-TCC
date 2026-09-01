@@ -1,4 +1,12 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+﻿document.addEventListener("DOMContentLoaded", function () {
+    var myElement = document.getElementById('bannerSakkola');
+    if (typeof bootstrap !== 'undefined') {
+        var myCarousel = new bootstrap.Carousel(myElement, {
+            interval: 3000,
+            ride: 'carousel'
+        });
+        myCarousel.cycle();
+    } else {
+        console.error("A biblioteca do Bootstrap não foi encontrada.");
+    }
+});
