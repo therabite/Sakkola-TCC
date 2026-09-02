@@ -1,6 +1,6 @@
 :root {
     --olho-maconhado: #F21F05;
-    --batom-de-paty: #F2053B;
+    --batom-de-paty: #FF5C5C;
     --verdinha: #188B12;
     --menstruacao: #C80C0C;
     --proletariado: #000000;
@@ -73,12 +73,19 @@ body {
     overflow: hidden;
 }
 .banner-full {
-    width:100%;
+    width:100%; 
     height:auto;
     display:block;
     object-fit:cover; /*garante o tamanho da imagem sem distorce-la*/
 }
-
+.div-da-linha h2 {
+    white-space: nowrap;
+}
+.div-da-linha .linha{
+    flex-grow:1;
+    height:2px;
+    background-color: var(--proletariado);
+}
 /* faixa vermelha */
 .footer-nav {
     height: 20px;
@@ -86,7 +93,6 @@ body {
     max-height: 20px;
     padding: 0;
     margin: 0;
- 
     overflow: hidden;
 }
 /* link copyright*/
