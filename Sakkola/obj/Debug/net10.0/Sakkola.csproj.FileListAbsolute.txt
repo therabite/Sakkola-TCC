@@ -122,7 +122,6 @@ C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\scopedcss\Views\Sha
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\scopedcss\bundle\Sakkola.styles.css
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\scopedcss\projectbundle\Sakkola.bundle.scp.css
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\compressed\mx8elg753c-{0}-61n19gt1b8-61n19gt1b8.gz
-C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\compressed\739tjhueeb-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\compressed\xlfv9xh48r-{0}-bqjiyaj88i-bqjiyaj88i.gz
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\compressed\w8yv29tu1k-{0}-c2jlpeoesf-c2jlpeoesf.gz
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\compressed\nj6rjwl3ve-{0}-erw9l3u2r3-erw9l3u2r3.gz
@@ -195,7 +194,6 @@ C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\refint\Sakkola.dll
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\Sakkola.pdb
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\Sakkola.genruntimeconfig.cache
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\ref\Sakkola.dll
-C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\compressed\ro9sj7835j-{0}-iidarx4asi-iidarx4asi.gz
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\bin\Debug\net10.0\appsettings.Development.json
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\bin\Debug\net10.0\appsettings.json
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\bin\Debug\net10.0\Sakkola.staticwebassets.runtime.json
@@ -295,3 +293,5 @@ C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\Sakkola.genrun
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\ref\Sakkola.dll
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\compressed\ro9sj7835j-{0}-bvqhxxl4lh-bvqhxxl4lh.gz
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\compressed\739tjhueeb-{0}-ic16xfdud8-ic16xfdud8.gz
+C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\compressed\739tjhueeb-{0}-ic16xfdud8-ic16xfdud8.gz
+C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\compressed\ro9sj7835j-{0}-krgdvabney-krgdvabney.gz
