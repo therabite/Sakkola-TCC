@@ -291,7 +291,8 @@ C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\refint\Sakkola
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\Sakkola.pdb
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\Sakkola.genruntimeconfig.cache
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\ref\Sakkola.dll
-C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\compressed\ro9sj7835j-{0}-bvqhxxl4lh-bvqhxxl4lh.gz
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\compressed\739tjhueeb-{0}-ic16xfdud8-ic16xfdud8.gz
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\compressed\739tjhueeb-{0}-ic16xfdud8-ic16xfdud8.gz
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\compressed\ro9sj7835j-{0}-krgdvabney-krgdvabney.gz
+C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\compressed\ro9sj7835j-{0}-krgdvabney-krgdvabney.gz
+C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\Sakkola.csproj.AssemblyReference.cache
