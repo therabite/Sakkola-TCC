@@ -17,7 +17,9 @@ namespace Sakkola.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login() => View();
+        public IActionResult Login(){ 
+           return View(); 
+        }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginClient model)
@@ -30,7 +32,7 @@ namespace Sakkola.Controllers
                 ModelState.AddModelError(string.Empty, "email ou senha inválidos");
                 return View(model);
             }
-
+            
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
@@ -73,11 +75,6 @@ namespace Sakkola.Controllers
         {
             await HttpContext.SignOutAsync("CookieAuth");
             return RedirectToAction("Index", "Home");
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
     }
 }
