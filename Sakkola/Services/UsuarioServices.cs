@@ -28,7 +28,8 @@ namespace Sakkola.Services
                 email = model.email,
                 cpf = model.cpf,
                 rg = model.rg,
-                telefone = model.telefone
+                telefone = model.telefone,
+                dataNasc = model.dataNasc
             };
 
             cliente.senha = _hasher.HashPassword(cliente, model.senha);

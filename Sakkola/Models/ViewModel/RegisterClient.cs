@@ -33,7 +33,6 @@ namespace Sakkola.Models.ViewModel
         /// 
         /// </summary>
         [Required(ErrorMessage = "A data de nascimentos é obrigatório para cadastro.")]
-        [DataType(DataType.Date)]
         public DateOnly dataNasc { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         ///
         ///

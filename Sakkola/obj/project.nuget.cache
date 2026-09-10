@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "DNrDo95ZBEk=",
-  "success": true,
+  "dgSpecHash": "sicn9YrVM1c=",
+  "success": false,
   "projectFilePath": "C:\\Users\\3mtec\\source\\repos\\Sakkola-TCC\\Sakkola\\Sakkola.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\3mtec\\.nuget\\packages\\bouncycastle.cryptography\\2.6.2\\bouncycastle.cryptography.2.6.2.nupkg.sha512",
@@ -12,7 +12,6 @@
     "C:\\Users\\3mtec\\.nuget\\packages\\microsoft.entityframeworkcore\\10.0.9\\microsoft.entityframeworkcore.10.0.9.nupkg.sha512",
     "C:\\Users\\3mtec\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\10.0.9\\microsoft.entityframeworkcore.abstractions.10.0.9.nupkg.sha512",
     "C:\\Users\\3mtec\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\10.0.9\\microsoft.entityframeworkcore.analyzers.10.0.9.nupkg.sha512",
-    "C:\\Users\\3mtec\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\10.0.9\\microsoft.entityframeworkcore.relational.10.0.9.nupkg.sha512",
     "C:\\Users\\3mtec\\.nuget\\packages\\mysql.data\\26.7.0\\mysql.data.26.7.0.nupkg.sha512",
     "C:\\Users\\3mtec\\.nuget\\packages\\mysql.entityframeworkcore\\10.0.9\\mysql.entityframeworkcore.10.0.9.nupkg.sha512",
     "C:\\Users\\3mtec\\.nuget\\packages\\mysqlconnector\\2.4.0\\mysqlconnector.2.4.0.nupkg.sha512",
@@ -25,11 +24,10 @@
   ],
   "logs": [
     {
-      "code": "NU1608",
-      "level": "Warning",
-      "message": "Detected package version outside of dependency constraint: Pomelo.EntityFrameworkCore.MySql 9.0.0 requires Microsoft.EntityFrameworkCore.Relational (>= 9.0.0 && <= 9.0.999) but version Microsoft.EntityFrameworkCore.Relational 10.0.9 was resolved.",
+      "code": "NU1107",
+      "level": "Error",
+      "message": "Version conflict detected for Microsoft.EntityFrameworkCore.Relational. Install/reference Microsoft.EntityFrameworkCore.Relational 10.0.9 directly to project Sakkola to resolve this issue. \r\n Sakkola -> MySql.EntityFrameworkCore 10.0.9 -> Microsoft.EntityFrameworkCore.Relational (>= 10.0.9) \r\n Sakkola -> Pomelo.EntityFrameworkCore.MySql 9.0.0 -> Microsoft.EntityFrameworkCore.Relational (>= 9.0.0 && <= 9.0.999).",
       "projectPath": "C:\\Users\\3mtec\\source\\repos\\Sakkola-TCC\\Sakkola\\Sakkola.csproj",
-      "warningLevel": 1,
       "filePath": "C:\\Users\\3mtec\\source\\repos\\Sakkola-TCC\\Sakkola\\Sakkola.csproj",
       "libraryId": "Microsoft.EntityFrameworkCore.Relational",
       "targetGraphs": [

@@ -24,7 +24,6 @@ namespace Sakkola.Models
         public string confirmacaoSenha {  get; set; } = string.Empty;
 
         [Required]
-        [DataType(DataType.Date)]
         public DataType dataNasc {  get; set; }
 
         [Required]
