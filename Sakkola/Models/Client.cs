@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sakkola.Models
 {
+    [Table("tbClient")]
     public class Client : Usuario
     {
         [Key]
@@ -15,5 +17,7 @@ namespace Sakkola.Models
         public string telefone { get; set; } = string.Empty;
         public string rg { get; set; } = string.Empty;
 
+        public int EnderecoId { get; set;}
+        public Endereco Endereco { get; set; }
     }
 }

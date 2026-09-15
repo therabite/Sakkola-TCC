@@ -9,5 +9,16 @@ namespace Sakkola.Data
 
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Client> Clientes { get; set; }
+        
+        public DbSet<Endereco> Enderecos { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Client>().ToTable("tbClient");
+            modelBuilder.Entity<Endereco>().ToTable("tbAddress");
+            modelBuilder.Entity<Usuario>().ToTable("tbUser");
+        }
     }
 }

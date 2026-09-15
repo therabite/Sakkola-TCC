@@ -2,7 +2,7 @@
 
 namespace Sakkola.Models.ViewModel
 {
-    public class RegisterClient
+    public class RegisterClient : Endereco
     {
         [Required(ErrorMessage = "O nome é obrigatório para cadastro.")]
         [StringLength(50, ErrorMessage = "O nome não pode exceder 50 caracteres.")]
@@ -52,5 +52,7 @@ namespace Sakkola.Models.ViewModel
         [Required(ErrorMessage = "o RG é obrigatório para cadastro.")]
         [RegularExpression(@"^\d{2}\.?\d{3}\.?\d{3}-?[0-9Xx]$", ErrorMessage = "Informe um RG válido.")]
         public string rg { get; set; } = string.Empty;
+
+        public string cep { get; set; }
     }
 }

@@ -22,6 +22,15 @@ namespace Sakkola.Services
         }
         public async Task CadastrarClienteAsync(RegisterClient model)
         {
+            var novoEndereco = new Endereco
+            {
+                cep = int.Parse(model.cep.Replace("-", "").Trim()), 
+                logradouro = "Não informado",
+                num = 0,
+                bairro = "Não informado",
+                estado = "UF"
+            };
+
             var cliente = new Client
             {
                 name = model.name,

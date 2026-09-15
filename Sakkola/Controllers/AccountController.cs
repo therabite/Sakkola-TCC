@@ -63,7 +63,7 @@ namespace Sakkola.Controllers
             if(await _usuarioServices.EmailJaCadastradoAsync(model.email))
             {
                 ModelState.AddModelError("Email", "este email já está em uso.");
-                return View(model);
+                return View("Cadastro", model);
             }
 
             await _usuarioServices.CadastrarClienteAsync(model);
