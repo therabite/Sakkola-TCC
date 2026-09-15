@@ -5,13 +5,17 @@ using Sakkola.Data;
 
 // 1. Registra o AppDbContext informando a conexão com o MySQL
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("conexaoMySQL");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUsuarioServices, UsuarioServices>();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseMySql(
+        connectionString,
+        new MySqlServerVersion(new Version(8, 0, 30))
+    ));
 
 // 2. Registra o serviço de usuário (mantenha como já está)
 builder.Services.AddScoped<IUsuarioServices, UsuarioServices>();

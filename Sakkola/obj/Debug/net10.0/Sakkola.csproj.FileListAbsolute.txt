@@ -294,7 +294,6 @@ C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\ref\Sakkola.dl
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\compressed\739tjhueeb-{0}-ic16xfdud8-ic16xfdud8.gz
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\compressed\739tjhueeb-{0}-ic16xfdud8-ic16xfdud8.gz
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\obj\Debug\net10.0\compressed\ro9sj7835j-{0}-krgdvabney-krgdvabney.gz
-C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\compressed\ro9sj7835j-{0}-krgdvabney-krgdvabney.gz
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\Sakkola.csproj.AssemblyReference.cache
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\bin\Debug\net10.0\Humanizer.dll
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\bin\Debug\net10.0\Microsoft.Bcl.AsyncInterfaces.dll
@@ -385,3 +384,4 @@ C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\bin\Debug\net10.0\tr\Microsoft.C
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\bin\Debug\net10.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\Sakkola.csproj.Up2Date
+C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\compressed\ro9sj7835j-{0}-plyrzf8i52-plyrzf8i52.gz

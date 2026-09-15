@@ -19,6 +19,12 @@ html {
   }
 }
 
+.sem-foco:focus {
+    border-color: #ccc;
+    box-shadow: none;
+    outline: none;
+}
+
 .btn:focus,
 .btn:active:focus,
 .btn-close:focus {

@@ -1,0 +1,96 @@
+﻿@model Sakkola.Models.ViewModel.RegisterClient
+
+<div class="container mb-4 py-4">
+    <div class="row align-items-center justify-content-sm-between g-5">
+        <!-- Formulário de Cadastro (Esquerda) -->
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="card p-4 border rounded-1 mt-3">
+
+                <form asp-controller="Account" asp-action="CadastroSakkolaClient" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
+
+                    <!-- Nome Completo -->
+                    <div class="mb-2">
+                        <label asp-for="name" class="form-label fw-medium text-dark mb-1 small">Nome Completo</label>
+                        <input asp-for="name" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Escreva aqui seu nome completo" />
+                        <span asp-validation-for="name" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-2">
+                        <label asp-for="email" class="form-label fw-medium text-dark mb-1 small">Email</label>
+                        <input asp-for="email" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="seu@email.com" />
+                        <span asp-validation-for="email" class="text-danger small"></span>
+                    </div>
+
+                    <!-- CPF -->
+                    <div class="mb-2">
+                        <label asp-for="cpf" class="form-label fw-medium text-dark mb-1 small">CPF</label>
+                        <input asp-for="cpf" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="000.000.000-00" />
+                        <span asp-validation-for="cpf" class="text-danger small"></span>
+                    </div>
+
+                    <!-- RG -->
+                    <div class="mb-2">
+                        <label asp-for="rg" class="form-label fw-medium text-dark mb-1 small">RG</label>
+                        <input asp-for="rg" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="00.000.000-0" />
+                        <span asp-validation-for="rg" class="text-danger small"></span>
+                    </div>
+
+                    <!-- CEP 
+                    <div class="mb-2">
+                        <label asp-for="" class="form-label fw-medium text-dark mb-1 small">CEP</label>
+                        <input asp-for="" class="form-control rounded-2" placeholder="00000-000" />
+                        <span asp-validation-for="" class="text-danger small"></span>
+                    </div>-->
+
+                    <!-- Data de Nascimento e Celular lado a lado -->
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label asp-for="dataNasc" class="form-label fw-medium text-dark mb-1 small">Data de Nascimento</label>
+                            <input asp-for="dataNasc" type="text" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="dd/mm/yyyy" />
+                            <span asp-validation-for="dataNasc" class="text-danger small"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="telefone" class="form-label fw-medium text-dark mb-1 small">Celular</label>
+                            <input asp-for="telefone" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Celular" />
+                            <span asp-validation-for="telefone" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Senha -->
+                    <div class="mb-2">
+                        <label asp-for="senha" class="form-label fw-medium text-dark mb-1 small">Senha</label>
+                        <input asp-for="senha" type="password" class="sem-foco form-control rounded-2" style="height: 50px;" placeholder="********" />
+                        <span asp-validation-for="senha" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Confirma Senha -->
+                    <div class="mb-4">
+                        <label asp-for="confirmarSenha" class="form-label fw-medium text-dark mb-1 small">Confirma Senha</label>
+                        <input asp-for="confirmarSenha" type="password" class="sem-foco form-control rounded-2" style="height: 50px;" placeholder="********" />
+                        <span asp-validation-for="confirmarSenha" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Botão Cadastrar -->
+                    <button type="submit" class="btn w-100 text-white fw-bold py-2 rounded-2 mb-3" style="background-color: #ff5252; height: 50px;">
+                        CADASTRAR
+                    </button>
+
+                    <!-- Link Entrar -->
+                    <div class="text-center small">
+                        <span class="text-dark">Já possui cadastro? </span>
+                        <a asp-controller="Account" asp-action="Login" class="fw-bold text-decoration-none" style="color: #4CAF50;">ENTRAR</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <!-- Ilustração da Sakkola (Direita) -->
+        <div class="col-12 col-md-6 text-center">
+            <img src="~/img/Logo.png" alt="Sakkola Ilustração" style="max-height: 50vh; opacity: 30%;" />
+        </div>
+
+    </div>
+</div>

@@ -54,7 +54,7 @@ namespace Sakkola.Controllers
         }
 
         [HttpGet]
-        public IActionResult Cadastro() => View();
+        public IActionResult Cadastro() => View("Cadastro");
 
         [HttpPost]
         public async Task<IActionResult> Cadastro(RegisterClient model)
