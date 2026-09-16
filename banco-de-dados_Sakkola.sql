@@ -63,7 +63,6 @@ status_entrega varchar(8) not null
 create table tbProduto(
 id_produto int primary key auto_increment,
 nome varchar(50) not null,
-url_image varchar(150) not null,
 descricao varchar(75) not null,
 preco decimal(6,2) not null,
 estoque int not null,
@@ -89,3 +88,5 @@ nome varchar(50) not null
 alter table tbClient add constraint fk__endereco_client foreign key (id_client) references tbAddress(id_address);
 alter table tbAddress add constraint fk_entrega_endereco foreign key (id_address) references tbEntrega(id_entrega);
 alter table tbentrega add constraint fk_pedido_entrega foreign key (id_entrega) references tbPedido(id_pedido);
+
+alter table tbUser add column confirmacaoSenha varchar(8) not null;

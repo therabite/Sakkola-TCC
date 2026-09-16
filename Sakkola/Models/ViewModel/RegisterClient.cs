@@ -6,7 +6,7 @@ namespace Sakkola.Models.ViewModel
     {
         [Required(ErrorMessage = "O nome é obrigatório para cadastro.")]
         [StringLength(50, ErrorMessage = "O nome não pode exceder 50 caracteres.")]
-        public string name { get; set; } = string.Empty;
+        public string nome { get; set; } = string.Empty;
         /// <summary>
         /// 
         /// </summary>
@@ -32,7 +32,7 @@ namespace Sakkola.Models.ViewModel
         /// 
         /// </summary>
         [Required(ErrorMessage = "A data de nascimentos é obrigatório para cadastro.")]
-        public DateOnly dataNasc { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateOnly data_nasc { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         ///
         ///
         ///

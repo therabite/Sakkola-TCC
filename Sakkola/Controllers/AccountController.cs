@@ -35,8 +35,8 @@ namespace Sakkola.Controllers
             
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
-                new Claim(ClaimTypes.Name, usuario.name.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, usuario.id_user.ToString()),
+                new Claim(ClaimTypes.Name, usuario.nome.ToString()),
                 new Claim(ClaimTypes.Email, usuario.email.ToString())
             };
 

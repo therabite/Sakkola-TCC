@@ -7,11 +7,11 @@ namespace Sakkola.Models
     public class Usuario
     {
         [Key]
-        public int Id { get; set; }
+        public int id_user { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string name { get; set; } = string.Empty;
+        public string nome { get; set; } = string.Empty;
         
         [Required, StringLength(50)]
         [EmailAddress]
@@ -26,7 +26,7 @@ namespace Sakkola.Models
         public string confirmacaoSenha {  get; set; } = string.Empty;
 
         [Required]
-        public DataType dataNasc {  get; set; }
+        public DataType data_nasc {  get; set; }
 
         [Required]
         public string cpf {  get; set; } = string.Empty;

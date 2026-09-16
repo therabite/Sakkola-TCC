@@ -26,19 +26,19 @@ namespace Sakkola.Services
             {
                 cep = int.Parse(model.cep.Replace("-", "").Trim()), 
                 logradouro = "Não informado",
-                num = 0,
+                numero = 0,
                 bairro = "Não informado",
                 estado = "UF"
             };
 
             var cliente = new Client
             {
-                name = model.name,
+                nome = model.nome,
                 email = model.email,
                 cpf = model.cpf,
                 rg = model.rg,
                 telefone = model.telefone,
-                dataNasc = model.dataNasc
+                data_nasc = model.data_nasc
             };
 
             cliente.senha = _hasher.HashPassword(cliente, model.senha);

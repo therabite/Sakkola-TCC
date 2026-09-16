@@ -69,8 +69,8 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
+C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\lib\jquery\LICENSE.txt
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\css\site.css
-C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\favicon.ico
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\js\site.js
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
@@ -130,4 +130,4 @@ C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\lib\jquery\dist\jquery.min.ma
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\lib\jquery\dist\jquery.slim.js
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\lib\jquery\dist\jquery.slim.min.js
 C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\lib\jquery\dist\jquery.slim.min.map
-C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\lib\jquery\LICENSE.txt
+C:\Users\Jucy\source\repos\Sakkola\Sakkola\wwwroot\favicon.ico

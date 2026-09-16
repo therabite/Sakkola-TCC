@@ -8,14 +8,14 @@ namespace Sakkola.Models
     public class Endereco
     {
         [Key]
-        public int id { get; set; }
+        public int id_address { get; set; }
 
         [Required]
         public int cep { get; set; }
         [Required]
         public string logradouro { get; set; }
         [Required]
-        public int num { get; set; }
+        public int numero { get; set; }
         [Required]
         public string bairro { get; set; }
         [Required]
