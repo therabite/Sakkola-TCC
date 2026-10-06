@@ -6,14 +6,14 @@ namespace Sakkola.Models
     [Table("tbClient")]
     public class Client : Usuario
     {
-        public int id_client { get; set; }
-        public string nome { get; set; } = string.Empty;
-        public string email { get; set; } = string.Empty;
-        public string senha { get; set; } = string.Empty;
-        public string confirmacaoSenha { get; set; } = string.Empty;
-        public DateOnly data_nasc { get; set; }
-        public string cpf { get; set; } = string.Empty;
-        public string telefone { get; set; } = string.Empty;
-        public string rg { get; set; } = string.Empty;
+        public int Id_client { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Senha { get; set; } = string.Empty;
+        public string ConfirmacaoSenha { get; set; } = string.Empty;
+        public DateOnly DataNasc { get; set; }
+        public string Cpf { get; set; } = string.Empty;
+        public string Telefone { get; set; } = string.Empty;
+        public string Rg { get; set; } = string.Empty;
     }
 }

@@ -1,12 +1,14 @@
 ﻿@model Sakkola.Models.ViewModel.RegisterClient
-
+﻿@{
+    ViewData["Title"] = "Cadastro";
+}
 <div class="container mb-4 py-4">
     <div class="row align-items-center justify-content-sm-between g-5">
         <!-- Formulário de Cadastro (Esquerda) -->
         <div class="col-12 col-md-6 col-lg-5">
             <div class="card p-4 border rounded-1 mt-3">
 
-                <form asp-controller="Account" asp-action="CadastroSakkolaClient" method="post">
+                <form asp-controller="Account" asp-action="Cadastro" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
 
                     <!-- Nome Completo -->
@@ -26,34 +28,26 @@
                     <!-- CPF -->
                     <div class="mb-2">
                         <label asp-for="cpf" class="form-label fw-medium text-dark mb-1 small">CPF</label>
-                        <input asp-for="cpf" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="000.000.000-00" />
+                        <input asp-for="cpf" id="cpf" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="000.000.000-00" />
                         <span asp-validation-for="cpf" class="text-danger small"></span>
                     </div>
-
-                    <!-- RG -->
-                    <div class="mb-2">
-                        <label asp-for="rg" class="form-label fw-medium text-dark mb-1 small">RG</label>
-                        <input asp-for="rg" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="00.000.000-0" />
-                        <span asp-validation-for="rg" class="text-danger small"></span>
-                    </div>
-
                     <!-- CEP -->
                     <div class="mb-2">
-                        <label asp-for="cep" class="form-label fw-medium text-dark mb-1 small">CEP</label>
-                        <input asp-for="cep" class="form-control rounded-2" placeholder="00000-000" style="height: 50px;"/>
-                        <span asp-validation-for="cep" class="text-danger small"></span>
+                        <label asp-for="Cep" class="form-label fw-medium text-dark mb-1 small">CEP</label>
+                        <input asp-for="Cep" id="cep" class="form-control rounded-2" placeholder="00000-000" style="height: 50px;" />
+                        <span asp-validation-for="Cep" class="text-danger small"></span>
                     </div>
 
                     <!-- Data de Nascimento e Celular lado a lado -->
                     <div class="row g-2 mb-2">
                         <div class="col-6">
                             <label asp-for="data_nasc" class="form-label fw-medium text-dark mb-1 small">Data de Nascimento</label>
-                            <input asp-for="data_nasc" type="text" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="dd/mm/yyyy" />
+                            <input asp-for="data_nasc" id="dataNasc" type="text" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="dd/mm/yyyy" />
                             <span asp-validation-for="data_nasc" class="text-danger small"></span>
                         </div>
                         <div class="col-6">
                             <label asp-for="telefone" class="form-label fw-medium text-dark mb-1 small">Celular</label>
-                            <input asp-for="telefone" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Celular" />
+                            <input asp-for="telefone" id="telefone" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Celular" />
                             <span asp-validation-for="telefone" class="text-danger small"></span>
                         </div>
                     </div>
@@ -61,14 +55,14 @@
                     <!-- Senha -->
                     <div class="mb-2">
                         <label asp-for="senha" class="form-label fw-medium text-dark mb-1 small">Senha</label>
-                        <input asp-for="senha" type="password" class="sem-foco form-control rounded-2" style="height: 50px;" placeholder="********" />
+                        <input asp-for="senha" max-length="8" type="password" class="sem-foco form-control rounded-2" style="height: 50px;" placeholder="********" />
                         <span asp-validation-for="senha" class="text-danger small"></span>
                     </div>
 
                     <!-- Confirma Senha -->
                     <div class="mb-4">
                         <label asp-for="confirmarSenha" class="form-label fw-medium text-dark mb-1 small">Confirma Senha</label>
-                        <input asp-for="confirmarSenha" type="password" class="sem-foco form-control rounded-2" style="height: 50px;" placeholder="********" />
+                        <input asp-for="confirmarSenha" max-length="8" type="password" class="sem-foco form-control rounded-2" style="height: 50px;" placeholder="********" />
                         <span asp-validation-for="confirmarSenha" class="text-danger small"></span>
                     </div>
 
@@ -94,3 +88,24 @@
 
     </div>
 </div>
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#dataNasc').mask('00/00/0000');
+            $('#cep').mask('00000-000');
+            $('#cpf').mask('000.000.000-00', { reverse: true });
+
+            var maskBehavior = function (val) {
+                return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+            },
+            options = {
+                onKeyPress: function(val, e, field, options) {
+                    field.mask(maskBehavior.apply({}, arguments), options);
+                }
+            };
+            $('#telefone').mask(maskBehavior, options);
+        });
+    </script>
+}

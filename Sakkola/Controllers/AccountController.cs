@@ -1,80 +1,118 @@
-﻿
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using MySqlConnector;
+using Sakkola.Models;
 using Sakkola.Models.ViewModel;
-using Sakkola.Services;
 
 namespace Sakkola.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUsuarioServices _usuarioServices;
+        private readonly string _connectionString;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(IUsuarioServices usuarioServices)
+        public AccountController(IConfiguration configuration)
         {
-            _usuarioServices = usuarioServices;
+            _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("conexaoMySQL");
         }
 
         [HttpGet]
-        public IActionResult Login(){ 
-           return View(); 
+        public IActionResult Cadastro()
+        {
+            return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginClient model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cadastro(RegisterClient registerClient, Endereco endereco)
         {
-            if (!ModelState.IsValid) return View(model);
-
-            var usuario = await _usuarioServices.ValidarCredenciaisAsync(model.email, model.senha);
-            if(usuario == null)
+            // 1. Caminho de falha de validação do formulário
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "email ou senha inválidos");
-                return View(model);
+                return View(registerClient);
             }
-            
-            var claims = new List<Claim>
+
+            try
             {
-                new Claim(ClaimTypes.NameIdentifier, usuario.id_user.ToString()),
-                new Claim(ClaimTypes.Name, usuario.nome.ToString()),
-                new Claim(ClaimTypes.Email, usuario.email.ToString())
-            };
+                using (var conn = new MySqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
 
-            var identity = new ClaimsIdentity(claims, "CookieAuth");
-            var principal = new ClaimsPrincipal(identity);
+                    string sql = @"
+                INSERT INTO tbAddress (CEP) VALUES (@cep);
+                INSERT INTO tbUser (nome, data_nasc, telefone, CPF, email, senha) 
+                VALUES (@nome, @data_nasc, @telefone, @CPF, @email, @senha);
+                INSERT INTO tbClient (id_client) VALUES (LAST_INSERT_ID());";
 
-            var autoProperties = new AuthenticationProperties
+                    using (var cmd = new MySqlCommand(sql, conn))
+                    {
+                        string cepLimpo = System.Text.RegularExpressions.Regex.Replace(endereco.Cep ?? "", @"\D", "");
+                        string cpfLimpo = System.Text.RegularExpressions.Regex.Replace(registerClient.cpf ?? "", @"\D", "");
+                        string telefoneLimpo = System.Text.RegularExpressions.Regex.Replace(registerClient.telefone ?? "", @"\D", "");
+
+                        cmd.Parameters.AddWithValue("@cep", cepLimpo);
+                        cmd.Parameters.AddWithValue("@nome", registerClient.nome);
+                        cmd.Parameters.AddWithValue("@data_nasc", registerClient.data_nasc);
+                        cmd.Parameters.AddWithValue("@telefone", telefoneLimpo);
+                        cmd.Parameters.AddWithValue("@CPF", cpfLimpo);
+                        cmd.Parameters.AddWithValue("@email", registerClient.email);
+                        cmd.Parameters.AddWithValue("@senha", registerClient.senha);
+
+                        await cmd.ExecuteNonQueryAsync();
+                    }
+                }
+
+                // 2. Caminho de sucesso
+                TempData["Mensagem"] = "Cadastro realizado com sucesso!";
+                return RedirectToAction("Login");
+            }
+            catch (Exception ex)
             {
-                IsPersistent = model.lembraDeMim
-            };
-
-            await HttpContext.SignInAsync("CookieAuth", principal, autoProperties);
-
-            return RedirectToAction("Index", "Home"); // mudar para view do carrinho posteriormente
+                ModelState.AddModelError(string.Empty, $"Erro ao guardar os dados: {ex.Message}");
+                return View(registerClient);
+            }
         }
 
         [HttpGet]
-        public IActionResult Cadastro() => View("Cadastro");
-
-        [HttpPost]
-        public async Task<IActionResult> Cadastro(RegisterClient model)
+        public IActionResult Login()
         {
-            if(!ModelState.IsValid) return View(model);
-            if(await _usuarioServices.EmailJaCadastradoAsync(model.email))
-            {
-                ModelState.AddModelError("Email", "este email já está em uso.");
-                return View("Cadastro", model);
-            }
-
-            await _usuarioServices.CadastrarClienteAsync(model);
-            return RedirectToAction(nameof(Login));
+            return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(string email, string password, bool remember)
         {
-            await HttpContext.SignOutAsync("CookieAuth");
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            {
+                ModelState.AddModelError(string.Empty, "Email e senha são obrigatórios.");
+                return View();
+            }
+            bool usuarioValido = ValidarUsuarioNoBanco(email, password);
+            if (!usuarioValido)
+            {
+                ModelState.AddModelError(string.Empty, "Email ou senha inválidos.");
+                return View();
+            }
+            TempData["Mensagem"] = "Login efetuado com sucesso!";
+
             return RedirectToAction("Index", "Home");
         }
+        private bool ValidarUsuarioNoBanco(string email, string password)
+        {
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                conexao.Open();
+
+                var cmd = new MySqlCommand();
+                
+                cmd.Parameters.AddWithValue("@email", email);
+                cmd.Parameters.AddWithValue("@senha", password);
+
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
+        }
+
     }
 }

@@ -48,11 +48,6 @@ namespace Sakkola.Models.ViewModel
         public string cpf { get; set; } = string.Empty;
         /// <summary>
         /// 
-        /// </summary>
-        [Required(ErrorMessage = "o RG é obrigatório para cadastro.")]
-        [RegularExpression(@"^\d{2}\.?\d{3}\.?\d{3}-?[0-9Xx]$", ErrorMessage = "Informe um RG válido.")]
-        public string rg { get; set; } = string.Empty;
-
-        public string cep { get; set; }
+        /// </summary
     }
 }

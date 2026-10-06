@@ -7,20 +7,28 @@ nome varchar(50) not null,
 data_nasc date not null,
 telefone int not null,
 CPF int not null,
-RG int not null,
 email varchar(50) not null,
 senha varchar(8) not null
+);
+
+create table tbAddress(
+id_address int primary key auto_increment,
+CEP int,
+Logradouro varchar(100),
+Numero int,
+Bairro varchar(50),
+Estado varchar(2)
+);
+
+create table tbClient(
+id_client int primary key auto_increment,
+foreign key (id_client) references tbUser(id_user)
 );
 
 create table tbFuncionario(
 id_employed int primary key auto_increment,
 is_admin boolean default false,
 foreign key (id_employed) references tbUser(id_user) on delete cascade
-);
-
-create table tbClient(
-id_client int primary key auto_increment,
-foreign key (id_client) references tbUser(id_user)
 );
 
 create table tbPedido(
@@ -44,15 +52,6 @@ id_carrinho int primary key auto_increment,
 valor_total decimal(6,2) not null,
 foreign key (id_carrinho) references tbClient(id_client), 
 foreign key (id_carrinho) references tbUser(id_user) 
-);
-
-create table tbAddress(
-id_address int primary key auto_increment,
-CEP int not null,
-Logradouro varchar(100) not null,
-Numero int not null,
-Bairro varchar(50) not null,
-Estado varchar(2) not null
 );
 
 create table tbEntrega(
@@ -86,7 +85,11 @@ nome varchar(50) not null
 
 
 alter table tbClient add constraint fk__endereco_client foreign key (id_client) references tbAddress(id_address);
-alter table tbAddress add constraint fk_entrega_endereco foreign key (id_address) references tbEntrega(id_entrega);
+alter table tbEntrega add constraint fk_endereco_entrega foreign key (id_entrega) references tbAddress(id_address);
 alter table tbentrega add constraint fk_pedido_entrega foreign key (id_entrega) references tbPedido(id_pedido);
 
-alter table tbUser add column confirmacaoSenha varchar(8) not null;
+ALTER TABLE tbUser MODIFY telefone VARCHAR(15);
+ALTER TABLE tbUser MODIFY CPF VARCHAR(14);
+
+select * from tbUser;
+select * from tbAddress;

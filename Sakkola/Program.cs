@@ -1,46 +1,44 @@
-using Sakkola.Services;
-// Adicione o uso do Entity Framework
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation; // Adiciona o namespace necessário
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Sakkola.Data;
 
-// 1. Registra o AppDbContext informando a conexão com o MySQL
-var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("conexaoMySQL");
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IUsuarioServices, UsuarioServices>();
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
-        connectionString,
-        new MySqlServerVersion(new Version(8, 0, 30))
-    ));
-
-// 2. Registra o serviço de usuário (mantenha como já está)
-builder.Services.AddScoped<IUsuarioServices, UsuarioServices>();
-
-
-// Configura Autenticação via Cookies
-builder.Services.AddAuthentication("CookieAuth")
-    .AddCookie("CookieAuth", options =>
+namespace Sakkola   
+{
+    public class Program
     {
-        options.Cookie.Name = "Sakkola.Auth";
-        options.LoginPath = "/Account/Login";
-        options.AccessDeniedPath = "/Account/Login";
-    });
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
+            // Add services to the container.
+            var mvcBuilder = builder.Services.AddControllersWithViews();
+            mvcBuilder.AddRazorRuntimeCompilation(); // Corrige o uso do método de extensão
 
-// Adicione na ordem de execução do pipeline:
-app.UseStaticFiles();
-app.UseRouting();
+            var connectionString = builder.Configuration.GetConnectionString("conexaoMySQL");
 
-app.UseAuthentication(); // 1º Identifica o usuário
-app.UseAuthorization();  // 2º Controla permissões de acesso
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            });
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
+            var app = builder.Build();
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.Run();
+        }
+    }
+}
