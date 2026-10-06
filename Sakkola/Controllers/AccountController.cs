@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MySqlConnector;
 using Sakkola.Models;
 using Sakkola.Models.ViewModel;
+using System.Security.Claims;
 
 namespace Sakkola.Controllers
 {
@@ -76,43 +80,84 @@ namespace Sakkola.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(string email, string password, bool remember)
+        public async Task<IActionResult> Login(LoginClient loginClient)
         {
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Email e senha são obrigatórios.");
-                return View();
+                return View(loginClient);
             }
-            bool usuarioValido = ValidarUsuarioNoBanco(email, password);
-            if (!usuarioValido)
+            try
             {
-                ModelState.AddModelError(string.Empty, "Email ou senha inválidos.");
-                return View();
-            }
-            TempData["Mensagem"] = "Login efetuado com sucesso!";
+                using (var conn = new MySqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
 
-            return RedirectToAction("Index", "Home");
+                    string sql = "SELECT id_User, email, senha from tbUser where email = @email and senha = @senha limit 1;";
+
+                    using(var cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@email", loginClient.Email);
+                        cmd.Parameters.AddWithValue("@senha", loginClient.Senha);
+
+                        using(var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            if(await reader.ReadAsync())
+                            {
+                                int idUser = reader.GetInt32("Id_user");
+                                string email = reader.GetString("email");
+                                string senha = reader.GetString("senha"); 
+                            
+                                var claims = new List<Claim>
+                                {
+                                    new Claim(ClaimTypes.NameIdentifier, idUser.ToString()),
+                                    new Claim(ClaimTypes.Email, email),
+                                };
+
+                                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                                var authPorperties = new AuthenticationProperties
+                                {
+                                    IsPersistent = true,
+                                    ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8)
+                                };
+
+                                await HttpContext.SignInAsync(
+                                    CookieAuthenticationDefaults.AuthenticationScheme,
+                                    new ClaimsPrincipal(claimsIdentity),
+                                    authPorperties
+                                    );
+                                return RedirectToAction("Index", "Home");
+                            }
+                            else
+                            {
+                                ModelState.AddModelError(string.Empty, "E-mail ou senha incorretos.");
+                                return View(loginClient);
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Erro ao conectar: {ex.Message}");
+                return View(loginClient);
+            }
         }
-        private bool ValidarUsuarioNoBanco(string email, string password)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
         {
-            using (var conexao = new MySqlConnection(_connectionString))
-            {
-                conexao.Open();
-
-                var cmd = new MySqlCommand();
-                
-                cmd.Parameters.AddWithValue("@email", email);
-                cmd.Parameters.AddWithValue("@senha", password);
-
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                return count > 0;
-            }
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
         }
-
     }
 }
