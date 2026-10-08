@@ -4,6 +4,8 @@ namespace Sakkola.Models.ViewModel
 {
     public class RegisterClient : Endereco
     {
+        public int Id_user { get; set; }
+
         [Required(ErrorMessage = "O nome é obrigatório para cadastro.")]
         [StringLength(50, ErrorMessage = "O nome não pode exceder 50 caracteres.")]
         public string nome { get; set; } = string.Empty;

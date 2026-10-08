@@ -84,12 +84,17 @@ nome varchar(50) not null
 );
 
 
-alter table tbClient add constraint fk__endereco_client foreign key (id_client) references tbAddress(id_address);
-alter table tbEntrega add constraint fk_endereco_entrega foreign key (id_entrega) references tbAddress(id_address);
-alter table tbentrega add constraint fk_pedido_entrega foreign key (id_entrega) references tbPedido(id_pedido);
+ALTER TABLE tbClient ADD CONSTRAINT fk_client_user FOREIGN KEY (id_client) REFERENCES tbUser(id_user);
+
+ALTER TABLE tbEntrega ADD COLUMN id_address INT, ADD COLUMN id_pedido INT;
+ALTER TABLE tbEntrega ADD CONSTRAINT fk_entrega_address FOREIGN KEY (id_address) REFERENCES tbAddress(id_address);
+
+ALTER TABLE tbEntrega ADD CONSTRAINT fk_entrega_pedido FOREIGN KEY (id_pedido) REFERENCES tbPedido(id_pedido);
 
 ALTER TABLE tbUser MODIFY telefone VARCHAR(15);
 ALTER TABLE tbUser MODIFY CPF VARCHAR(14);
+
+ALTER TABLE tbUser ADD CONSTRAINT unique_email UNIQUE (email);
 
 select * from tbUser;
 select * from tbAddress;

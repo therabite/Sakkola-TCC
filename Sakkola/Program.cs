@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Sakkola.Data;
+using Sakkola.Repository;
+using Sakkola.Repository.Interfaces;
 
 namespace Sakkola   
 {
@@ -9,6 +11,8 @@ namespace Sakkola
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddScoped<IUserClientRepository, UserClientRepository>();
 
             // Add services to the container.
             var mvcBuilder = builder.Services.AddControllersWithViews();

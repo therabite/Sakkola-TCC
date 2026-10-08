@@ -9,7 +9,7 @@ namespace Sakkola.Models
     {
         [Key]
         public int Id_address { get; set; }
-        // Em RegisterClient.cs, se quiser manter a validação, garanta que o nome seja 'Cep' (com C maiúsculo):
+
         [Required(ErrorMessage = "O CEP é obrigatório.")]
         [RegularExpression(@"^\d{5}-?\d{3}$", ErrorMessage = "Informe um CEP válido.")]
         public new string Cep { get; set; } = string.Empty;
