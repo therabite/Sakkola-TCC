@@ -32,12 +32,33 @@
                     <a asp-controller="carrinho" asp-action="Index" class="text-white">
                         <i class="bi bi-cart3"></i>
                     </a>
-                    <a asp-controller="Account" asp-action="Cadastro" class="text-white">
-                        <i class="bi bi-person-circle"></i>
-                    </a>
-                </div>
+
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <a href="javascript:void(0)"
+                            class="text-white position-relative"
+                            data-bs-toggle="modal"
+                            data-bs-target="#userProfileModal"
+                            title="Minha Conta"
+                            style="cursor: pointer;">
+                                <i class="bi bi-person-circle"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Cadastro" class="text-white">
+                                <i class="bi bi-person-circle"></i>
+                            </a>
+                        }
+                    </div>
             </div>
         </div>
+
+            @if(User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <partial name="_UserProfileModal" />
+            }
+
         <nav class="header-sakkola-2">
             <div class="me-0 gap-0 container d-flex justify-content-end">
                 <ul class="nav links-font-header py-1 gap-2">
@@ -103,8 +124,9 @@
             </div>
         </div>
     </header>
+
     <div>
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 mb-5">
             @RenderBody()
         </main>
     </div>
@@ -134,7 +156,7 @@
                         <a class="font-footer nav-link text-white p-0 opacity-75">&copy; 2026 Copyright</a>
                     </li>
                     <li>
-                        <a class="font-footer nav-link text-white py-0">Sakkola.com</a>
+                        <a asp-controller="Home" asp-action="Index" class="font-footer nav-link text-white py-0">Sakkola.com</a>
                     </li>
                 </ul>
             </div>
