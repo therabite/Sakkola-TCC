@@ -1,12 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
 using Sakkola.Models;
+using Sakkola.Repository.Interfaces;
 using System.Diagnostics;
 
 namespace Sakkola.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IProdutoRepository _produtoRepository;
+        public HomeController(IProdutoRepository produtoRepository)
+        {
+            _produtoRepository = produtoRepository;
+        }
+        public async Task<IActionResult> Index()
+        {
+            ViewData["TemaCategoria"] = "";
+
+            var produtos = await _produtoRepository.ObterTodosAsync();
+            return View(produtos);
+        }
+
+        public IActionResult Promocoes()
+        {
+            return View();
+        }
+
+        public IActionResult Carrinho()
         {
             return View();
         }

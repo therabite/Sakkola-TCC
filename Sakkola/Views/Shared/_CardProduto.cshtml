@@ -1,0 +1,44 @@
+﻿@model Sakkola.Models.ViewProdutos.Produtos
+
+<div class="mb-5 gap-1 card p-1 pb-3 px-3 border rounded-3 shadow-sm" style="width: 226.19px; height:391px;">
+    <div class="text-end">
+        <a asp-controller="Home" asp-action="Carrinho" class="text-dark text-decoration-none d-inline-flex align-items-center gap-2" onclick="mockCarrinho()">
+            <i class="bi bi-cart3 fs-5 text-dark"></i>
+        </a>
+    </div>
+
+    <div class="border rounded-3 p-2 d-flex justify-content-center align-items-center mb-3" style="height: 172px;">
+        <img src="~/img/produtos/@(Model.id).png"
+             class="img-fluid max-h-100"
+             alt="@Model.nome"
+             style="max-height:100%; object-fit:contain;"
+             onerror="this.src='/img/logo-sakkola-color-no-text.png';" />
+    </div>
+
+    <p class="text-dark small mb-3 leading-tight" style="min-height:48px; font-size:16px;">
+        @Model.descricao
+    </p>
+
+    <h6 class="fw-bold fs-5 mb-3" style="color:var(--verdinha)">
+        R$ @Model.preco.ToString("N2")
+    </h6>
+
+    <a asp-controller="Produtos" asp-action="Detalhes" asp-route-id="@Model.id"
+           class="btn text-white w-100 fw-medium mt-auto text-decoration-none d-flex align-items-center justify-content-center"
+           style="background-color: var(--batom-de-paty)">
+            Ver Mais
+    </a>
+</div>
+
+<style>
+.grid-ofertas-home {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 1rem; 
+    max-width: 1400px; 
+    padding: 0 1.5rem;
+}
+    .grid-ofertas-home .card {
+        width: 100% !important; 
+    }
+</style>

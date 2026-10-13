@@ -8,6 +8,58 @@
     --suquinho-de-laranja: #FF7843;
     --vulva-da-estelar: #F24806;
 }
+/* 1. Definição das variáveis de cor por categoria */
+.tema-acougue {
+    --cor-header: #AD2F12;
+    --cor-header-dark: #A40101;
+    --cor-fundo-pagina: #F9EEEE;
+}
+
+.tema-hortifruti {
+    --cor-header: #22C03F;
+    --cor-header-dark: #2BA22B;
+    --cor-fundo-pagina: #EEF9F0;
+}
+
+.tema-padaria {
+    --cor-header: #C89A66;
+    --cor-header-dark: #A27745;
+    --cor-fundo-pagina: #F9F6EE;
+}
+
+.tema-higiene {
+    --cor-header: #2262C0;
+    --cor-header-dark: #2F44AD;
+    --cor-fundo-pagina: #EEEFF9;
+}
+
+.tema-limpeza {
+    --cor-header: #22C0B3;
+    --cor-header-dark: #2BA297;
+    --cor-fundo-pagina: #EEF9F7;
+}
+
+.tema-frios {
+    --cor-header: #A4C1D5;
+    --cor-header-dark: #8BACC7;
+    --cor-fundo-pagina: #EEF4F9;
+}
+
+.tema-mercearia {
+    --cor-header: #FFA667;
+    --cor-header-dark: #F29350;
+    --cor-fundo-pagina: #F9F2EE;
+}
+
+.header-sakkola, .footer {
+    background-color: var(--cor-header, #F21F05);
+    transition: background-color 0.3s ease;
+}
+
+.header-sakkola-2, .footer-nav {
+    background-color: var(--cor-header-dark, #C80C0C);
+    transition: background-color 0.3s ease;
+}
 
 html {
   font-size: 14px;
@@ -38,13 +90,8 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
-}
-.header-sakkola{
-    background-color: var(--olho-maconhado);
-}
-.header-sakkola-2 {
-    background-color: var(--menstruacao);
+   background-color: var(--cor-fundo-pagina, #FFFFFF);
+   margin-bottom: 60px;
 }
 
 /* bordinha redondinha barra de busquinha */

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Sakkola.Models.ViewProdutos.Produtos>
+
+@{
+    ViewData["Title"] = "Início - ";
+}
+<div id="bannerSakkola" class="carousel slide carousel-fade banner-container d-flex w-100 justify-content-center" data-bs-ride="carousel" data-bs-interval="3000">
+    <!-- Indicadores -->
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#bannerSakkola" data-bs-slide-to="0" class="active" aria-current="true"></button>
+        <button type="button" data-bs-target="#bannerSakkola" data-bs-slide-to="1"></button>
+    </div>
+
+    <!-- Imagens -->
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="~/img/sakkola-banner-promo-1.png" class="d-block w-100 banner-full" alt="Banner 1">
+        </div>
+        <div class="carousel-item">
+            <img src="~/img/sakkola-banner-promo-2.png" class="d-block w-100 banner-full" alt="Banner 2">
+        </div>
+    </div>
+
+    <!-- Botoes -->
+    <button class="justify-content-start carousel-control-prev" type="button" data-bs-target="#bannerSakkola" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="justify-content-end carousel-control-next" type="button" data-bs-target="#bannerSakkola" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+</div>
+
+<div class="div-da-linha d-flex justify-content-between align-items-center p-3 w-100 mb-2">
+    <h1 class="me-5">Melhores Ofertas</h1>
+    <div class="linha"></div>
+</div>
+
+<div class="grid-ofertas-home mt-3 mb-5 mx-auto">
+    @if (Model != null && Model?.Any() == true)
+    {
+        @foreach (var produto in Model.Take(12))
+        {
+            <partial name="_CardProduto" model="produto" />
+        }
+    }
+    else
+    {
+        <p class="text-muted ms-3">Nenhum produto cadastrado no momento.</p>
+    }
+</div>

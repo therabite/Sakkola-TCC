@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Sakkola.Models.ViewProdutos.Produtos>
+@{
+    ViewData["Title"] = "Todos os Produtos - ";
+}
+
+<div class="container-fluid px-5 mt-4">
+    <div class="div-da-linha d-flex justify-content-between align-items-center p-3 w-100 mb-2">
+        <h1 class="fw-bold fs-2 text-secondary">Todos os Produtos</h1>
+        <div class="linha flex-grow-1 ms-3"></div>
+    </div>
+
+    <!-- Grid reutilizando o card compartilhado -->
+    <div class="d-flex flex-wrap gap-3 mt-3 mb-5" style="max-width: 1210px;">
+        @if (Model != null && Model?.Any() == true)
+        {
+            @foreach (var produto in Model)
+            {
+                <partial name="_CardProduto" model="produto" />
+            }
+        }
+        else
+        {
+            <div class="w-100 text-center py-5">
+                <p class="text-muted">Nenhum produto cadastrado no momento.</p>
+            </div>
+        }
+    </div>
+</div>

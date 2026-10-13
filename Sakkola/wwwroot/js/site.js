@@ -2,7 +2,7 @@
     var myElement = document.getElementById('bannerSakkola');
     if (typeof bootstrap !== 'undefined') {
         var myCarousel = new bootstrap.Carousel(myElement, {
-            interval: 3000,
+            interval: 5000,
             ride: 'carousel'
         });
         myCarousel.cycle();
