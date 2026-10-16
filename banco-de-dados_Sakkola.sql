@@ -47,12 +47,7 @@ forma_pagamento varchar(50) not null,
 foreign key (id_pagamento) references tbPedido(id_pedido)
 );
 
-create table tbCarrinho(
-id_carrinho int primary key auto_increment,
-valor_total decimal(6,2) not null,
-foreign key (id_carrinho) references tbClient(id_client), 
-foreign key (id_carrinho) references tbUser(id_user) 
-);
+
 
 create table tbEntrega(
 id_entrega int primary key auto_increment,
@@ -67,6 +62,13 @@ preco decimal(6,2) not null,
 estoque int not null,
 id_categoria INT NOT NULL,
 FOREIGN KEY (id_categoria) REFERENCES tbCategoria(id_categoria)
+);
+
+create table tbCarrinho(
+id_carrinho int primary key auto_increment,
+valor_total decimal(6,2) not null,
+foreign key (id_carrinho) references tbClient(id_client), 
+foreign key (id_carrinho) references tbUser(id_user) 
 );
 
 create table tbItemPedido(
@@ -99,6 +101,7 @@ ALTER TABLE tbUser ADD CONSTRAINT unique_email UNIQUE (email);
 select * from tbUser;
 select * from tbAddress;
 select * from tbcategoria;
+select * from tbProduto;
 
 INSERT IGNORE INTO tbCategoria (nome) VALUES 
 ('Açougue'),
@@ -235,3 +238,22 @@ CALL sp_InserirProduto('Molho de Tomate Tradicional', 'Molho de Tomate Tradicion
 CALL sp_InserirProduto('Farinha de Trigo Tradicional', 'Farinha de Trigo Tradicional - Pacote 1kg', 5.50, 70, 'Mercearia');
 CALL sp_InserirProduto('Sal Refinado', 'Sal Refinado - Pacote 1kg', 2.50, 100, 'Mercearia');
 CALL sp_InserirProduto('Biscoito Recheado de Chocolate', 'Biscoito Recheado de Chocolate - Pacote 130g', 3.50, 95, 'Mercearia');
+
+DROP TABLE IF EXISTS tbCarrinho;
+
+
+CREATE TABLE tbCarrinho (
+    id_carrinho INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    CONSTRAINT fk_carrinho_usuario FOREIGN KEY (id_usuario) REFERENCES tbUser(id_user) ON DELETE CASCADE
+);
+
+CREATE TABLE tbCarrinhoItem (
+    id_item INT PRIMARY KEY AUTO_INCREMENT,
+    id_carrinho INT NOT NULL,
+    id_produto INT NOT NULL,
+    quantidade INT NOT NULL,
+    
+    CONSTRAINT fk_item_carrinho FOREIGN KEY (id_carrinho) REFERENCES tbCarrinho(id_carrinho) ON DELETE CASCADE,
+    CONSTRAINT fk_item_produto FOREIGN KEY (id_produto) REFERENCES tbProduto(id_produto) ON DELETE CASCADE
+);
