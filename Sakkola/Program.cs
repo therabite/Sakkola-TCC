@@ -14,6 +14,7 @@ namespace Sakkola
 
             builder.Services.AddScoped<IUserClientRepository, UserClientRepository>();
             builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+            builder.Services.AddScoped<ICarrinhoRepository, CarrinhoRepository>();
 
             // Add services to the container.
             var mvcBuilder = builder.Services.AddControllersWithViews();

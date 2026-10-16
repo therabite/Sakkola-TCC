@@ -21,7 +21,7 @@
 <div class="container my-4">
     <div class="card border rounded-4 p-4 shadow-sm bg-white position-relative mx-auto" style="width: 1166px;">
 
-        <a href="javascript:history.back()" class="text-secondary fs-4 mb-3 d-inline-block text-decoration-none">
+        <a asp-controller="Home" asp-action="Index" class="text-secondary fs-4 mb-3 d-inline-block text-decoration-none">
             <i class="bi bi-arrow-left"></i>
         </a>
 
@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="text-end mt-4">
-                    <a asp-controller="Home" asp-action="Carrinho" class="text-dark text-decoration-none d-inline-flex align-items-center gap-2" onclick="mockCarrinho()">
+                    <a asp-controller="Carrinho" asp-action="Index" class="text-dark text-decoration-none d-inline-flex align-items-center gap-2" onclick="adicionarAoCarrinho(@Model.id)">
                         <i class="bi bi-cart3 fs-1 text-dark"></i>
                     </a>
                 </div>
@@ -82,20 +82,25 @@
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        function alterarQtd(valor) {
-            var input = document.getElementById('quantidadeInput');
-            var atual = parseInt(input.value);
-            var novo = atual + valor;
-            if (novo >= 1) {
-                input.value = novo;
-            }
-        }
+<script>
+function adicionarAoCarrinho(idProduto) {
+    let qtdInput = document.getElementById('quantidadeInput');
+    let quantidade = qtdInput ? qtdInput.value : 1;
 
-        function mockCarrinho() {
-            var qtd = document.getElementById('quantidadeInput').value;
-            alert("Produto adicionado ao carrinho com sucesso! (Mockado: " + qtd + " unidade(s))");
+    fetch(`/Carrinho/Adicionar?idProduto=${idProduto}&quantidade=${quantidade}`, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
         }
-    </script>
+    })
+    .then(response => {
+        // Se o utilizador não estiver logado, o [Authorize] redireciona para a tela de Login
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else if (response.ok) {
+            window.location.href = '/Carrinho/Index'; // Vai direto para o carrinho ao adicionar
+        }
+    })
+    .catch(error => console.error('Erro:', error));
 }
+</script>

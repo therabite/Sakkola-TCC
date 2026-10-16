@@ -1,0 +1,34 @@
+﻿@model Sakkola.Models.ViewCarrinho.ItemCarrinho
+
+<div class="row align-items-center p-3 border-bottom position-relative">
+    <div class="col-md-7 d-flex align-items-center gap-3">
+        <div class="border rounded-2 p-1 d-flex justify-content-center align-items-center" style="width: 80px; height: 80px; min-width: 80px;">
+            <img src="~/img/produtos/@(Model.IdProduto).png" class="img-fluid" style="max-height: 100%; object-fit: contain;" onerror="this.src='/img/logo-sakkola-color-no-text.png';" />
+        </div>
+        <div>
+            <p class="text-dark mb-0 fw-medium">@Model.NomeProduto</p>
+        </div>
+    </div>
+
+    <!-- Seletor de Quantidade -->
+    <div class="col-md-3 d-flex justify-content-center">
+        <div class="input-group rounded-pill overflow-hidden border" style="width: 130px;">
+            <span class="btn btn-light border-0 px-3 fw-bold text-secondary">+</span>
+            <input type="text" class="form-control text-center border-0 fw-bold bg-white text-secondary" value="@Model.Quantidade" readonly />
+            <span class="btn btn-light border-0 px-3 fw-bold text-secondary">-</span>
+        </div>
+    </div>
+
+    <!-- Preço e Botão Remover -->
+    <div class="col-md-2 text-end">
+        <div class="d-flex flex-column align-items-end justify-content-center gap-2">
+            <form asp-controller="Carrinho" asp-action="Remover" method="post" class="m-0">
+                <input type="hidden" name="idItem" value="@Model.IdItem" />
+                <button type="submit" class="btn text-muted p-0 border-0 bg-transparent" title="Remover item">
+                    <i class="bi bi-trash fs-5 text-secondary"></i>
+                </button>
+            </form>
+            <span class="fw-bold text-success" style="color: var(--verdinha) !important;">R$ @Model.PrecoUnitario.ToString("N2")</span>
+        </div>
+    </div>
+</div>

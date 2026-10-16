@@ -1,0 +1,58 @@
+﻿@model Sakkola.Models.ViewCarrinho.Carrinho
+
+@{
+    ViewData["Title"] = "Carrinho - Sakkola";
+}
+
+<div class="container my-4" style="max-width: 1200px;">
+    <div class="mb-3">
+        <a asp-controller="Produtos" asp-action="Index" class="text-dark fs-4 text-decoration-none">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+    </div>
+
+    <div class="card border rounded-3 shadow-sm mb-4">
+        <div class="card-header bg-white border-bottom py-3 px-4">
+            <div class="row fw-semibold text-secondary">
+                <div class="col-md-7">Produto</div>
+                <div class="col-md-3 text-center">Quantidade</div>
+                <div class="col-md-2 text-end">Preço Unitário</div>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            @if (Model != null && Model.Itens.Any())
+            {
+                @foreach (var item in Model.Itens)
+                {
+                    <partial name="_ItemCarrinho" model="item" />
+                }
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <p class="text-muted">O seu carrinho está vazio.</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Resumo e Pagamento -->
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <!-- Informações de entrega -->
+        </div>
+        <div class="col-lg-4">
+            <div class="card border rounded-3 shadow-sm h-100 p-3 d-flex flex-column justify-content-between">
+                <h6 class="fw-bold mb-3" style="color: var(--batom-de-paty);">Total a pagar</h6>
+                <div class="bg-light border rounded-2 p-2 text-center mb-3">
+                    <span class="fw-semibold text-secondary">Total: (@Model.TotalItens Itens):</span> 
+                    <span class="fw-bold text-dark fs-5">R$ @Model.ValorTotal.ToString("N2")</span>
+                </div>
+                <button type="button" class="btn text-white w-100 fw-medium py-2" style="background-color: var(--batom-de-paty);">
+                    Finalizar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

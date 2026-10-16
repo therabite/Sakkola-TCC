@@ -2,7 +2,7 @@
 
 <div class="mb-5 gap-1 card p-1 pb-3 px-3 border rounded-3 shadow-sm" style="width: 226.19px; height:391px;">
     <div class="text-end">
-        <a asp-controller="Home" asp-action="Carrinho" class="text-dark text-decoration-none d-inline-flex align-items-center gap-2" onclick="mockCarrinho()">
+        <a asp-controller="Carrinho" asp-action="Index" class="text-dark text-decoration-none d-inline-flex align-items-center gap-2" onclick="adicionarAoCarrinho(@Model.id)">
             <i class="bi bi-cart3 fs-5 text-dark"></i>
         </a>
     </div>
@@ -42,3 +42,25 @@
         width: 100% !important; 
     }
 </style>
+<script>
+function adicionarAoCarrinho(idProduto) {
+    let qtdInput = document.getElementById('quantidadeInput');
+    let quantidade = qtdInput ? qtdInput.value : 1;
+
+    fetch(`/Carrinho/Adicionar?idProduto=${idProduto}&quantidade=${quantidade}`, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        // Se o utilizador não estiver logado, o [Authorize] redireciona para a tela de Login
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else if (response.ok) {
+            window.location.href = '/Carrinho/Index'; // Vai direto para o carrinho ao adicionar
+        }
+    })
+    .catch(error => console.error('Erro:', error));
+}
+</script>
