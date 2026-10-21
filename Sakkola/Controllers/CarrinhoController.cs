@@ -26,18 +26,38 @@ namespace Sakkola.Controllers
         [HttpPost]
         public async Task<IActionResult> Adicionar(int idProduto, int quantidade = 1)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            await _carrinhoRepository.AdicionarItemAsync(userId, idProduto, quantidade);
-
-            // Se for chamada via AJAX/Fetch
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            if (!User.Identity.IsAuthenticated)
             {
-                return Json(new { success = true });
+                return Json(new
+                {
+                    success = false,
+                    requiresLogin = true,
+                    message = "Você precisa estar logado para adicionar produtos ao carrinho!",
+                    redirect = Url.Action("Login", "Account")
+                });
             }
 
-            return RedirectToAction("Index");
-        }
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.Identity.Name;
 
+            await _carrinhoRepository.AdicionarItemAsync(userId, idProduto, quantidade);
+            var carrinho = await _carrinhoRepository.ObterCarrinhoPorUsuarioAsync(userId);
+
+            return Json(new { success = true, totalItens = carrinho.TotalItens });
+        }
+        [HttpPost]
+        public async Task<IActionResult> AtualizarQuantidade(int idItem, int quantidade)
+        {
+            try
+            {
+                await _carrinhoRepository.AtualizarQuantidadeItemAsync(idItem, quantidade);
+
+                return Json(new { success = true });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false });
+            }
+        }
         [HttpPost]
         public async Task<IActionResult> Remover(int idItem)
         {

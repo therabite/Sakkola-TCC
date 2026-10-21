@@ -1,4 +1,5 @@
-﻿using MySqlConnector;
+﻿using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 using Sakkola.Models.ViewCarrinho;
 using Sakkola.Repository.Interfaces;
 
@@ -12,8 +13,6 @@ namespace Sakkola.Repository
         {
             _connectionString = configuration.GetConnectionString("conexaoMySQL")!;
         }
-
-        // Descobre ou cria o ID do carrinho do usuário atual
         private async Task<int> ObterOuCriarCarrinhoIdAsync(MySqlConnection conn, MySqlTransaction? tran, int idUsuario)
         {
             string sqlSelect = "SELECT id_carrinho FROM tbCarrinho WHERE id_usuario = @idUsuario;";
@@ -150,7 +149,23 @@ namespace Sakkola.Repository
                 }
             }
         }
+        public async Task AtualizarQuantidadeItemAsync(int idItem, int quantidade)
+        {
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                await conn.OpenAsync();
 
+                string sql = "UPDATE tbCarrinhoItem SET quantidade = @quantidade WHERE id_item = @idItem;";
+
+                using (var cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@quantidade", quantidade);
+                    cmd.Parameters.AddWithValue("@idItem", idItem);
+
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
+        }
         public async Task RemoverItemAsync(string userIdStr, int idItem)
         {
             using (var conn = new MySqlConnection(_connectionString))

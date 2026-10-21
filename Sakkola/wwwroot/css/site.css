@@ -8,7 +8,20 @@
     --suquinho-de-laranja: #FF7843;
     --vulva-da-estelar: #F24806;
 }
-/* 1. Definição das variáveis de cor por categoria */
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    user-select: none; 
+}
+
+input, textarea, select {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
 .tema-acougue {
     --cor-header: #AD2F12;
     --cor-header-dark: #A40101;

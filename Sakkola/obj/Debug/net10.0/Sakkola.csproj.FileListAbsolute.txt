@@ -1286,5 +1286,5 @@ C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\bin\Debug\net10.0\Microsoft.AspN
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\bin\Debug\net10.0\Microsoft.AspNetCore.Razor.Language.dll
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\bin\Debug\net10.0\Microsoft.CodeAnalysis.Razor.dll
 C:\Users\3mtec\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\Sakkola.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Jucy\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\compressed\ro9sj7835j-{0}-qy41mz0vt0-qy41mz0vt0.gz
-C:\Users\Jucy\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\compressed\739tjhueeb-{0}-ze87xo6x1a-ze87xo6x1a.gz
+C:\Users\Jucy\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\compressed\ro9sj7835j-{0}-qpatmmhji3-qpatmmhji3.gz
+C:\Users\Jucy\source\repos\Sakkola-TCC\Sakkola\obj\Debug\net10.0\compressed\739tjhueeb-{0}-lm3k9a07hb-lm3k9a07hb.gz

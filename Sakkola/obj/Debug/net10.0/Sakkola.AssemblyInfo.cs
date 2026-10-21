@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sakkola")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+40f37028a36c81bb033947f994a0a0dbcc34cba5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7d435baaf9206bf63b42d69b179d0d8f2303b36")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sakkola")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sakkola")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

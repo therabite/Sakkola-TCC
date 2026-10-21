@@ -6,6 +6,7 @@ namespace Sakkola.Repository.Interfaces
         Task<Carrinho> ObterCarrinhoPorUsuarioAsync(string userId);
         Task AdicionarItemAsync(string userId, int idProduto, int quantidade);
         Task AtualizarQuantidadeAsync(string userId, int idItem, int quantidade);
+        Task AtualizarQuantidadeItemAsync(int idItem, int quantidade);
         Task RemoverItemAsync(string userId, int idItem);
     }
 }
