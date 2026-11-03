@@ -36,15 +36,13 @@
             }
         </div>
     </div>
-
-    <!-- Resumo e Pagamento -->
     <div class="mb-5 row g-4">
         <div class="col-lg-8">
-            <!-- Informações de entrega -->
+            <partial name="_AddressInfo" model="Model" />
         </div>
         <div class="col-lg-4">
             <div class="card border rounded-3 shadow-sm h-100 p-3 d-flex flex-column justify-content-between">
-                <h6 class="fw-bold mb-3" style="color: var(--batom-de-paty);">Total a pagar</h6>
+                <h6 class="fw-bold mb-3" style="color: var(--suquinho-de-laranja);">Total a pagar</h6>
                 <div class="bg-light border rounded-2 p-2 text-center mb-3">
                     <span class="fw-semibold text-secondary">Total: (@Model.TotalItens Itens):</span> 
                     <span class="fw-bold text-dark fs-5">R$ @Model.ValorTotal.ToString("N2")</span>

@@ -45,7 +45,7 @@
 <div class="grid-ofertas-home mt-3 mb-5 mx-auto">
     @if (Model != null && Model?.Any() == true)
     {
-        @foreach (var produto in Model.Take(12))
+        @foreach (var produto in Model.Where(p => p.id < 85).Take(24))
         {
             <partial name="_CardProduto" model="produto" />
         }

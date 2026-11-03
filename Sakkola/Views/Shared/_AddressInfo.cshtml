@@ -1,1 +1,80 @@
-﻿@model Sakkola.Models.Endereco
+﻿@model Sakkola.Models.ViewCarrinho.Carrinho
+
+<div class="card border rounded-3 shadow-sm p-4 position-relative h-100">
+    <button type="button" class="btn position-absolute top-0 end-0 m-3 p-0 border-0 bg-transparent text-secondary" data-bs-toggle="modal" data-bs-target="#modalEditarEntrega" title="Editar Informações de Entrega" style="cursor: pointer;">
+        <i class="bi bi-pencil-square fs-5"></i>
+    </button>
+
+    <h6 class="fw-bold mb-3" style="color: var(--batom-de-paty);">Informações de Entrega</h6>
+
+    <div class="row align-items-center">
+        <div class="col-md-5 border-end">
+            <!-- Exibição do Nome e Telefone -->
+            <p class="fw-medium text-dark mb-1">@(Model?.NomeCliente ?? "Nome não cadastrado")</p>
+            <p class="text-muted mb-0">@(Model?.Telefone ?? "Telefone não cadastrado")</p>
+        </div>
+
+        <div class="col-md-7 ps-md-4">
+            <!-- Exibição do Endereço -->
+            <p class="text-secondary mb-0">
+                @Model?.Logradouro, @Model?.Numero<br />
+                @Model?.Bairro, @Model?.Cidade - @Model?.Estado<br />
+                @Model?.Cep
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Edição -->
+<div class="modal fade" id="modalEditarEntrega" tabindex="-1" aria-labelledby="modalEditarEntregaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4 p-3">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold w-100 text-center" style="color: var(--batom-de-paty);" id="modalEditarEntregaLabel">Informações de Entrega</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+
+                <form asp-action="SalvarEndereco" asp-controller="Carrinho" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary small fw-bold">Nome</label>
+                            <input type="text" class="form-control" name="NomeCliente" value="@Model?.NomeCliente" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary small fw-bold">Telefone</label>
+                            <input type="text" class="form-control" name="Telefone" value="@Model?.Telefone" required />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-secondary small fw-bold">CEP</label>
+                            <input type="text" class="form-control" name="Cep" value="@Model?.Cep" required />
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label text-secondary small fw-bold">Logradouro</label>
+                            <input type="text" class="form-control" name="Logradouro" value="@Model?.Logradouro" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-secondary small fw-bold">Número</label>
+                            <input type="text" class="form-control" name="Numero" value="@Model?.Numero" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary small fw-bold-md">Bairro</label>
+                            <input type="text" class="form-control" name="Bairro" value="@Model?.Bairro" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary small fw-bold">Cidade</label>
+                            <input type="text" class="form-control" name="Cidade" value="@Model?.Cidade" required />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-secondary small fw-bold">Estado</label>
+                            <input type="text" class="form-control" name="Estado" value="@Model?.Estado" required />
+                        </div>
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn text-white w-100 py-2 fw-medium rounded-pill" style="background-color: var(--batom-de-paty);">Finalizar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -68,6 +68,18 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+            "Microsoft.Graph": {
+              "target": "Package",
+              "version": "[6.9.0, )"
+            },
+            "Microsoft.Identity.Client": {
+              "target": "Package",
+              "version": "[4.92.0, )"
+            },
+            "Microsoft.Identity.Web": {
+              "target": "Package",
+              "version": "[4.16.1, )"
+            },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
               "version": "[9.0.0, )"

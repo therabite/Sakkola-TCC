@@ -89,6 +89,7 @@ nome varchar(50) not null
 ALTER TABLE tbClient ADD CONSTRAINT fk_client_user FOREIGN KEY (id_client) REFERENCES tbUser(id_user);
 
 ALTER TABLE tbEntrega ADD COLUMN id_address INT, ADD COLUMN id_pedido INT;
+ALTER TABLE tbAddress ADD COLUMN cidade varchar(50);
 ALTER TABLE tbEntrega ADD CONSTRAINT fk_entrega_address FOREIGN KEY (id_address) REFERENCES tbAddress(id_address);
 
 ALTER TABLE tbEntrega ADD CONSTRAINT fk_entrega_pedido FOREIGN KEY (id_pedido) REFERENCES tbPedido(id_pedido);
@@ -108,6 +109,7 @@ INSERT IGNORE INTO tbCategoria (nome) VALUES
 ('Hortifrúti'),
 ('Padaria'),
 ('Higiene'),
+
 ('Limpeza'),
 ('Frios e Laticínios'),
 ('Mercearia');
@@ -257,3 +259,11 @@ CREATE TABLE tbCarrinhoItem (
     CONSTRAINT fk_item_carrinho FOREIGN KEY (id_carrinho) REFERENCES tbCarrinho(id_carrinho) ON DELETE CASCADE,
     CONSTRAINT fk_item_produto FOREIGN KEY (id_produto) REFERENCES tbProduto(id_produto) ON DELETE CASCADE
 );
+
+select * from tbproduto;
+
+ALTER TABLE tbAddress MODIFY COLUMN cep VARCHAR(10);
+ALTER TABLE tbAddress MODIFY COLUMN numero VARCHAR(20);
+ALTER TABLE tbUser MODIFY COLUMN telefone VARCHAR(20);
+
+CALL sp_InserirProduto('Extrato de Tomate', 'Extrato de Tomate Concentrado - Lata 340g', 6.50, 70, 'Mercearia');

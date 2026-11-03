@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Sakkola.Models.ViewCarrinho;
 using Sakkola.Repository.Interfaces;
 using System.Security.Claims;
 
@@ -11,16 +12,26 @@ namespace Sakkola.Controllers
         {
             _carrinhoRepository = carrinhoRepository;
         }
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.Identity.Name;
-
-            if (string.IsNullOrEmpty(userId))
+            if (User.Identity == null || !User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Login", "Account");
             }
+            
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var carrinho = await _carrinhoRepository.ObterCarrinhoPorUsuarioAsync(userId);
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var carrinho = await _carrinhoRepository.ObterCarrinhoPorUsuarioAsync(userId.ToString());
+            if (carrinho == null)
+            {
+                carrinho = new Sakkola.Models.ViewCarrinho.Carrinho();
+            }
+            
             return View(carrinho);
         }
         [HttpPost]
@@ -63,6 +74,20 @@ namespace Sakkola.Controllers
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             await _carrinhoRepository.RemoverItemAsync(userId, idItem);
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SalvarEndereco(Carrinho carrinho)
+        {
+            string userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdStr))
+            {
+                return RedirectToAction("Login"); 
+            }
+            await _carrinhoRepository.AtualizarDadosEntregaAsync(userIdStr, carrinho);
+           
             return RedirectToAction("Index");
         }
     }

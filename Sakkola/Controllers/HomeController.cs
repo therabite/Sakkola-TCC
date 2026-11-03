@@ -19,10 +19,9 @@ namespace Sakkola.Controllers
             var produtos = await _produtoRepository.ObterTodosAsync();
             return View(produtos);
         }
-
-        public IActionResult Promocoes()
+        public async Task<IActionResult> Promocoes()
         {
-            return View();
+            return View(await _produtoRepository.ObterTodosAsync());
         }
 
         public IActionResult Carrinho()

@@ -10,6 +10,7 @@
         console.error("A biblioteca do Bootstrap não foi encontrada.");
     }
 });
+
 //seletor de quantidade
 window.alterarQtd = function(delta) {
     let input = document.getElementById('quantidadeInput');

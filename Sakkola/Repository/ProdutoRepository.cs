@@ -38,7 +38,6 @@ namespace Sakkola.Repository
             }
             return produtos;
         }
-
         public async Task<List<Produtos>> ObterPorCategoriaAsync(string nomeCategoria)
         {
             var produtos = new List<Produtos>();
@@ -67,7 +66,6 @@ namespace Sakkola.Repository
             }
             return produtos;
         }
-
         public async Task<Produtos> ObterPorIdAsync(int id)
         {
             Produtos produto = null;
@@ -94,7 +92,6 @@ namespace Sakkola.Repository
             }
             return produto;
         }
-
         public async Task<List<Produtos>> ObterPorCategoriaExcetoIdAsync(int idCategoria, int idProdutoAtual, int limite = 4)
         {
             var produtos = new List<Produtos>();
@@ -125,7 +122,6 @@ namespace Sakkola.Repository
             }
             return produtos;
         }
-
         private Produtos MapearProduto(MySqlDataReader reader)
         {
             return new Produtos
@@ -143,5 +139,6 @@ namespace Sakkola.Repository
                 }
             };
         }
+
     }
 }
