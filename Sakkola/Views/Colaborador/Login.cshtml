@@ -1,0 +1,58 @@
+﻿@model Sakkola.Models.ViewModel.LoginColaborador
+
+<div asp-validation-summary="All" class="text-danger"></div>
+<div class="container my-5 py-4">
+    <div class="row align-items-center justify-content-sm-between g-5">
+
+        <div class="col-4 col-md-2 text-center">
+            <img src="~/img/Logo.png" alt="Sakkola Ilustração" style="max-height: 50vh; opacity: 30%;" />
+        </div>
+
+
+        <div class="col-12 col-md-5 col-lg-4">
+            <div class="card p-4 border rounded-1 mt-3" style="height: 450px;">
+
+                <!-- Logo -->
+                <div class="text-center mb-4">
+                    <a class="navar-brand text-white fw-bold fs-3 me-3" asp-area="" asp-controller="home" asp-action="Index">
+                        <img src="~/img/logo-sakkola-color.png" style="height: 80px;" />
+                    </a>
+                </div>
+
+                <form asp-controller="Colaborador" asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
+
+                    <div style="margin-top: 2vh;">
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label fw-medium text-dark mb-1">Email</label>
+                            <input asp-for="Email" class="sem-foco form-control rounded-2" placeholder="Digite seu email aqui" style="height: 50px;" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Senha -->
+                        <div class="mb-1">
+                            <label asp-for="Senha" class="form-label fw-medium text-dark mb-1">Senha</label>
+                            <input asp-for="Senha" type="password" class="sem-foco form-control rounded-2" placeholder="********" style="height: 50px;" />
+                            <span asp-validation-for="Senha" class="text-danger small"></span>
+                        </div>
+
+                    <div style="margin-top: 6vh;">
+                        <!-- Botão Entrar -->
+                        <button type="submit" class="btn btn-dark w-100 py-2 fw-semibold rounded-3 shadow-sm">
+                            Entrar no Painel
+                        </button>
+
+                        <!-- Link Cadastrar -->
+                        <div class="text-center small">
+                            <span class="text-dark">Não possui cadastro? </span>
+                            <a asp-controller="Colaborador" asp-action="Cadastro" class="fw-bold text-decoration-none" style="color: #4CAF50;">CADASTRAR</a>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>

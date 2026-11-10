@@ -9,5 +9,8 @@ namespace Sakkola.Repository.Interfaces
         Task AtualizarQuantidadeItemAsync(int idItem, int quantidade);
         Task RemoverItemAsync(string userId, int idItem);
         Task AtualizarDadosEntregaAsync(string userIdStr, Carrinho carrinho);
+        Task<List<ItemCarrinho>> ObterItensPorUsuarioAsync(int idUser);
+        Task LimparCarrinhoAsync(int idUser);
+        Task FinalizarCompraAsync(int idUser, decimal valorTotal);
     }
 }

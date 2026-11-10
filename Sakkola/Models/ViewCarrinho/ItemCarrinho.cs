@@ -2,6 +2,7 @@
 {
     public class ItemCarrinho
     {
+        public int IdCarrinho { get; set; }
         public int IdItem { get; set; }
         public int IdProduto { get; set; }
         public string NomeProduto { get; set; }

@@ -4,7 +4,7 @@ using Sakkola.Data;
 using Sakkola.Repository;
 using Sakkola.Repository.Interfaces;
 
-namespace Sakkola   
+namespace Sakkola
 {
     public class Program
     {
@@ -15,10 +15,19 @@ namespace Sakkola
             builder.Services.AddScoped<IUserClientRepository, UserClientRepository>();
             builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
             builder.Services.AddScoped<ICarrinhoRepository, CarrinhoRepository>();
+            builder.Services.AddScoped<IColaboradorRepository, ColaboradorRepository>();
+
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             // Add services to the container.
             var mvcBuilder = builder.Services.AddControllersWithViews();
-            mvcBuilder.AddRazorRuntimeCompilation(); // Corrige o uso do método de extensão
+            mvcBuilder.AddRazorRuntimeCompilation();
 
             var connectionString = builder.Configuration.GetConnectionString("conexaoMySQL");
 
@@ -35,7 +44,6 @@ namespace Sakkola
             });
 
             var app = builder.Build();
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
@@ -44,11 +52,16 @@ namespace Sakkola
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseSession();
+
             app.UseAuthentication();
             app.UseAuthorization();
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
             app.Run();
         }
     }

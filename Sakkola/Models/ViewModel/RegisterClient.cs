@@ -48,8 +48,5 @@ namespace Sakkola.Models.ViewModel
         [Required(ErrorMessage = "O CPF é obrigatório para cadastro.")]
         [RegularExpression(@"^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$", ErrorMessage = "Informe um CPF válido.")]
         public string cpf { get; set; } = string.Empty;
-        /// <summary>
-        /// 
-        /// </summary
     }
 }

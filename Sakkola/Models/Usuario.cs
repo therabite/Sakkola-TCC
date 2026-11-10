@@ -33,9 +33,5 @@ namespace Sakkola.Models
 
         [Required]
         public string telefone { get; set; } = string.Empty;
-
-        [Required]
-        public string rg { get; set; } = string.Empty;
-
     }
 }

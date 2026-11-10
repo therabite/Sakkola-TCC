@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Sakkola.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Painel de Pedidos";
+}
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark">Painel de Pedidos</h2>
+            <p class="text-muted m-0">Acompanhe os pedidos efetuados pelos clientes em tempo real.</p>
+        </div>
+        <a asp-controller="Colaborador" asp-action="Login" class="btn btn-outline-secondary btn-sm">Sair / Trocar Conta</a>
+    </div>
+
+    <!-- Mensagens de Feedback (Sucesso/Erro) -->
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Sucesso"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Verificação se a lista está vazia -->
+    @if (Model == null || !Model.Any())
+    {
+        <div class="card shadow-sm border-0 p-5 text-center bg-light rounded-4">
+            <h4 class="text-muted fw-normal">Nenhum pedido registado no momento.</h4>
+            <p class="text-muted small mt-2">Assim que os clientes finalizarem compras, eles aparecerão aqui.</p>
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="py-3 ps-4">ID Pedido</th>
+                            <th class="py-3">ID Cliente</th>
+                            <th class="py-3">Data do Pedido</th>
+                            <th class="py-3">Valor Total</th>
+                            <th class="py-3">Status</th>
+                            <th class="py-3 text-end pe-4">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pedido in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-primary">#@pedido.IdPedido</td>
+                                <td>@pedido.IdCliente</td>
+                                <td>@pedido.DataPedido.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="fw-bold text-success">R$ @pedido.ValorTotal.ToString("N2")</td>
+                                <td>
+                                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
+                                        @pedido.Status
+                                    </span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <!-- Formulário para alterar o status do pedido rapidamente -->
+                                    <form asp-action="AtualizarStatus" method="post" class="d-inline">
+                                        <input type="hidden" name="idPedido" value="@pedido.IdPedido" />
+                                        <input type="hidden" name="novoStatus" value="Concluído" />
+                                        <button type="submit" class="btn btn-sm btn-outline-success rounded-3 px-3">
+                                            Concluir
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

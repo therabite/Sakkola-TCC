@@ -284,5 +284,94 @@ namespace Sakkola.Repository
                 }
             }
         }
+        public async Task<List<ItemCarrinho>> ObterItensPorUsuarioAsync(int idUser)
+        {
+            var itens = new List<ItemCarrinho>();
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                await conn.OpenAsync();
+
+                string sql = @"SELECT c.id_carrinho, c.id_produto, c.quantidade, 
+                                  p.nome AS nome_produto, p.preco AS preco_unitario 
+                           FROM tbCarrinho c
+                           INNER JOIN tbProduto p ON c.id_produto = p.id_produto
+                           WHERE c.id_user = @id_user;";
+
+                using (var cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id_user", idUser);
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            itens.Add(new ItemCarrinho
+                            {
+                                IdCarrinho = Convert.ToInt32(reader["id_carrinho"]),
+                                IdProduto = Convert.ToInt32(reader["id_produto"]),
+                                NomeProduto = reader["nome_produto"]?.ToString() ?? "",
+                                PrecoUnitario = Convert.ToDecimal(reader["preco_unitario"]),
+                                Quantidade = Convert.ToInt32(reader["quantidade"])
+                            });
+                        }
+                    }
+                }
+            }
+
+            return itens;
+        }
+        public async Task LimparCarrinhoAsync(int idUser)
+        {
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                await conn.OpenAsync();
+
+                string sql = "DELETE FROM tbCarrinho WHERE id_user = @id_user;";
+
+                using (var cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id_user", idUser);
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
+        }
+        public async Task FinalizarCompraAsync(int idUser, decimal valorTotal)
+        {
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                await conn.OpenAsync();
+
+                using (var transaction = await conn.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        string sqlPedido = "INSERT INTO tbpedido (id_user, valor_total, data_pedido, status) VALUES (@idUser, @valorTotal, NOW(), 'Pendente');";
+
+                        using (var cmdPedido = new MySqlCommand(sqlPedido, conn, transaction))
+                        {
+                            cmdPedido.Parameters.AddWithValue("@idUser", idUser);
+                            cmdPedido.Parameters.AddWithValue("@valorTotal", valorTotal);
+                            await cmdPedido.ExecuteNonQueryAsync();
+                        }
+
+                        string sqlLimparCarrinho = "DELETE FROM tbCarrinho WHERE id_user = @idUser;";
+
+                        using (var cmdLimpar = new MySqlCommand(sqlLimparCarrinho, conn, transaction))
+                        {
+                            cmdLimpar.Parameters.AddWithValue("@idUser", idUser);
+                            await cmdLimpar.ExecuteNonQueryAsync();
+                        }
+
+                        await transaction.CommitAsync();
+                    }
+                    catch
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+            }
+        }
     }
 }

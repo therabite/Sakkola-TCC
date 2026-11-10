@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Sakkola.Models;
 using Sakkola.Models.ViewCarrinho;
+using Sakkola.Repository;
 using Sakkola.Repository.Interfaces;
 using System.Security.Claims;
 
@@ -89,6 +91,29 @@ namespace Sakkola.Controllers
             await _carrinhoRepository.AtualizarDadosEntregaAsync(userIdStr, carrinho);
            
             return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public async Task<IActionResult> FinalizarCompra()
+        {
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            int userId = Convert.ToInt32(userIdClaim);
+
+            var itens = await _carrinhoRepository.ObterItensPorUsuarioAsync(userId);
+            if (itens == null || !itens.Any())
+            {
+                TempData["Erro"] = "O seu carrinho está vazio!";
+                return RedirectToAction("Index");
+            }
+            decimal valorTotal = itens.Sum(i => i.PrecoUnitario * i.Quantidade);
+
+            await _carrinhoRepository.FinalizarCompraAsync(userId, valorTotal);
+
+            TempData["Sucesso"] = "Pedido finalizado com sucesso! O colaborador já pode visualizá-lo.";
+            return RedirectToAction("Index", "Home");
         }
     }
 }

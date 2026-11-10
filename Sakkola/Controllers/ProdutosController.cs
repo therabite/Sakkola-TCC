@@ -52,14 +52,12 @@ namespace Sakkola.Controllers
             };
 
             ViewData["IdCategoria"] = id.ToLower();
-
-            // Usa corretamente o método que aceita string
+            
             var produtos = await _produtoRepository.ObterPorCategoriaAsync(id);
 
             return View(produtos);
         }
 
-        // Tela de Detalhes do Produto (recebe inteiro do ID)
         public async Task<IActionResult> Detalhes(int id)
         {
             var produto = await _produtoRepository.ObterPorIdAsync(id);

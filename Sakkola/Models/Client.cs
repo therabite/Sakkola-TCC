@@ -14,6 +14,5 @@ namespace Sakkola.Models
         public DateOnly DataNasc { get; set; }
         public string Cpf { get; set; } = string.Empty;
         public string Telefone { get; set; } = string.Empty;
-        public string Rg { get; set; } = string.Empty;
     }
 }
