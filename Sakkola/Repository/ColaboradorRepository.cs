@@ -18,9 +18,10 @@ namespace Sakkola.Repository
             using (var conn = new MySqlConnection(_connectionString))
             {
                 await conn.OpenAsync();
-                string sql = @"SELECT u.id_user, u.email, f.is_admin 
-                       FROM tbFuncionario f
-                       INNER JOIN tbUser u ON f.id_employed = u.id_user
+
+                string sql = @"SELECT u.id_user, u.email, u.senha, f.is_admin 
+                       FROM tbFuncionario f 
+                       INNER JOIN tbUser u ON f.id_employed = u.id_user 
                        WHERE u.email = @email AND u.senha = @senha;";
 
                 using (var cmd = new MySqlCommand(sql, conn))
@@ -33,6 +34,7 @@ namespace Sakkola.Repository
                         if (await reader.ReadAsync())
                         {
                             bool isAdmin = Convert.ToBoolean(reader["is_admin"]);
+
                             if (!isAdmin)
                             {
                                 return null;
@@ -108,7 +110,7 @@ namespace Sakkola.Repository
                 }
             }
         }
-        public async Task CadastrarFuncionarioAsync(string nome, DateTime dataNasc, int telefone, int cpf, string email, string senha, bool isAdmin)
+        public async Task CadastrarFuncionarioAsync(RegisterColaborador colaborador)
         {
             using (var conn = new MySqlConnection(_connectionString))
             {
@@ -126,12 +128,12 @@ namespace Sakkola.Repository
 
                         using (var cmdUser = new MySqlCommand(sqlUser, conn, transaction))
                         {
-                            cmdUser.Parameters.AddWithValue("@nome", nome);
-                            cmdUser.Parameters.AddWithValue("@dataNasc", dataNasc);
-                            cmdUser.Parameters.AddWithValue("@telefone", telefone);
-                            cmdUser.Parameters.AddWithValue("@cpf", cpf);
-                            cmdUser.Parameters.AddWithValue("@email", email);
-                            cmdUser.Parameters.AddWithValue("@senha", senha);
+                            cmdUser.Parameters.AddWithValue("@nome", colaborador.Nome);
+                            cmdUser.Parameters.AddWithValue("@dataNasc", colaborador.DataNasc);
+                            cmdUser.Parameters.AddWithValue("@telefone", colaborador.Telefone);
+                            cmdUser.Parameters.AddWithValue("@cpf", colaborador.Cpf);
+                            cmdUser.Parameters.AddWithValue("@email", colaborador.Email);
+                            cmdUser.Parameters.AddWithValue("@senha", colaborador.Senha);
 
                             idGerado = Convert.ToInt64(await cmdUser.ExecuteScalarAsync());
                         }
@@ -141,7 +143,7 @@ namespace Sakkola.Repository
                         using (var cmdFunc = new MySqlCommand(sqlFuncionario, conn, transaction))
                         {
                             cmdFunc.Parameters.AddWithValue("@idEmployed", idGerado);
-                            cmdFunc.Parameters.AddWithValue("@isAdmin", isAdmin);
+                            cmdFunc.Parameters.AddWithValue("@isAdmin", colaborador.IsAdmin);
                             await cmdFunc.ExecuteNonQueryAsync();
                         }
 

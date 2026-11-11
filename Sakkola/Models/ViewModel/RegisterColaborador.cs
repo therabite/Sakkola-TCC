@@ -4,14 +4,18 @@ namespace Sakkola.Models.ViewModel
 {
     public class RegisterColaborador
     {
-        public int Id_colaborador { get; set; }
-        public string nome { get; set; }
-        public DateTime data_nasc { get; set; }
-        public int telefone { get; set; }
-        public int cpf { get; set; }
-        public string email { get; set; }
-        public string senha { get; set; }
-        public string confirmarsenha { get; set; }
+        public string Nome { get; set; }
+        public DateTime DataNasc { get; set; }
+        public string Telefone { get; set; }
+        public string Cpf { get; set; }
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "A senha é obrigatória.")]
+        public string Senha { get; set; }
+
+        [Required(ErrorMessage = "A confirmação de senha é obrigatória.")]
+        [Compare("Senha", ErrorMessage = "As senhas não coincidem.")]
+        public string ConfirmarSenha { get; set; }
         public bool IsAdmin { get; set; }
     }
 }

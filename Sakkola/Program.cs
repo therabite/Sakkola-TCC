@@ -16,6 +16,7 @@ namespace Sakkola
             builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
             builder.Services.AddScoped<ICarrinhoRepository, CarrinhoRepository>();
             builder.Services.AddScoped<IColaboradorRepository, ColaboradorRepository>();
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>

@@ -7,6 +7,7 @@ wwwroot\img\banners\hortifruti.jpeg
 wwwroot\img\banners\limpeza.jpeg
 wwwroot\img\banners\mercearia.jpeg
 wwwroot\img\banners\padaria.jpeg
+wwwroot\img\Logo-Escrito-Black.png
 wwwroot\img\Logo-Escrito-White.png
 wwwroot\img\logo-sakkola-color-no-text.png
 wwwroot\img\logo-sakkola-color.png

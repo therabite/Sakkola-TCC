@@ -1,45 +1,54 @@
 ﻿@model Sakkola.Models.ViewModel.RegisterColaborador
-﻿@{
-ViewData["Title"] = "Cadastro";
-}
+
 <div class="container mb-4 py-4">
     <div class="row align-items-center justify-content-sm-between g-5">
-        <!-- Formulário de Cadastro (Esquerda) -->
+
         <div class="col-12 col-md-6 col-lg-5">
             <div class="card p-4 border rounded-1 mt-3">
 
-                <form asp-action="Cadastro" method="post">
+                <form asp-controller="Colaborador" asp-action="Cadastro" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
+
                     <div class="mb-3">
-                        <label class="form-label">Nome Completo</label>
-                        <input type="text" name="nome" class="form-control" required />
+                        <label asp-for="Nome" class="form-label fw-medium text-dark mb-1 small">Nome Completo</label>
+                        <input asp-for="Nome" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Escreva aqui seu nome completo" />
+                        <span asp-validation-for="Nome" class="text-danger small"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Data de Nascimento</label>
-                        <!-- O name tem de ser exatamente "dataNasc" -->
-                        <input type="date" name="dataNasc" class="form-control" required />
+                        <label asp-for="DataNasc" class="form-label fw-medium text-dark mb-1 small">Data de Nascimento</label>
+                        <input asp-for="DataNasc" id="DataNasc" type="text" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="dd/mm/yyyy" />
+                        <span asp-validation-for="DataNasc" class="text-danger small"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Telefone</label>
-                        <!-- O name tem de ser exatamente "telefone" -->
-                        <input type="number" name="telefone" class="form-control" required />
+                        <label asp-for="Telefone" class="form-label fw-medium text-dark mb-1 small">Telefone</label>
+                        <input asp-for="Telefone" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Digite seu telefone" />
+                        <span asp-validation-for="Telefone" class="text-danger small"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">CPF</label>
-                        <!-- O name tem de ser exatamente "cpf" -->
-                        <input type="number" name="cpf" class="form-control" required />
+                        <label asp-for="Cpf" class="form-label fw-medium text-dark mb-1 small">CPF</label>
+                        <input asp-for="Cpf" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Digite seu CPF" />
+                        <span asp-validation-for="Cpf" class="text-danger small"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">E-mail Corporativo</label>
-                        <input type="email" name="email" class="form-control" placeholder="usuario@admin" required />
+                        <label asp-for="Email" class="form-label fw-medium text-dark mb-1 small">E-mail Corporativo</label>
+                        <input asp-for="Email" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="usuario@admin" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Senha</label>
-                        <input type="password" name="senha" class="form-control" maxlength="8" required />
+                        <label asp-for="Senha" class="form-label fw-medium text-dark mb-1 small">Senha</label>
+                        <input asp-for="Senha" type="password" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Digite sua senha" />
+                        <span asp-validation-for="Senha" class="text-danger small"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="ConfirmarSenha" class="form-label fw-medium text-dark mb-1 small">Confirmar Senha</label>
+                        <input asp-for="ConfirmarSenha" type="password" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Confirme sua senha" />
+                        <span asp-validation-for="ConfirmarSenha" class="text-danger small"></span>
                     </div>
 
                     <div class="mb-3 form-check">
@@ -47,9 +56,8 @@ ViewData["Title"] = "Cadastro";
                         <label class="form-check-label" for="checkAdmin">Conceder privilégios de Administrador</label>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">Cadastrar Funcionário</button>
+                    <button type="submit" class="btn btn-dark w-100 py-2 fw-semibold rounded-3 shadow-sm">Cadastrar Funcionário</button>
                 </form>
-
             </div>
         </div>
 
@@ -60,14 +68,15 @@ ViewData["Title"] = "Cadastro";
 
     </div>
 </div>
+
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
     <script>
         $(document).ready(function () {
-            $('#dataNasc').mask('00/00/0000');
-            $('#cep').mask('00000-000');
-            $('#cpf').mask('000.000.000-00', { reverse: true });
+            // Como o asp-for gera o ID com a mesma capitalização da propriedade:
+            $('#DataNasc').mask('00/00/0000');
+            $('#Cpf').mask('000.000.000-00', { reverse: true });
 
             var maskBehavior = function (val) {
                 return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
@@ -77,7 +86,7 @@ ViewData["Title"] = "Cadastro";
                     field.mask(maskBehavior.apply({}, arguments), options);
                 }
             };
-            $('#telefone').mask(maskBehavior, options);
+            $('#Telefone').mask(maskBehavior, options);
         });
     </script>
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Sakkola.Libraries.Filtro;
 using Sakkola.Models.ViewModel;
 using Sakkola.Repository.Interfaces;
 
@@ -12,21 +13,20 @@ namespace Sakkola.Controllers
         {
             _colaboradorRepository = colaboradorRepository;
         }
+
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> Login(LoginColaborador model)
         {
-            if (string.IsNullOrEmpty(model.Email) || !model.Email.EndsWith("@admin", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(model.Email) || !model.Email.EndsWith("@admin.com", StringComparison.OrdinalIgnoreCase))
             {
-                ModelState.AddModelError(string.Empty, "Acesso restrito. O e-mail deve pertencer ao domínio @admin.");
+                ModelState.AddModelError(string.Empty, "Acesso restrito. O e-mail deve pertencer ao domínio @admin.com");
                 return View(model);
             }
-
             var colaborador = await _colaboradorRepository.ValidarColaboradorAsync(model.Email, model.Senha);
 
             if (colaborador == null)
@@ -35,11 +35,12 @@ namespace Sakkola.Controllers
                 return View(model);
             }
 
+            HttpContext.Session.SetString("Senha", colaborador.Senha);
             HttpContext.Session.SetString("EmailColaborador", colaborador.Email);
-            HttpContext.Session.SetString("SenhaColaborador", colaborador.Senha);
 
             return RedirectToAction("PainelPedidos", "Colaborador");
         }
+
         [HttpGet]
         public IActionResult Cadastro()
         {
@@ -47,53 +48,27 @@ namespace Sakkola.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Cadastro(RegisterColaborador model)
+        public async Task<IActionResult> Cadastro(RegisterColaborador colaborador)
         {
-            if (string.IsNullOrEmpty(model.email) || !model.email.EndsWith("@admin.com", StringComparison.OrdinalIgnoreCase))
+            if (!ModelState.IsValid) return View(colaborador);
+
+            if (string.IsNullOrEmpty(colaborador.Email) || !colaborador.Email.EndsWith("@admin.com", StringComparison.OrdinalIgnoreCase))
             {
                 ModelState.AddModelError(string.Empty, "O e-mail deve terminar com @admin.com");
-                return View(model);
+                return View(colaborador);
             }
 
-            try
-            {
-                await _colaboradorRepository.CadastrarFuncionarioAsync(
-                    model.nome,
-                    model.data_nasc,
-                    model.telefone,
-                    model.cpf,
-                    model.email,
-                    model.senha,
-                    model.IsAdmin
-                );
+            await _colaboradorRepository.CadastrarFuncionarioAsync(colaborador);
 
-                TempData["Sucesso"] = "Funcionário cadastrado com sucesso!";
-                return RedirectToAction("Login");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, "Erro: " + ex.Message);
-                return View(model);
-            }
+            TempData["Sucesso"] = "Funcionário cadastrado com sucesso!";
+            return RedirectToAction("Login");
         }
+
+        [ColaboradorAutorizacao]
         [HttpGet]
-        public async Task<IActionResult> PainelPedidos()
+        public IActionResult PainelPedidos()
         {
-            if (HttpContext.Session.GetString("EmailColaborador") == null)
-            {
-                return RedirectToAction("Login", "Colaborador");
-            }
-
-            var pedidos = await _colaboradorRepository.ObterPedidosPendentesAsync();
-            return View(pedidos);
-        }
-        [HttpPost]
-        public async Task<IActionResult> AtualizarStatus(int idPedido, string novoStatus)
-        {
-            await _colaboradorRepository.AtualizarStatusPedidoAsync(idPedido, novoStatus);
-
-            TempData["Sucesso"] = "Status do pedido atualizado com sucesso!";
-            return RedirectToAction(nameof(PainelPedidos));
+            return View();
         }
     }
 }

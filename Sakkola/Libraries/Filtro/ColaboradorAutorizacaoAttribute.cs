@@ -7,11 +7,13 @@ namespace Sakkola.Libraries.Filtro
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var httpContext = context.HttpContext;
-            if (httpContext.Session.GetInt32("IdColaborador") == null)
+            var sessaoEmail = context.HttpContext.Session.GetString("EmailColaborador");
+
+            if (string.IsNullOrEmpty(sessaoEmail))
             {
                 context.Result = new RedirectToActionResult("Login", "Colaborador", null);
             }
+
             base.OnActionExecuting(context);
         }
     }
