@@ -66,15 +66,22 @@ namespace Sakkola.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginClient loginClient)
         {
-            if (!ModelState.IsValid)
+            if (loginClient == null || string.IsNullOrEmpty(loginClient.Email))
             {
                 return View(loginClient);
             }
+
+            if (loginClient.Email.Contains("admin.com", StringComparison.OrdinalIgnoreCase))
+            {
+                TempData["MensagemAviso"] = "E-mail administrativo detectado. Por favor, faça login na área de colaboradores.";
+
+                return RedirectToAction("Login", "Colaborador");
+            }
             try
             {
-                var usuaria = await _clientRepository.ValidarUserAsync(loginClient.Email, loginClient.Senha);
+                var usuario = await _clientRepository.ValidarUserAsync(loginClient.Email, loginClient.Senha);
 
-                if (usuaria == null)
+                if (usuario == null)
                 {
                     ModelState.AddModelError(string.Empty, "Email ou senha inválidos.");
                     return View(loginClient);
@@ -82,9 +89,9 @@ namespace Sakkola.Controllers
 
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.NameIdentifier, usuaria.Id_user.ToString()),
-                    new Claim(ClaimTypes.Name, usuaria.nome),
-                    new Claim(ClaimTypes.Email, usuaria.email)
+                    new Claim(ClaimTypes.NameIdentifier, usuario.Id_user.ToString()),
+                    new Claim(ClaimTypes.Name, usuario.nome),
+                    new Claim(ClaimTypes.Email, usuario.email)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -97,7 +104,7 @@ namespace Sakkola.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Carrinho");
             }
             catch (Exception ex)
             {

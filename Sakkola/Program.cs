@@ -1,7 +1,8 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using Sakkola.Data;
 using Sakkola.Repository;
+using Sakkola.Repository.Contract;
 using Sakkola.Repository.Interfaces;
 
 namespace Sakkola
@@ -16,6 +17,7 @@ namespace Sakkola
             builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
             builder.Services.AddScoped<ICarrinhoRepository, CarrinhoRepository>();
             builder.Services.AddScoped<IColaboradorRepository, ColaboradorRepository>();
+            builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             builder.Services.AddDistributedMemoryCache();

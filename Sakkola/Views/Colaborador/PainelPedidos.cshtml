@@ -5,6 +5,7 @@
 }
 
 <div class="container my-5">
+    <!-- Cabeçalho do Painel -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold text-dark">Painel de Pedidos</h2>
@@ -13,16 +14,40 @@
         <a asp-controller="Colaborador" asp-action="Login" class="btn btn-outline-secondary btn-sm">Sair / Trocar Conta</a>
     </div>
 
-    <!-- Mensagens de Feedback (Sucesso/Erro) -->
+    <!-- Alerta de Sucesso -->
     @if (TempData["Sucesso"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div id="alertaSucessoAdmin" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
             @TempData["Sucesso"]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+
+        <script>
+            setTimeout(function() {
+                var alerta = document.getElementById('alertaSucessoAdmin');
+                if (alerta) {
+                    var bsAlert = new bootstrap.Alert(alerta);
+                    bsAlert.close();
+                }
+            }, 5000);
+        </script>
     }
 
-    <!-- Verificação se a lista está vazia -->
+    <!-- Formulário de Filtro por Status -->
+    <form method="get" asp-action="PainelPedidos" class="row g-1 mb-3 align-items-center bg-white p-3 rounded-4 shadow-sm border" style="height:70px">
+        <div class="col-auto">
+            <label for="status" class="col-form-label fw-bold text-secondary">Filtrar por Status:</label>
+        </div>
+        <div class="col-auto">
+            <select name="status" id="status" class="border form-select border-0 bg-light fw-medium text-secondary rounded-pill px-4" onchange="this.form.submit()">
+                <option value="Todos" selected="@(ViewBag.StatusSelecionado == "Todos" || ViewBag.StatusSelecionado == null)">Todos os Pedidos</option>
+                <option value="Pendente" selected="@(ViewBag.StatusSelecionado == "Pendente")">Pendente</option>
+                <option value="Pago" selected="@(ViewBag.StatusSelecionado == "Pago")">Pago</option>
+                <option value="Cancelado" selected="@(ViewBag.StatusSelecionado == "Cancelado")">Cancelado</option>
+            </select>
+        </div>
+    </form>
+
     @if (Model == null || !Model.Any())
     {
         <div class="card shadow-sm border-0 p-5 text-center bg-light rounded-4">
@@ -32,46 +57,73 @@
     }
     else
     {
-        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th class="py-3 ps-4">ID Pedido</th>
-                            <th class="py-3">ID Cliente</th>
-                            <th class="py-3">Data do Pedido</th>
-                            <th class="py-3">Valor Total</th>
-                            <th class="py-3">Status</th>
-                            <th class="py-3 text-end pe-4">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var pedido in Model)
-                        {
-                            <tr>
-                                <td class="ps-4 fw-bold text-primary">#@pedido.IdPedido</td>
-                                <td>@pedido.IdCliente</td>
-                                <td>@pedido.DataPedido.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td class="fw-bold text-success">R$ @pedido.ValorTotal.ToString("N2")</td>
-                                <td>
-                                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
-                                        @pedido.Status
-                                    </span>
-                                </td>
-                                <td class="text-end pe-4">
-                                    <!-- Formulário para alterar o status do pedido rapidamente -->
-                                    <form asp-action="AtualizarStatus" method="post" class="d-inline">
-                                        <input type="hidden" name="idPedido" value="@pedido.IdPedido" />
-                                        <input type="hidden" name="novoStatus" value="Concluído" />
-                                        <button type="submit" class="btn btn-sm btn-outline-success rounded-3 px-3">
-                                            Concluir
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+        <!-- Container Principal Estilo Carrinho -->
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden bg-white">
+            <!-- Cabeçalho Estilizado -->
+            <div class="bg-light border-bottom py-3 px-4 d-flex justify-content-between align-items-center text-muted fw-bold small text-uppercase">
+                <div style="flex: 0 0 18%;">ID Pedido / Cliente</div>
+                <div style="flex: 0 0 25%;">Data do Pedido</div>
+                <div style="flex: 0 0 22%;">Valor Total</div>
+                <div style="flex: 0 0 20%;">Status</div>
+                <div style="flex: 0 0 15%;" class="text-end">Ações</div>
+            </div>
+
+            <!-- Lista de Pedidos em Cards Individuais -->
+            <div class="p-3 d-flex flex-column gap-3">
+                @foreach (var pedido in Model)
+                {
+                    <div class="d-flex align-items-center justify-content-between p-3 border rounded-3 position-relative shadow-sm bg-white">
+                        
+                        <!-- ID e Cliente -->
+                        <div class="d-flex flex-column" style="flex: 0 0 18%;">
+                            <span class="fw-bold text-primary fs-5">#@pedido.IdPedido</span>
+                            <span class="text-muted small">Cliente ID: @pedido.IdCliente</span>
+                        </div>
+
+                        <!-- Data do Pedido -->
+                        <div style="flex: 0 0 25%;" class="text-secondary fw-medium">
+                            <i class="bi bi-calendar-event me-1"></i> @pedido.DataPedido.ToString("dd/MM/yyyy")
+                        </div>
+
+                        <!-- Valor Total -->
+                        <div style="flex: 0 0 22%;" class="fw-bold" style="color: var(--verdinha) !important;">
+                            R$ @pedido.ValorTotal.ToString("N2")
+                        </div>
+
+                        <!-- Status Badge -->
+                        <div style="flex: 0 0 20%;">
+                            @if (pedido.StatusPedido == "Pago")
+                            {
+                                <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill fw-semibold">
+                                    <i class="bi bi-check-circle me-1"></i> @pedido.StatusPedido
+                                </span>
+                            }
+                            else if (pedido.StatusPedido == "Pendente")
+                            {
+                                <span class="badge bg-warning bg-opacity-10 text-warning border border-warning px-3 py-2 rounded-pill fw-semibold text-dark">
+                                    <i class="bi bi-clock me-1"></i> @pedido.StatusPedido
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-2 rounded-pill fw-semibold">
+                                    <i class="bi bi-x-circle me-1"></i> @pedido.StatusPedido
+                                </span>
+                            }
+                        </div>
+
+                        <!-- Ações -->
+                        <div class="text-end" style="flex: 0 0 15%;">
+                            <form asp-action="AtualizarStatus" method="post" class="m-0">
+                                <input type="hidden" name="idPedido" value="@pedido.IdPedido" />
+                                <input type="hidden" name="novoStatus" value="Pago" />
+                                <button type="submit" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-medium">
+                                    Aprovar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     }

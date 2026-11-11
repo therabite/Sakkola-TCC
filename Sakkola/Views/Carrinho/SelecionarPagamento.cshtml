@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Forma de Pagamento - Sakkola";
+}
+
+<div class="container my-5" style="max-width: 600px;">
+    <div class="card border rounded-3 shadow-sm p-4">
+        <h3 class="fw-bold mb-4" style="color: var(--suquinho-de-laranja);">Escolha a Forma de Pagamento</h3>
+        
+        <form asp-controller="Carrinho" asp-action="ProcessarFinalizacao" method="post">
+            <div class="mb-3 form-check border p-3 rounded-2">
+                <input class="form-check-input" type="radio" name="formaPagamento" id="pagamentoPix" value="PIX" checked>
+                <label class="form-check-label fw-semibold text-dark" for="pagamentoPix">
+                    <i class="bi bi-qr-code text-success me-2"></i> PIX (Aprovação Imediata - Status: Pago)
+                </label>
+            </div>
+
+            <div class="mb-4 form-check border p-3 rounded-2">
+                <input class="form-check-input" type="radio" name="formaPagamento" id="pagamentoCartao" value="CartaoEntrega">
+                <label class="form-check-label fw-semibold text-dark" for="pagamentoCartao">
+                    <i class="bi bi-credit-card text-primary me-2"></i> Cartão na Entrega (Status: Pendente / Expira em 30 min)
+                </label>
+            </div>
+
+            <button type="submit" class="btn text-white w-100 py-2 fw-bold" style="background-color: var(--batom-de-paty);">
+                Confirmar e Finalizar Pedido
+            </button>
+        </form>
+    </div>
+</div>

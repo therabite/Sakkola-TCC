@@ -90,7 +90,7 @@
 </div>
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#dataNasc').mask('00/00/0000');
@@ -107,5 +107,31 @@
             };
             $('#telefone').mask(maskBehavior, options);
         });
+        $(document).ready(function () {
+        $('#cep').blur(function () {
+            var cep = $(this).val().replace(/\D/g, '');
+
+            if (cep != "") {
+                var validacep = /^[0-9]{8}$/;
+
+                if(validacep.test(cep)) {
+                    // Consulta o webservice viacep.com.br/
+                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+                        if (!("erro" in dados)) {
+                            // Atualiza os campos com os valores retornado
+                            $('#Rua').val(dados.logradouro);
+                            $('#Bairro').val(dados.bairro);
+                            $('#Cidade').val(dados.localidade);
+                            $('#Estado').val(dados.uf);
+                        } else {
+                            alert("CEP não encontrado.");
+                        }
+                    });
+                } else {
+                    alert("Formato de CEP inválido.");
+                }
+            }
+        });
+    });
     </script>
 }

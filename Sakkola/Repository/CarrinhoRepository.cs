@@ -44,12 +44,12 @@ namespace Sakkola.Repository
                 await conn.OpenAsync();
                 int idCarrinho = await ObterOuCriarCarrinhoIdAsync(conn, null, idUsuario);
 
-                string sqlUsuario = @"
-                    SELECT u.nome, u.telefone, 
-                    e.cep, e.logradouro, e.numero, e.bairro, e.cidade, e.estado
-                    FROM tbUser u
-                    LEFT JOIN tbAddress e ON u.id_user = e.id_address
-                    WHERE u.id_user = @idUsuario;";
+                // 1. Buscar dados do cliente e endereço
+                string sqlUsuario = @"SELECT u.nome, u.telefone, 
+                                     e.cep, e.logradouro, e.numero, e.bairro, e.cidade, e.estado
+                              FROM tbUser u
+                              LEFT JOIN tbAddress e ON u.id_user = e.id_address
+                              WHERE u.id_user = @idUsuario;";
 
                 using (var cmdUser = new MySqlCommand(sqlUsuario, conn))
                 {
@@ -70,12 +70,11 @@ namespace Sakkola.Repository
                     }
                 }
 
-                // 2. Buscar os itens do carrinho (seu código original)
-                string sqlItens = @"
-                    SELECT ci.id_item, ci.id_produto, p.nome, p.preco, ci.quantidade 
-                    FROM tbCarrinhoItem ci
-                    INNER JOIN tbProduto p ON ci.id_produto = p.id_produto
-                    WHERE ci.id_carrinho = @idCarrinho;";
+                // 2. Buscar os itens do carrinho alinhados com a estrutura da tabela
+                string sqlItens = @"SELECT ci.id_item, ci.id_produto, p.nome, p.preco, ci.quantidade 
+                              FROM tbCarrinhoItem ci
+                              INNER JOIN tbProduto p ON ci.id_produto = p.id_produto
+                              WHERE ci.id_carrinho = @idCarrinho;";
 
                 using (var cmdItens = new MySqlCommand(sqlItens, conn))
                 {
@@ -292,15 +291,19 @@ namespace Sakkola.Repository
             {
                 await conn.OpenAsync();
 
-                string sql = @"SELECT c.id_carrinho, c.id_produto, c.quantidade, 
-                                  p.nome AS nome_produto, p.preco AS preco_unitario 
-                           FROM tbCarrinho c
-                           INNER JOIN tbProduto p ON c.id_produto = p.id_produto
-                           WHERE c.id_user = @id_user;";
+                // 1. Descobre o id_carrinho correto do usuário
+                int idCarrinho = await ObterOuCriarCarrinhoIdAsync(conn, null, idUser);
+
+                // 2. Faz a consulta correta usando tbCarrinhoItem (ci) ligada à tbProduto (p)
+                string sql = @"SELECT ci.id_item, ci.id_carrinho, ci.id_produto, ci.quantidade, 
+                              p.nome AS nome_produto, p.preco AS preco_unitario 
+                       FROM tbCarrinhoItem ci
+                       INNER JOIN tbProduto p ON ci.id_produto = p.id_produto
+                       WHERE ci.id_carrinho = @idCarrinho;";
 
                 using (var cmd = new MySqlCommand(sql, conn))
                 {
-                    cmd.Parameters.AddWithValue("@id_user", idUser);
+                    cmd.Parameters.AddWithValue("@idCarrinho", idCarrinho);
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
@@ -308,11 +311,12 @@ namespace Sakkola.Repository
                         {
                             itens.Add(new ItemCarrinho
                             {
-                                IdCarrinho = Convert.ToInt32(reader["id_carrinho"]),
-                                IdProduto = Convert.ToInt32(reader["id_produto"]),
+                                IdItem = reader.GetInt32("id_item"),
+                                IdCarrinho = reader.GetInt32("id_carrinho"),
+                                IdProduto = reader.GetInt32("id_produto"),
                                 NomeProduto = reader["nome_produto"]?.ToString() ?? "",
-                                PrecoUnitario = Convert.ToDecimal(reader["preco_unitario"]),
-                                Quantidade = Convert.ToInt32(reader["quantidade"])
+                                PrecoUnitario = reader.GetDecimal("preco_unitario"),
+                                Quantidade = reader.GetInt32("quantidade")
                             });
                         }
                     }
@@ -355,7 +359,7 @@ namespace Sakkola.Repository
                             await cmdPedido.ExecuteNonQueryAsync();
                         }
 
-                        string sqlLimparCarrinho = "DELETE FROM tbCarrinho WHERE id_user = @idUser;";
+                        string sqlLimparCarrinho = "DELETE FROM tbCarrinho WHERE id_usuario = @idUser;";
 
                         using (var cmdLimpar = new MySqlCommand(sqlLimparCarrinho, conn, transaction))
                         {

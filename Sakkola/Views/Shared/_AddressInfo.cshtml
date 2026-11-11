@@ -47,11 +47,11 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label text-secondary small fw-bold">CEP</label>
-                            <input type="text" class="form-control" name="Cep" value="@Model?.Cep" required />
+                            <input type="text" id="Cep" class="form-control" name="Cep" value="@Model?.Cep" required />
                         </div>
                         <div class="col-md-8">
                             <label class="form-label text-secondary small fw-bold">Logradouro</label>
-                            <input type="text" class="form-control" name="Logradouro" value="@Model?.Logradouro" required />
+                            <input type="text" id="Rua" class="form-control" name="Logradouro" value="@Model?.Logradouro" required />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label text-secondary small fw-bold">Número</label>
@@ -59,15 +59,15 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-secondary small fw-bold-md">Bairro</label>
-                            <input type="text" class="form-control" name="Bairro" value="@Model?.Bairro" required />
+                            <input type="text" id="Bairro" class="form-control" name="Bairro" value="@Model?.Bairro" required />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-secondary small fw-bold">Cidade</label>
-                            <input type="text" class="form-control" name="Cidade" value="@Model?.Cidade" required />
+                            <input type="text" id="Cidade" class="form-control" name="Cidade" value="@Model?.Cidade" required />
                         </div>
                         <div class="col-12">
                             <label class="form-label text-secondary small fw-bold">Estado</label>
-                            <input type="text" class="form-control" name="Estado" value="@Model?.Estado" required />
+                            <input type="text" id="Estado" class="form-control" name="Estado" value="@Model?.Estado" required />
                         </div>
                         <div class="col-12 mt-4">
                             <button type="submit" class="btn text-white w-100 py-2 fw-medium rounded-pill" style="background-color: var(--batom-de-paty);">Finalizar</button>
@@ -78,3 +78,32 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#Cep').blur(function () {
+            var cep = $(this).val().replace(/\D/g, '');
+
+            if (cep != "") {
+                var validacep = /^[0-9]{8}$/;
+
+                if(validacep.test(cep)) {
+                    // Consulta o webservice viacep.com.br/
+                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+                        if (!("erro" in dados)) {
+                            // Atualiza os campos com os valores retornado
+                            $('#Rua').val(dados.logradouro);
+                            $('#Bairro').val(dados.bairro);
+                            $('#Cidade').val(dados.localidade);
+                            $('#Estado').val(dados.uf);
+                        } else {
+                            alert("CEP não encontrado.");
+                        }
+                    });
+                } else {
+                    alert("Formato de CEP inválido.");
+                }
+            }
+        });
+    });
+</script>

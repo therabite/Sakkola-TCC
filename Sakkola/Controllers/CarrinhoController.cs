@@ -93,7 +93,7 @@ namespace Sakkola.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public async Task<IActionResult> FinalizarCompra()
+        public async Task<IActionResult> FinalizarCompra(string formaPagamento)
         {
             string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdClaim))
@@ -108,12 +108,55 @@ namespace Sakkola.Controllers
                 TempData["Erro"] = "O seu carrinho está vazio!";
                 return RedirectToAction("Index");
             }
-            decimal valorTotal = itens.Sum(i => i.PrecoUnitario * i.Quantidade);
 
-            await _carrinhoRepository.FinalizarCompraAsync(userId, valorTotal);
+            decimal subtotal = itens.Sum(i => i.PrecoUnitario * i.Quantidade);
+            decimal valorFreteCalculado = 10.00m;
 
-            TempData["Sucesso"] = "Pedido finalizado com sucesso! O colaborador já pode visualizá-lo.";
+            decimal valorTotalGeral = subtotal + valorFreteCalculado;
+
+            await _carrinhoRepository.FinalizarCompraAsync(userId, valorTotalGeral);
+
+            TempData["Sucesso"] = "Pedido realizado com sucesso! O status encontra-se pendente.";
             return RedirectToAction("Index", "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> SelecionarPagamento()
+        {
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdClaim)) return RedirectToAction("Login", "Account");
+
+            int userId = Convert.ToInt32(userIdClaim);
+            var itens = await _carrinhoRepository.ObterItensPorUsuarioAsync(userId);
+
+            if (itens == null || !itens.Any())
+            {
+                TempData["Erro"] = "O seu carrinho está vazio!";
+                return RedirectToAction("Index");
+            }
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ProcessarFinalizacao(string formaPagamento)
+        {
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdClaim)) return RedirectToAction("Login", "Account");
+            int userId = Convert.ToInt32(userIdClaim);
+
+            var itens = await _carrinhoRepository.ObterItensPorUsuarioAsync(userId);
+            if (itens == null || !itens.Any()) return RedirectToAction("Index");
+
+            decimal subtotal = itens.Sum(i => i.PrecoUnitario * i.Quantidade);
+            decimal valorFrete = 10.00m;
+            decimal valorTotalGeral = subtotal + valorFrete;
+
+            string statusInicial = (formaPagamento == "PIX") ? "Pago" : "Pendente";
+
+            await _carrinhoRepository.FinalizarCompraComPagamentoAsync(userId, valorTotalGeral, formaPagamento, statusInicial);
+
+            TempData["SucessoCliente"] = $"Pedido realizado com sucesso! O status encontra-se: {statusInicial}.";
+
+            return View();
         }
     }
 }

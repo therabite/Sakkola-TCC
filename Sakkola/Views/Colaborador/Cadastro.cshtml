@@ -1,10 +1,15 @@
 ﻿@model Sakkola.Models.ViewModel.RegisterColaborador
+@{
+    ViewData["Title"] = "Cadastro de Colaborador";
+    Layout = "~/Views/Shared/_LayoutAcesso.cshtml";
+}
 
-<div class="container mb-4 py-4">
-    <div class="row align-items-center justify-content-sm-between g-5">
-
-        <div class="col-12 col-md-6 col-lg-5">
-            <div class="card p-4 border rounded-1 mt-3">
+<div class="container d-flex justify-content-center align-items-center min-vh-100 py-4">
+    <div class="row justify-content-center w-100">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card p-4 border rounded-1 shadow-sm">
+                
+                <h3 class="text-center fw-bold mb-4 text-dark">Cadastro de Funcionário</h3>
 
                 <form asp-controller="Colaborador" asp-action="Cadastro" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
@@ -57,24 +62,21 @@
                     </div>
 
                     <button type="submit" class="btn btn-dark w-100 py-2 fw-semibold rounded-3 shadow-sm">Cadastrar Funcionário</button>
+                    
+                    <div class="text-center small">
+                        <span class="text-dark">Já possui cadastro? </span>
+                        <a asp-controller="Colaborador" asp-action="Login" class="fw-bold text-decoration-none" style="color: #4CAF50;">ENTRAR</a>
+                    </div>
                 </form>
             </div>
         </div>
-
-        <!-- Ilustração da Sakkola (Direita) -->
-        <div class="col-12 col-md-6 text-center">
-            <img src="~/img/Logo.png" alt="Sakkola Ilustração" style="max-height: 50vh; opacity: 30%;" />
-        </div>
-
     </div>
 </div>
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-
     <script>
         $(document).ready(function () {
-            // Como o asp-for gera o ID com a mesma capitalização da propriedade:
             $('#DataNasc').mask('00/00/0000');
             $('#Cpf').mask('000.000.000-00', { reverse: true });
 

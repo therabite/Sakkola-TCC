@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sakkola.Libraries.Filtro;
 using Sakkola.Models.ViewModel;
+using Sakkola.Repository;
+using Sakkola.Repository.Contract;
 using Sakkola.Repository.Interfaces;
 
 namespace Sakkola.Controllers
@@ -8,10 +10,12 @@ namespace Sakkola.Controllers
     public class ColaboradorController : Controller
     {
         private readonly IColaboradorRepository _colaboradorRepository;
+        private readonly IPedidoRepository _pedidoRepository;
 
-        public ColaboradorController(IColaboradorRepository colaboradorRepository)
+        public ColaboradorController(IColaboradorRepository colaboradorRepository, IPedidoRepository pedidoRepository)
         {
             _colaboradorRepository = colaboradorRepository;
+            _pedidoRepository = pedidoRepository;
         }
 
         [HttpGet]
@@ -66,9 +70,24 @@ namespace Sakkola.Controllers
 
         [ColaboradorAutorizacao]
         [HttpGet]
-        public IActionResult PainelPedidos()
+        public async Task<IActionResult> PainelPedidos(string status)
         {
-            return View();
+            // Guarda o status atual na ViewBag para manter o select selecionado na tela
+            ViewBag.StatusSelecionado = status;
+
+            var pedidos = string.IsNullOrEmpty(status) || status == "Todos"
+                ? await _pedidoRepository.ObterPedidosPorStatusOuTodosAsync(null)
+                : await _pedidoRepository.ObterPedidosPorStatusOuTodosAsync(status);
+
+            return View(pedidos);
+        }
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("EmailColaborador");
+
+            return RedirectToAction("Login", "Colaborador");
         }
     }
 }

@@ -1,0 +1,18 @@
+﻿@if (TempData["SucessoCliente"] != null)
+{
+    <div id="alertaSucessoCliente" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        @TempData["SucessoCliente"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <script>
+        // Faz o alerta sumir automaticamente após 5 segundos (5000ms)
+        setTimeout(function() {
+            var alerta = document.getElementById('alertaSucessoCliente');
+            if (alerta) {
+                var bsAlert = new bootstrap.Alert(alerta);
+                bsAlert.close();
+            }
+        }, 5000);
+    </script>
+}

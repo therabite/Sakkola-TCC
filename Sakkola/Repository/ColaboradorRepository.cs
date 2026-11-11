@@ -72,7 +72,7 @@ namespace Sakkola.Repository
                                 IdCliente = Convert.ToInt32(reader["id_user"]),
                                 ValorTotal = Convert.ToDecimal(reader["valor_total"]),
                                 DataPedido = Convert.ToDateTime(reader["data_pedido"]),
-                                Status = reader["status"]?.ToString() ?? "Pendente"
+                                StatusPedido = reader["status"]?.ToString() ?? "Pendente"
                             });
                         }
                     }

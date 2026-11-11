@@ -5,12 +5,14 @@
 }
 
 <div class="container my-4" style="max-width: 1200px;">
+    <!-- Botão de Retorno -->
     <div class="mb-3">
         <a asp-controller="Produtos" asp-action="Index" class="text-dark fs-4 text-decoration-none">
             <i class="bi bi-arrow-left"></i>
         </a>
     </div>
 
+    <!-- Tabela de Produtos -->
     <div class="card border rounded-3 shadow-sm mb-4">
         <div class="card-header bg-white border-bottom py-3 px-4">
             <div class="row fw-semibold text-secondary">
@@ -36,21 +38,109 @@
             }
         </div>
     </div>
+
+    <!-- Seção Inferior: Endereço e Resumo do Pagamento -->
     <div class="mb-5 row g-4">
+        <!-- Coluna Esquerda: Informações de Endereço (_AddressInfo) -->
         <div class="col-lg-8">
             <partial name="_AddressInfo" model="Model" />
-        </div>
+        </div> 
+
+        <!-- Coluna Direita: Total a Pagar -->
         <div class="col-lg-4">
             <div class="card border rounded-3 shadow-sm h-100 p-3 d-flex flex-column justify-content-between">
-                <h6 class="fw-bold mb-3" style="color: var(--suquinho-de-laranja);">Total a pagar</h6>
-                <div class="bg-light border rounded-2 p-2 text-center mb-3">
-                    <span class="fw-semibold text-secondary">Total: (@Model.TotalItens Itens):</span> 
-                    <span class="fw-bold text-dark fs-5">R$ @Model.ValorTotal.ToString("N2")</span>
+                <div>
+                    <h6 class="fw-bold mb-3" style="color: var(--suquinho-de-laranja);">Total a pagar</h6>
+                    
+                    <div class="bg-light border rounded-2 p-3 mb-3">
+                        <!-- Subtotal -->
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-secondary small">Subtotal (@Model.TotalItens Itens):</span> 
+                            <span class="fw-semibold text-dark">R$ @Model.ValorTotal.ToString("N2")</span>
+                        </div>
+                    
+                        <!-- Frete -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary small">Frete:</span> 
+                            <span id="lblValorFrete" class="fw-semibold text-muted">Calculado no CEP</span>
+                        </div>
+
+                        <hr class="my-2" />
+
+                        <!-- Total Geral (Armazena o subtotal puro no atributo data-subtotal) -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-secondary">Total Geral:</span> 
+                            <span id="lblTotalGeral" class="fw-bold text-dark fs-5" data-subtotal="@Model.ValorTotal">
+                                R$ @Model.ValorTotal.ToString("N2")
+                            </span>
+                        </div>
+                    </div>
                 </div>
-                <a asp-controller="Carrinho" asp-action="FinalizarCompra" class="btn text-white w-100 fw-medium py-2" style="background-color: var(--batom-de-paty);">
-                    Finalizar Pedido
-                </a>
+
+                @if (Model != null && Model.Itens != null && Model.Itens.Any())
+                {
+                    <!-- Botão Normal (Liberado) -->
+                    <form asp-controller="Carrinho" asp-action="FinalizarCompra" method="post">
+                        <button type="submit" class="btn text-white w-100 fw-medium py-2" style="background-color: var(--batom-de-paty);">
+                            Finalizar Pedido
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <!-- Botão Desativado / Trancado -->
+                    <button type="button" class="btn btn-secondary w-100 fw-medium py-2" disabled style="opacity: 0.6; cursor: not-allowed;">
+                        Carrinho Vazio
+                    </button>
+                }
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Aplica máscara no CEP
+            $('#Cep').mask('00000-000');
+
+            // Função para calcular o frete via AJAX
+            function calcularFrete(cepDigitado) {
+                var cepLimpo = cepDigitado.replace(/\D/g, '');
+                if (cepLimpo.length === 8) {
+                    $.ajax({
+                        url: '/Cep/CalcularFrete',
+                        type: 'POST',
+                        data: { cepDestino: cepLimpo },
+                        success: function (response) {
+                            if (response.sucesso) {
+                                $('#lblValorFrete').text(response.freteFormatado).removeClass('text-muted').addClass('text-success fw-bold');
+
+                                var subtotal = parseFloat($('#lblTotalGeral').attr('data-subtotal'));
+                                var totalGeral = subtotal + response.frete;
+
+                                $('#lblTotalGeral').text("R$ " + totalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                            } else {
+                                console.log(response.mensagem);
+                            }
+                        },
+                        error: function () {
+                            console.log("Erro ao calcular o frete.");
+                        }
+                    });
+                }
+            }
+
+            var cepInicial = $('#Cep').val();
+            if (cepInicial) {
+                calcularFrete(cepInicial);
+            }
+
+            $(document).on('blur', '#Cep', function () {
+                var cep = $(this).val();
+                calcularFrete(cep);
+            });
+        });
+    </script>
+}
