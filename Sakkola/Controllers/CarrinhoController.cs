@@ -117,7 +117,7 @@ namespace Sakkola.Controllers
             await _carrinhoRepository.FinalizarCompraAsync(userId, valorTotalGeral);
 
             TempData["Sucesso"] = "Pedido realizado com sucesso! O status encontra-se pendente.";
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("SelecionarPagamento", "Carrinho");
         }
         [HttpGet]
         public async Task<IActionResult> SelecionarPagamento()
@@ -134,7 +134,7 @@ namespace Sakkola.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View();
+            return RedirectToAction("MeusPedidos", "Carrinho");
         }
         [HttpPost]
         public async Task<IActionResult> ProcessarFinalizacao(string formaPagamento)
@@ -156,7 +156,7 @@ namespace Sakkola.Controllers
 
             TempData["SucessoCliente"] = $"Pedido realizado com sucesso! O status encontra-se: {statusInicial}.";
 
-            return View();
+            return RedirectToAction("MeusPedidos", "Carrinho");
         }
     }
 }

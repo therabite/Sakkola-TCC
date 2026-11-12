@@ -14,25 +14,6 @@
         <a asp-controller="Colaborador" asp-action="Login" class="btn btn-outline-secondary btn-sm">Sair / Trocar Conta</a>
     </div>
 
-    <!-- Alerta de Sucesso -->
-    @if (TempData["Sucesso"] != null)
-    {
-        <div id="alertaSucessoAdmin" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            @TempData["Sucesso"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-
-        <script>
-            setTimeout(function() {
-                var alerta = document.getElementById('alertaSucessoAdmin');
-                if (alerta) {
-                    var bsAlert = new bootstrap.Alert(alerta);
-                    bsAlert.close();
-                }
-            }, 5000);
-        </script>
-    }
-
     <!-- Formulário de Filtro por Status -->
     <form method="get" asp-action="PainelPedidos" class="row g-1 mb-3 align-items-center bg-white p-3 rounded-4 shadow-sm border" style="height:70px">
         <div class="col-auto">

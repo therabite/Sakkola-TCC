@@ -340,7 +340,7 @@ namespace Sakkola.Repository
                 }
             }
         }
-        public async Task FinalizarCompraAsync(int idUser, decimal valorTotal)
+        public async Task FinalizarCompraAsync(int idUser, decimal valorTotal, string formaPagamento = "PIX", string status = "Pendente")
         {
             using (var conn = new MySqlConnection(_connectionString))
             {
@@ -350,17 +350,29 @@ namespace Sakkola.Repository
                 {
                     try
                     {
-                        string sqlPedido = "INSERT INTO tbpedido (id_user, valor_total, data_pedido, status) VALUES (@idUser, @valorTotal, NOW(), 'Pendente');";
+                        string sqlPedido = @"INSERT INTO tbpedido (id_user, valor_total, data_pedido, status, forma_pagamento) 
+                                     VALUES (@idUser, @valorTotal, NOW(), @status, @formaPagamento);";
 
                         using (var cmdPedido = new MySqlCommand(sqlPedido, conn, transaction))
                         {
                             cmdPedido.Parameters.AddWithValue("@idUser", idUser);
                             cmdPedido.Parameters.AddWithValue("@valorTotal", valorTotal);
+                            cmdPedido.Parameters.AddWithValue("@status", status);
+                            cmdPedido.Parameters.AddWithValue("@formaPagamento", formaPagamento);
                             await cmdPedido.ExecuteNonQueryAsync();
                         }
 
-                        string sqlLimparCarrinho = "DELETE FROM tbCarrinho WHERE id_usuario = @idUser;";
+                        // Limpa primeiro os itens do carrinho para não dar erro de FK na tbCarrinhoItem
+                        string sqlLimparItens = @"DELETE FROM tbCarrinhoItem 
+                                          WHERE id_carrinho IN (SELECT id_carrinho FROM tbCarrinho WHERE id_usuario = @idUser);";
+                        using (var cmdLimparItens = new MySqlCommand(sqlLimparItens, conn, transaction))
+                        {
+                            cmdLimparItens.Parameters.AddWithValue("@idUser", idUser);
+                            await cmdLimparItens.ExecuteNonQueryAsync();
+                        }
 
+                        // Depois limpa o cabeçalho do carrinho
+                        string sqlLimparCarrinho = "DELETE FROM tbCarrinho WHERE id_usuario = @idUser;";
                         using (var cmdLimpar = new MySqlCommand(sqlLimparCarrinho, conn, transaction))
                         {
                             cmdLimpar.Parameters.AddWithValue("@idUser", idUser);
