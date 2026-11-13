@@ -78,7 +78,7 @@
                 @if (Model != null && Model.Itens != null && Model.Itens.Any())
                 {
                     <!-- Botão Normal (Liberado) -->
-                    <form asp-controller="Carrinho" asp-action="SelecionarPagamento" method="post">
+                    <form asp-controller="Carrinho" asp-action="SelecionarPagamento" method="get">
                         <button type="submit" class="btn text-white w-100 fw-medium py-2" style="background-color: var(--batom-de-paty);">
                             Finalizar Pedido
                         </button>
