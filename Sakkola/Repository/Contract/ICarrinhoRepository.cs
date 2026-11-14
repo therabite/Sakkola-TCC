@@ -5,12 +5,11 @@ namespace Sakkola.Repository.Interfaces
     {
         Task<Carrinho> ObterCarrinhoPorUsuarioAsync(string userId);
         Task AdicionarItemAsync(string userId, int idProduto, int quantidade);
-        Task AtualizarQuantidadeAsync(string userId, int idItem, int quantidade);
         Task AtualizarQuantidadeItemAsync(int idItem, int quantidade);
         Task RemoverItemAsync(string userId, int idItem);
         Task AtualizarDadosEntregaAsync(string userIdStr, Carrinho carrinho);
         Task<List<ItemCarrinho>> ObterItensPorUsuarioAsync(int idUser);
         Task LimparCarrinhoAsync(int idUser);
-        Task FinalizarCompraAsync(int idUser, decimal valorTotal);
+        Task FinalizarCompraAsync(int idUser, decimal valorTotal, string formaPagamento = "PIX", string status = "Pendente");
     }
 }

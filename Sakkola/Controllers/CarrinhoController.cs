@@ -151,7 +151,7 @@ namespace Sakkola.Controllers
 
             string statusInicial = (formaPagamento == "PIX") ? "Pago" : "Pendente";
 
-            await _carrinhoRepository.FinalizarCompraComPagamentoAsync(userId, valorTotalGeral, formaPagamento, statusInicial);
+            await _carrinhoRepository.FinalizarCompraAsync(userId, valorTotalGeral, formaPagamento, statusInicial);
 
             TempData["SucessoCliente"] = $"Pedido realizado com sucesso! O status encontra-se: {statusInicial}.";
 

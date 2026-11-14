@@ -6,5 +6,7 @@ namespace Sakkola.Repository.Contract
     {
         Task<int> CadastrarPedidoAsync(Pedido pedido);
         Task<IEnumerable<Pedido>> ObterPedidosPorStatusOuTodosAsync(string status);
+        Task<IEnumerable<Pedido>> ObterPedidosPorUsuarioAsync(int idUser);
+        Task AtualizarStatusPedidoAsync(int idPedido, string novoStatus);
     }
 }

@@ -158,20 +158,6 @@ namespace Sakkola.Repository
                 }
             }
         }
-        public async Task AtualizarQuantidadeAsync(string userIdStr, int idItem, int quantidade)
-        {
-            using (var conn = new MySqlConnection(_connectionString))
-            {
-                await conn.OpenAsync();
-                string sql = "UPDATE tbCarrinhoItem SET quantidade = @quantidade WHERE id_item = @idItem;";
-                using (var cmd = new MySqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@quantidade", quantidade);
-                    cmd.Parameters.AddWithValue("@idItem", idItem);
-                    await cmd.ExecuteNonQueryAsync();
-                }
-            }
-        }
         public async Task AtualizarQuantidadeItemAsync(int idItem, int quantidade)
         {
             using (var conn = new MySqlConnection(_connectionString))

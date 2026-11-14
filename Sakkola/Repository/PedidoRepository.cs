@@ -68,5 +68,55 @@ namespace Sakkola.Repository
                 }
             }
         }
+        public async Task<IEnumerable<Pedido>> ObterPedidosPorUsuarioAsync(int idUser)
+        {
+            var lista = new List<Pedido>();
+
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+
+                string sql = "SELECT * FROM tbpedido WHERE id_user = @IdUser ORDER BY data_pedido DESC;";
+
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    cmd.Parameters.AddWithValue("@IdUser", idUser);
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            lista.Add(new Pedido
+                            {
+                                IdPedido = reader.GetInt32("id_pedido"),
+                                IdCliente = reader.GetInt32("id_user"),
+                                ValorTotal = reader.GetDecimal("valor_total"),
+                                DataPedido = reader.GetDateTime("data_pedido"),
+                                StatusPedido = reader.GetString("status")
+                            });
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
+
+        public async Task AtualizarStatusPedidoAsync(int idPedido, string novoStatus)
+        {
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+
+                string sql = "UPDATE tbpedido SET status = @NovoStatus WHERE id_pedido = @IdPedido;";
+
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    cmd.Parameters.AddWithValue("@NovoStatus", novoStatus);
+                    cmd.Parameters.AddWithValue("@IdPedido", idPedido);
+
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
+        }
     }
 }
