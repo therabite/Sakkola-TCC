@@ -75,25 +75,27 @@ namespace Sakkola.Repository
             using (var conexao = new MySqlConnection(_connectionString))
             {
                 await conexao.OpenAsync();
+                string sqlPedido = "SELECT id_pedido, id_user, valor_total, data_pedido, status, forma_pagamento FROM tbpedido WHERE id_user = @IdUser ORDER BY data_pedido DESC;";
 
-                string sql = "SELECT * FROM tbpedido WHERE id_user = @IdUser ORDER BY data_pedido DESC;";
-
-                using (var cmd = new MySqlCommand(sql, conexao))
+                using (var cmdPedido = new MySqlCommand(sqlPedido, conexao))
                 {
-                    cmd.Parameters.AddWithValue("@IdUser", idUser);
+                    cmdPedido.Parameters.AddWithValue("@IdUser", idUser);
 
-                    using (var reader = await cmd.ExecuteReaderAsync())
+                    using (var reader = await cmdPedido.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
                         {
-                            lista.Add(new Pedido
+                            var pedido = new Pedido
                             {
                                 IdPedido = reader.GetInt32("id_pedido"),
                                 IdCliente = reader.GetInt32("id_user"),
                                 ValorTotal = reader.GetDecimal("valor_total"),
                                 DataPedido = reader.GetDateTime("data_pedido"),
-                                StatusPedido = reader.GetString("status")
-                            });
+                                StatusPedido = reader.GetString("status"),
+                                FormaPagamento = reader.IsDBNull(reader.GetOrdinal("forma_pagamento")) ? "PIX" : reader.GetString("forma_pagamento")
+                            };
+
+                            lista.Add(pedido);
                         }
                     }
                 }

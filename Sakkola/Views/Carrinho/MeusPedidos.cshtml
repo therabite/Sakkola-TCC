@@ -1,18 +1,159 @@
-﻿@if (TempData["SucessoCliente"] != null)
-{
-    <div id="alertaSucessoCliente" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-        @TempData["SucessoCliente"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+﻿@model IEnumerable<Sakkola.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Minhas Compras - Sakkola";
+}
+
+<div class="container my-5" style="max-width: 900px;">
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark">Minhas Compras</h2>
+            <p class="text-muted m-0">Acompanhe o histórico e o status dos seus pedidos.</p>
+        </div>
+        <a asp-controller="Produtos" asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill px-3">Continuar Comprando</a>
     </div>
 
-    <script>
-        // Faz o alerta sumir automaticamente após 5 segundos (5000ms)
-        setTimeout(function() {
-            var alerta = document.getElementById('alertaSucessoCliente');
-            if (alerta) {
-                var bsAlert = new bootstrap.Alert(alerta);
-                bsAlert.close();
+    @if (Model == null || !Model.Any())
+    {
+        <div class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">
+            <h4 class="text-muted fw-normal">Você ainda não realizou nenhuma compra.</h4>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex flex-column gap-4">
+            @foreach (var pedido in Model)
+            {
+                <!-- Data do Pedido com Horário no Topo -->
+                <div class="text-secondary fw-bold small mb-n2">
+                    <i class="bi bi-calendar-event me-1"></i> @pedido.DataPedido.ToString("dd 'de' MMMM 'de' yyyy 'às' HH:mm")
+                </div>
+
+                <!-- Card da Compra -->
+                <div class="card border shadow-sm rounded-4 p-4 bg-white">
+                    <div class="row align-items-center">
+                        
+                        <!-- Foto do Último Item Adicionado -->
+                        <div class="col-md-2 text-center">
+                            <div class="bg-light border rounded-3 p-1 d-inline-flex align-items-center justify-content-center shadow-sm overflow-hidden" style="width: 75px; height: 75px;">
+                                @if (!string.IsNullOrEmpty(pedido.ImagemUltimoItem))
+                                {
+                                    <img src="@Url.Content(pedido.ImagemUltimoItem)" alt="Produto" class="w-100 h-100 object-fit-cover" />
+                                }
+                                else
+                                {
+                                    <i class="bi bi-box-seam fs-2 text-secondary"></i>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Detalhes do Status -->
+                        <div class="col-md-6">
+                            <div class="mb-1">
+                                @if (pedido.StatusPedido == "Pago")
+                                {
+                                    <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-1 rounded-pill fw-semibold small">
+                                        <i class="bi bi-check-circle me-1"></i> Pagamento Aprovado
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning bg-opacity-10 text-warning border border-warning px-3 py-1 rounded-pill fw-semibold text-dark small">
+                                        <i class="bi bi-clock me-1"></i> Pagamento Pendente
+                                    </span>
+                                }
+                            </div>
+                            <!-- Removido o ID numérico daqui, exibindo apenas o texto padrão ou descritivo -->
+                            <h5 class="fw-bold text-dark mb-1">Pedido realizado</h5>
+                            <p class="text-muted small m-0">Forma de Pagamento: <strong>@pedido.FormaPagamento</strong></p>
+                        </div>
+
+                        <!-- Botão Ver Compra -->
+                        <div class="col-md-4 text-end">
+                            <button type="button" class="btn text-white btn-sm fw-semibold py-2 px-4 rounded-pill shadow-sm" style="background-color: var(--batom-de-paty);" data-bs-toggle="modal" data-bs-target="#modalDetalhes-@pedido.IdPedido">
+                                Ver Compra
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODAL DE DETALHES DA COMPRA -->
+                <div class="modal fade" id="modalDetalhes-@pedido.IdPedido" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            
+                            <div class="modal-header bg-light border-bottom px-4 py-3">
+                                <!-- Exibe apenas "Detalhes do Pedido" sem hashtag e sem número, conforme solicitado -->
+                                <h5 class="modal-title fw-bold text-dark">
+                                    Detalhes do Pedido
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body p-4">
+                                <div class="mb-3 d-flex justify-content-between text-muted small border-bottom pb-2">
+                                    <span>Data: <strong>@pedido.DataPedido.ToString("dd/MM/yyyy HH:mm")</strong></span>
+                                    <span>Status: <strong class="text-dark">@pedido.StatusPedido</strong></span>
+                                </div>
+
+                                <h6 class="fw-bold text-secondary mb-3">Produtos do Pedido</h6>
+                                
+                                <!-- Lista Real dos Produtos do Pedido -->
+                                <div class="list-group list-group-flush mb-4 border rounded-3 overflow-hidden">
+                                    @if (pedido.Itens != null && pedido.Itens.Any())
+                                    {
+                                        foreach (var item in pedido.Itens)
+                                        {
+                                            <div class="list-group-item d-flex justify-content-between align-items-center py-3 bg-white">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="border rounded p-1" style="width: 50px; height: 50px;">
+                                                        <img src="@Url.Content(item.ImagemUrl)" alt="Img" class="w-100 h-100 object-fit-cover" />
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-0 fw-semibold text-dark">@item.NomeProduto</h6>
+                                                        <small class="text-muted">@item.Descricao</small><br />
+                                                        <small class="text-muted">Quantidade: @item.Quantidade x R$ @item.PrecoUnitario.ToString("N2")</small>
+                                                    </div>
+                                                </div>
+                                                <span class="fw-bold text-success">R$ @((item.PrecoUnitario * item.Quantidade).ToString("N2"))</span>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="p-3 text-center text-muted">Nenhum item detalhado encontrado.</div>
+                                    }
+                                </div>
+
+                                <!-- Resumo de Custos -->
+                                <div class="bg-light p-3 rounded-3 border">
+                                    <div class="d-flex justify-content-between text-muted small mb-2">
+                                        <span>Subtotal dos Produtos:</span>
+                                        <span class="fw-semibold">R$ @pedido.ValorTotal.ToString("N2")</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between text-muted small mb-2">
+                                        <span>Custo de Frete:</span>
+                                        <span class="fw-semibold text-success">R$ 10,00</span>
+                                    </div>
+                                    <hr class="my-2" />
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="fw-bold text-dark">Custo Total:</span>
+                                        <span class="fw-bold fs-5 text-dark" style="color: var(--suquinho-de-laranja) !important;">
+                                            R$ @((pedido.ValorTotal + 10.00m).ToString("N2"))
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer border-0 px-4 pb-4">
+                                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-4" data-bs-dismiss="modal">Fechar</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             }
-        }, 5000);
-    </script>
-}
+        </div>
+    }
+</div>

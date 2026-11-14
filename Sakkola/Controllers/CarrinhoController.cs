@@ -2,6 +2,7 @@
 using Sakkola.Models;
 using Sakkola.Models.ViewCarrinho;
 using Sakkola.Repository;
+using Sakkola.Repository.Contract;
 using Sakkola.Repository.Interfaces;
 using System.Security.Claims;
 
@@ -10,9 +11,11 @@ namespace Sakkola.Controllers
     public class CarrinhoController : Controller
     {
         private readonly ICarrinhoRepository _carrinhoRepository;
-        public CarrinhoController(ICarrinhoRepository carrinhoRepository)
+        private readonly IPedidoRepository _pedidoRepository;
+        public CarrinhoController(ICarrinhoRepository carrinhoRepository, IPedidoRepository pedidoRepository)
         {
             _carrinhoRepository = carrinhoRepository;
+            _pedidoRepository = pedidoRepository;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -92,33 +95,6 @@ namespace Sakkola.Controllers
            
             return RedirectToAction("Index");
         }
-        [HttpPost]
-        public async Task<IActionResult> FinalizarCompra(string formaPagamento)
-        {
-            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userIdClaim))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            int userId = Convert.ToInt32(userIdClaim);
-
-            var itens = await _carrinhoRepository.ObterItensPorUsuarioAsync(userId);
-            if (itens == null || !itens.Any())
-            {
-                TempData["Erro"] = "O seu carrinho está vazio!";
-                return RedirectToAction("Index");
-            }
-
-            decimal subtotal = itens.Sum(i => i.PrecoUnitario * i.Quantidade);
-            decimal valorFreteCalculado = 10.00m;
-
-            decimal valorTotalGeral = subtotal + valorFreteCalculado;
-
-            await _carrinhoRepository.FinalizarCompraAsync(userId, valorTotalGeral);
-
-            TempData["Sucesso"] = "Pedido realizado com sucesso! O status encontra-se pendente.";
-            return RedirectToAction("SelecionarPagamento");
-        }
         [HttpGet]
         public async Task<IActionResult> SelecionarPagamento()
         {
@@ -133,8 +109,10 @@ namespace Sakkola.Controllers
                 TempData["Erro"] = "O seu carrinho está vazio!";
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("SelecionarPagamento", "Carrinho");
+
+            return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> ProcessarFinalizacao(string formaPagamento)
         {
@@ -155,7 +133,18 @@ namespace Sakkola.Controllers
 
             TempData["SucessoCliente"] = $"Pedido realizado com sucesso! O status encontra-se: {statusInicial}.";
 
-            return RedirectToAction("MeusPedidos", "Carrinho");
+            return RedirectToAction("MeusPedidos", "Carrinho"); 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MeusPedidos()
+        {
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdClaim)) return RedirectToAction("Login", "Account");
+            int userId = Convert.ToInt32(userIdClaim);
+
+            var pedidos = await _pedidoRepository.ObterPedidosPorUsuarioAsync(userId);
+            return View(pedidos);
         }
     }
 }

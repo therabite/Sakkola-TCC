@@ -19,14 +19,15 @@ namespace Sakkola.Controllers
             var produtos = await _produtoRepository.ObterTodosAsync();
             return View(produtos);
         }
+        [HttpGet]
         public async Task<IActionResult> Promocoes()
         {
-            return View(await _produtoRepository.ObterTodosAsync());
-        }
+            ViewData["TemaCategoria"] = "tema-promocao";
+            ViewData["NomeCategoria"] = "Promoções";
 
-        public IActionResult Carrinho()
-        {
-            return View();
+            var produtosPromocao = await _produtoRepository.ObterPorCategoriaAsync("promocao");
+
+            return View(produtosPromocao);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
