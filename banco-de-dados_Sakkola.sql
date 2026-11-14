@@ -47,8 +47,6 @@ forma_pagamento varchar(50) not null,
 foreign key (id_pagamento) references tbPedido(id_pedido)
 );
 
-
-
 create table tbEntrega(
 id_entrega int primary key auto_increment,
 status_entrega varchar(8) not null
@@ -241,9 +239,6 @@ CALL sp_InserirProduto('Farinha de Trigo Tradicional', 'Farinha de Trigo Tradici
 CALL sp_InserirProduto('Sal Refinado', 'Sal Refinado - Pacote 1kg', 2.50, 100, 'Mercearia');
 CALL sp_InserirProduto('Biscoito Recheado de Chocolate', 'Biscoito Recheado de Chocolate - Pacote 130g', 3.50, 95, 'Mercearia');
 
-DROP TABLE IF EXISTS tbCarrinho;
-
-
 CREATE TABLE tbCarrinho (
     id_carrinho INT PRIMARY KEY AUTO_INCREMENT,
     id_usuario INT NOT NULL,
@@ -260,10 +255,16 @@ CREATE TABLE tbCarrinhoItem (
     CONSTRAINT fk_item_produto FOREIGN KEY (id_produto) REFERENCES tbProduto(id_produto) ON DELETE CASCADE
 );
 
-select * from tbproduto;
+ALTER TABLE tbpedido ADD COLUMN id_user INT NOT NULL;
+
+ALTER TABLE tbpedido modify COLUMN status VARCHAR(100) NOT NULL;
 
 ALTER TABLE tbAddress MODIFY COLUMN cep VARCHAR(10);
 ALTER TABLE tbAddress MODIFY COLUMN numero VARCHAR(20);
 ALTER TABLE tbUser MODIFY COLUMN telefone VARCHAR(20);
 
-CALL sp_InserirProduto('Extrato de Tomate', 'Extrato de Tomate Concentrado - Lata 340g', 6.50, 70, 'Mercearia');
+describe tbpedido;
+ALTER TABLE tbpedido modify COLUMN data_pedido datetime;
+
+select * from tbproduto where id_categoria = 8;
+select * from tbcategoria;
