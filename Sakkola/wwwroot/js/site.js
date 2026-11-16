@@ -1,113 +1,84 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    var myElement = document.getElementById('bannerSakkola');
-    if (typeof bootstrap !== 'undefined') {
-        var myCarousel = new bootstrap.Carousel(myElement, {
+    inicializarCarrossel();
+});
+
+function inicializarCarrossel() {
+    const bannerEl = document.getElementById('bannerSakkola');
+    if (bannerEl && typeof bootstrap !== 'undefined') {
+        const carousel = new bootstrap.Carousel(bannerEl, {
             interval: 5000,
             ride: 'carousel'
         });
-        myCarousel.cycle();
-    } else {
-        console.error("A biblioteca do Bootstrap não foi encontrada.");
+        carousel.cycle();
     }
-});
+}
 
-//seletor de quantidade
-window.alterarQtd = function(delta) {
-    let input = document.getElementById('quantidadeInput');
-    
-    if (input) {
-        let valorAtual = parseInt(input.value) || 1;
-        let novoValor = valorAtual + delta;
-        
-        if (novoValor < 1) {
-            novoValor = 1;
-        }
-        
-        input.value = novoValor;
+async function enviarPostAjax(url) {
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        return await response.json();
+    } catch (error) {
+        console.error('Erro na requisição:', error);
+        return null;
     }
-};
+}
 
-// Função para adicionar ao carrinho
-window.adicionarAoCarrinho = function(idProduto) {
-
-    let qtdInput = document.getElementById('quantidadeInput');
-    let quantidade = 1;
-    if (qtdInput) {
-        quantidade = parseInt(qtdInput.value, 10);
-        if (isNaN(quantidade) || quantidade < 1) {
-            quantidade = 1;
-        }
-    }
-
-    fetch(`/Carrinho/Adicionar?idProduto=${idProduto}&quantidade=${quantidade}`, {
-        method: 'POST',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.requiresLogin) {
-            alert(data.message);
-            window.location.href = data.redirect;
-        } else if (data.success) {
-            let toastEl = document.getElementById('toastCarrinho');
-            if (toastEl) {
-                let toast = new bootstrap.Toast(toastEl);
-                toast.show();
-            }
-
-            let badgeCarrinho = document.getElementById('cart-badge-count');
-            if (badgeCarrinho && data.totalItens !== undefined) {
-                badgeCarrinho.innerText = data.totalItens;
-            }
-        } else {
-            alert("Não foi possível adicionar o produto ao carrinho.");
-        }
-    })
-    .catch(error => console.error('Erro na requisição:', error));
-};
-
-// Função para alterar visualmente o valor no seletor
-window.alterarQtd = function(delta) {
-    let input = document.getElementById('quantidadeInput');
-    if (input) {
-        let valorAtual = parseInt(input.value, 10) || 1;
-        let novoValor = valorAtual + delta;
-        
-        if (novoValor < 1) {
-            novoValor = 1;
-        }
-        
-        input.value = novoValor;
-    }
-};
-
-window.alterarQtdItem = function(idItem, delta) {
-    let input = document.getElementById('qtdItem_' + idItem);
+window.alterarQtd = function (delta) {
+    const input = document.getElementById('quantidadeInput');
     if (!input) return;
 
-    let valorAtual = parseInt(input.value, 10) || 1;
-    let novoValor = valorAtual + delta;
+    const valorAtual = parseInt(input.value, 10) || 1;
+    input.value = Math.max(1, valorAtual + delta);
+};
 
-    if (novoValor < 1) {
-        novoValor = 1;
+window.adicionarAoCarrinho = async function (idProduto, quantidadeCustomizada) {
+    let quantidade = 1;
+
+    if (quantidadeCustomizada !== undefined && quantidadeCustomizada > 0) {
+        quantidade = quantidadeCustomizada;
+    } else {
+        const qtdInput = document.getElementById('quantidadeInput');
+        if (qtdInput) {
+            quantidade = Math.max(1, parseInt(qtdInput.value, 10) || 1);
+        }
     }
 
+    const data = await enviarPostAjax(`/Carrinho/Adicionar?idProduto=${idProduto}&quantidade=${quantidade}`);
+    if (!data) return;
+
+    if (data.requiresLogin) {
+        alert(data.message);
+        window.location.href = data.redirect;
+    } else if (data.success) {
+        const toastEl = document.getElementById('toastCarrinho');
+        if (toastEl) {
+            new bootstrap.Toast(toastEl).show();
+        }
+
+        const badgeCarrinho = document.getElementById('cart-badge-count');
+        if (badgeCarrinho && data.totalItens !== undefined) {
+            badgeCarrinho.innerText = data.totalItens;
+        }
+    } else {
+        alert("Não foi possível adicionar o produto ao carrinho.");
+    }
+};
+
+window.alterarQtdItem = async function (idItem, delta) {
+    const input = document.getElementById(`qtdItem_${idItem}`);
+    if (!input) return;
+
+    const valorAtual = parseInt(input.value, 10) || 1;
+    const novoValor = Math.max(1, valorAtual + delta);
     input.value = novoValor;
-    fetch(`/Carrinho/AtualizarQuantidade?idItem=${idItem}&quantidade=${novoValor}`, {
-        method: 'POST',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert("Não foi possível atualizar a quantidade.");
-        }
-    })
-    .catch(error => console.error('Erro na requisição:', error));
+
+    const data = await enviarPostAjax(`/Carrinho/AtualizarQuantidade?idItem=${idItem}&quantidade=${novoValor}`);
+    if (data && data.success) {
+        location.reload();
+    } else {
+        alert("Não foi possível atualizar a quantidade.");
+    }
 };

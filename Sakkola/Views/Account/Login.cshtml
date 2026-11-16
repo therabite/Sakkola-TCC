@@ -19,7 +19,7 @@
                     </a>
                 </div>
 
-                <form asp-controller="Account" asp-action="Login" method="post">
+                <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
 
                     <div style="margin-top: 2vh;">

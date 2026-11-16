@@ -8,7 +8,7 @@
         public string NomeProduto { get; set; }
         public decimal PrecoUnitario { get; set; }
         public int Quantidade { get; set; }
-        public string ImagemUrl { get; set; }
+        public string Descricao { get; set; }
         public decimal Subtotal => PrecoUnitario * Quantidade;
     }
 }

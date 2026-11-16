@@ -104,7 +104,7 @@ namespace Sakkola.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                return RedirectToAction("Index", "Carrinho");
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {

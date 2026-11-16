@@ -60,5 +60,33 @@ namespace Sakkola.Controllers
 
             return View(produtos);
         }
+        public async Task<IActionResult> Detalhes(int id)
+        {
+            var produto = await _produtoRepository.ObterPorIdAsync(id);
+            if (produto == null)
+            {
+                return NotFound();
+            }
+
+            string nomeCatSlug = produto.Categoria?.categoria?.ToLower() ?? "acougue";
+
+            if (nomeCatSlug.Contains("açougue") || nomeCatSlug.Contains("acougue")) nomeCatSlug = "acougue";
+            else if (nomeCatSlug.Contains("frios")) nomeCatSlug = "frios";
+            else if (nomeCatSlug.Contains("hortifrúti") || nomeCatSlug.Contains("hortifruti")) nomeCatSlug = "hortifruti";
+            else if (nomeCatSlug.Contains("padaria")) nomeCatSlug = "padaria";
+            else if (nomeCatSlug.Contains("higiene")) nomeCatSlug = "higiene";
+            else if (nomeCatSlug.Contains("limpeza")) nomeCatSlug = "limpeza";
+            else if (nomeCatSlug.Contains("mercearia")) nomeCatSlug = "mercearia";
+            else if (nomeCatSlug.Contains("promocao")) nomeCatSlug = "promocao";
+
+            ViewData["TemaCategoria"] = $"tema-{nomeCatSlug}";
+            ViewData["NomeCategoria"] = produto.Categoria?.categoria ?? "Produtos";
+            ViewData["IdCategoria"] = nomeCatSlug;
+
+            var sugestoes = await _produtoRepository.ObterPorCategoriaExcetoIdAsync(produto.id_categoria, produto.id, 4);
+            ViewBag.Sugestoes = sugestoes;
+
+            return View(produto);
+        }
     }
 }

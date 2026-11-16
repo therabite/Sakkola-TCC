@@ -71,7 +71,7 @@ namespace Sakkola.Repository
                 }
 
                 // 2. Buscar os itens do carrinho alinhados com a estrutura da tabela
-                string sqlItens = @"SELECT ci.id_item, ci.id_produto, p.nome, p.preco, ci.quantidade 
+                string sqlItens = @"SELECT ci.id_item, ci.id_produto, p.nome, p.preco, p.descricao, ci.quantidade 
                               FROM tbCarrinhoItem ci
                               INNER JOIN tbProduto p ON ci.id_produto = p.id_produto
                               WHERE ci.id_carrinho = @idCarrinho;";
@@ -89,7 +89,8 @@ namespace Sakkola.Repository
                                 IdProduto = reader.GetInt32("id_produto"),
                                 NomeProduto = reader.GetString("nome"),
                                 PrecoUnitario = reader.GetDecimal("preco"),
-                                Quantidade = reader.GetInt32("quantidade")
+                                Quantidade = reader.GetInt32("quantidade"),
+                                Descricao = reader.GetString("descricao")
                             });
                         }
                     }
