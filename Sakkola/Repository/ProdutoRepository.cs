@@ -38,32 +38,50 @@ namespace Sakkola.Repository
             }
             return produtos;
         }
-        public async Task<List<Produtos>> ObterPorCategoriaAsync(string nomeCategoria)
+        public async Task<List<Produtos>> ObterPorCategoriaAsync(string categoriaSlug)
         {
             var produtos = new List<Produtos>();
-            using (var conn = new MySqlConnection(_connectionString))
-            {
-                await conn.OpenAsync();
-                string sql = @"
-                    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.estoque, p.id_categoria, c.nome AS nome_categoria
-                    FROM tbProduto p
-                    INNER JOIN tbCategoria c ON p.id_categoria = c.id_categoria
-                    WHERE LOWER(c.nome) LIKE LOWER(CONCAT('%', @nomeCategoria, '%'))
-                    ORDER BY p.nome ASC;";
 
-                using (var cmd = new MySqlCommand(sql, conn))
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+
+                string query = @"
+            SELECT p.id_produto, p.nome, p.descricao, p.preco, p.estoque, p.id_categoria
+            FROM tbProduto p
+            INNER JOIN tbCategoria c ON p.id_categoria = c.id_categoria
+            WHERE 
+                (@Slug = 'acougue' AND c.id_categoria = 1) OR
+                (@Slug = 'hortifruti' AND c.id_categoria = 2) OR
+                (@Slug = 'padaria' AND c.id_categoria = 3) OR
+                (@Slug = 'higiene' AND c.id_categoria = 4) OR
+                (@Slug = 'limpeza' AND c.id_categoria = 5) OR
+                (@Slug = 'frios' AND c.id_categoria = 6) OR
+                (@Slug = 'mercearia' AND c.id_categoria = 7) OR
+                (@Slug = 'promocao' AND c.id_categoria = 8)";
+
+                using (var cmd = new MySqlCommand(query, conexao))
                 {
-                    cmd.Parameters.AddWithValue("@nomeCategoria", nomeCategoria ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@Slug", categoriaSlug.ToLower().Trim());
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
                         {
-                            produtos.Add(MapearProduto(reader));
+                            produtos.Add(new Produtos
+                            {
+                                id = reader.GetInt32("id_produto"),
+                                nome = reader.GetString("nome"),
+                                descricao = reader.GetString("descricao"),
+                                preco = reader.GetDecimal("preco"),
+                                estoque = reader.GetInt32("estoque"),
+                                id_categoria = reader.GetInt32("id_categoria")
+                            });
                         }
                     }
                 }
             }
+
             return produtos;
         }
         public async Task<Produtos> ObterPorIdAsync(int id)

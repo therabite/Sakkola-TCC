@@ -10,8 +10,23 @@
     <div class="row align-items-center">
         <div class="col-md-5 border-end">
             <!-- Exibição do Nome e Telefone -->
-            <p class="fw-medium text-dark mb-1">@(Model?.NomeCliente ?? "Nome não cadastrado")</p>
-            <p class="text-muted mb-0">@(Model?.Telefone ?? "Telefone não cadastrado")</p>
+            <p class="fw-medium text-dark mb-1">@(Model?.NomeCliente ?? "Nome não informado")</p>
+            <p class="text-muted mb-0">
+                @{
+                    string telefone = Model?.Telefone;
+                    if (!string.IsNullOrEmpty(telefone) && telefone.Length >= 10)
+                    {
+                        long.TryParse(telefone, out long numTel);
+                        telefone = telefone.Length == 11
+                            ? string.Format("{0:(##) #####-####}", numTel) 
+                            : string.Format("{0:(##) ####-####}", numTel);
+                    }
+                    else{
+                        telefone = "Telefone não informado";
+                    }
+                }
+                @telefone
+            </p>
         </div>
 
         <div class="col-md-7 ps-md-4">
@@ -43,11 +58,11 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-secondary small fw-bold">Telefone</label>
-                            <input type="text" class="form-control" name="Telefone" value="@Model?.Telefone" required />
+                            <input type="text" id="telefone" class="form-control" name="Telefone" placeholder="(00) 00000-0000" value="@Model?.Telefone" required />
                         </div>
                         <div class="col-12">
                             <label class="form-label text-secondary small fw-bold">CEP</label>
-                            <input type="text" id="Cep" class="form-control" name="Cep" value="@Model?.Cep" required />
+                            <input type="text" id="Cep" class="form-control" name="Cep" placeholder="00000-000" value="@Model?.Cep" required />
                         </div>
                         <div class="col-md-8">
                             <label class="form-label text-secondary small fw-bold">Logradouro</label>
@@ -78,32 +93,48 @@
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#Cep').blur(function () {
-            var cep = $(this).val().replace(/\D/g, '');
 
-            if (cep != "") {
-                var validacep = /^[0-9]{8}$/;
-
-                if(validacep.test(cep)) {
-                    // Consulta o webservice viacep.com.br/
-                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
-                        if (!("erro" in dados)) {
-                            // Atualiza os campos com os valores retornado
-                            $('#Rua').val(dados.logradouro);
-                            $('#Bairro').val(dados.bairro);
-                            $('#Cidade').val(dados.localidade);
-                            $('#Estado').val(dados.uf);
-                        } else {
-                            alert("CEP não encontrado.");
-                        }
-                    });
-                } else {
-                    alert("Formato de CEP inválido.");
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    
+    <script>
+        $(document).ready(function () {
+            var SPMaskBehavior = function (val) {
+                return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+            },
+            spOptions = {
+                onKeyPress: function(val, e, field, options) {
+                    field.mask(SPMaskBehavior.apply({}, arguments), options);
                 }
-            }
+            };
+
+            $('#telefone').mask(SPMaskBehavior, spOptions);
+            $('#telefone').trigger('input');
+
+            // Consulta de CEP via ViaCEP
+            $('#Cep').blur(function () {
+                var cep = $(this).val().replace(/\D/g, '');
+
+                if (cep != "") {
+                    var validacep = /^[0-9]{8}$/;
+
+                    if(validacep.test(cep)) {
+                        $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+                            if (!("erro" in dados)) {
+                                $('#Rua').val(dados.logradouro);
+                                $('#Bairro').val(dados.bairro);
+                                $('#Cidade').val(dados.localidade);
+                                $('#Estado').val(dados.uf);
+                            } else {
+                                alert("CEP não encontrado.");
+                            }
+                        });
+                    } else {
+                        alert("Formato de CEP inválido.");
+                    }
+                }
+            });
         });
-    });
-</script>
+    </script>
+}
