@@ -17,7 +17,6 @@ namespace Sakkola.Controllers
             var produtos = await _produtoRepository.ObterTodosAsync();
             return View(produtos);
         }
-
         public async Task<IActionResult> Categoria(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -25,10 +24,9 @@ namespace Sakkola.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            string categoriaSlug = id.ToLower().Trim();
-            if (categoriaSlug == "promoção") categoriaSlug = "promocao";
+            string slugLower = id.ToLower().Trim();
 
-            ViewData["TemaCategoria"] = categoriaSlug switch
+            ViewData["TemaCategoria"] = slugLower switch
             {
                 "acougue" => "tema-acougue",
                 "hortifruti" => "tema-hortifruti",
@@ -41,7 +39,7 @@ namespace Sakkola.Controllers
                 _ => ""
             };
 
-            ViewData["NomeCategoria"] = categoriaSlug switch
+            string nomeCategoriaOficial = slugLower switch
             {
                 "acougue" => "Açougue",
                 "hortifruti" => "Hortifrúti",
@@ -54,9 +52,9 @@ namespace Sakkola.Controllers
                 _ => id
             };
 
-            ViewData["IdCategoria"] = categoriaSlug;
-
-            var produtos = await _produtoRepository.ObterPorCategoriaAsync(categoriaSlug);
+            ViewData["NomeCategoria"] = nomeCategoriaOficial;
+            ViewData["IdCategoria"] = slugLower;
+            var produtos = await _produtoRepository.ObterPorCategoriaAsync(nomeCategoriaOficial);
 
             return View(produtos);
         }

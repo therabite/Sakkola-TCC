@@ -250,4 +250,12 @@ CALL sp_InserirProduto('Creme de Leite', 'Creme de leite tradicional - 200g', 3.
 CALL sp_InserirProduto('Panetone Trufado', 'Panetone Recheado trufado - 750g', 34.99, 25, 'Promoção');
 CALL sp_InserirProduto('Caixa de Bombons Natalina', 'Caixa de bombons sortidos para presentear - 250g', 17.99, 50, 'Promoção');
 CALL sp_InserirProduto('Biscoito Natalino', 'Biscoitos amanteigados decorados com motivos natalinos - 300g', 14.99, 30, 'Promoção');
+<<<<<<< HEAD
 CALL sp_InserirProduto('Espumante Sem Álcool', 'Bebida gaseificada saborizada para comemorações - 750ml', 18.99, 40, 'Promoção');
+=======
+CALL sp_InserirProduto('Espumante Sem Álcool', 'Bebida gaseificada saborizada para comemorações - 750ml', 18.99, 40, 'Promoção');
+
+SELECT p.id_produto, p.nome AS Produto, c.nome AS CategoriaOficial 
+FROM tbProduto p
+INNER JOIN tbCategoria c ON p.id_categoria = c.id_categoria;
+>>>>>>> 4664ec0d5f3be8898c1d94dfecce1fbd22c761b3

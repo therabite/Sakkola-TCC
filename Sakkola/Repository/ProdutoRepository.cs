@@ -41,19 +41,32 @@ namespace Sakkola.Repository
         public async Task<List<Produtos>> ObterPorCategoriaAsync(string nomeCategoria)
         {
             var produtos = new List<Produtos>();
+            string categoriaOficial = nomeCategoria?.ToLower().Trim() switch
+            {
+                "acougue" => "Açougue",
+                "hortifruti" => "Hortifrúti",
+                "padaria" => "Padaria",
+                "higiene" => "Higiene",
+                "limpeza" => "Limpeza e Utilidades", 
+                "frios" => "Frios e Laticínios",
+                "mercearia" => "Mercearia",
+                "promocao" => "Promoção",
+                _ => nomeCategoria
+            };
+
             using (var conn = new MySqlConnection(_connectionString))
             {
                 await conn.OpenAsync();
                 string sql = @"
-                    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.estoque, p.id_categoria, c.nome AS nome_categoria
-                    FROM tbProduto p
-                    INNER JOIN tbCategoria c ON p.id_categoria = c.id_categoria
-                    WHERE LOWER(c.nome) LIKE LOWER(CONCAT('%', @nomeCategoria, '%'))
-                    ORDER BY p.nome ASC;";
+            SELECT p.id_produto, p.nome, p.descricao, p.preco, p.estoque, p.id_categoria, c.nome AS nome_categoria
+            FROM tbProduto p
+            INNER JOIN tbCategoria c ON p.id_categoria = c.id_categoria
+            WHERE LOWER(TRIM(c.nome)) = LOWER(TRIM(@categoria))
+            ORDER BY p.nome ASC;";
 
                 using (var cmd = new MySqlCommand(sql, conn))
                 {
-                    cmd.Parameters.AddWithValue("@nomeCategoria", nomeCategoria ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@categoria", categoriaOficial);
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
@@ -92,6 +105,7 @@ namespace Sakkola.Repository
             }
             return produto;
         }
+
         public async Task<List<Produtos>> ObterPorCategoriaExcetoIdAsync(int idCategoria, int idProdutoAtual, int limite = 4)
         {
             var produtos = new List<Produtos>();
@@ -122,6 +136,7 @@ namespace Sakkola.Repository
             }
             return produtos;
         }
+
         private Produtos MapearProduto(MySqlDataReader reader)
         {
             return new Produtos
@@ -139,6 +154,5 @@ namespace Sakkola.Repository
                 }
             };
         }
-
     }
 }

@@ -11,7 +11,23 @@
         <div class="col-md-5 border-end">
             <!-- Exibição do Nome e Telefone -->
             <p class="fw-medium text-dark mb-1">@(Model?.NomeCliente ?? "Nome não cadastrado")</p>
-            <p class="text-muted mb-0">@(Model?.Telefone ?? "Telefone não cadastrado")</p>
+            <p class="text-muted mb-0">
+                @{
+                    string telefone = Model?.Telefone;
+                    if (!string.IsNullOrEmpty(telefone) && telefone.Length >= 10)
+                    {
+                        long.TryParse(telefone, out long numTel);
+                        telefone = telefone.Length == 11
+                            ? string.Format("{0:(##) #####-####}", numTel)
+                            : string.Format("{0:(##) ####-####}", numTel);
+                    }
+                    else
+                    {
+                        telefone = "Telefone não informado";
+                    }
+                }
+                @telefone
+            </p>
         </div>
 
         <div class="col-md-7 ps-md-4">
@@ -70,7 +86,7 @@
                             <input type="text" id="Estado" class="form-control" name="Estado" value="@Model?.Estado" required />
                         </div>
                         <div class="col-12 mt-4">
-                            <button type="submit" class="btn text-white w-100 py-2 fw-medium rounded-pill" style="background-color: var(--batom-de-paty);">Finalizar</button>
+                            <button type="submit" class="btn text-white w-100 py-2 fw-medium" style="background-color: var(--batom-de-paty);">Finalizar</button>
                         </div>
                     </div>
                 </form>

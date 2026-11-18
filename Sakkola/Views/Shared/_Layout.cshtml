@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="shortcut icon" href="~/img/Logo-White.png" />
 </head>
-<body class="@ViewData["TemaCategoria"]">
+<body class="@ViewData["TemaCategoria"] d-flex flex-column" style="min-height: 100vh;">
 
     @{
         var colaboradorEmail = Context.Session.GetString("EmailColaborador");
@@ -20,16 +20,12 @@
 
     @if (string.IsNullOrEmpty(colaboradorEmail))
     {
-        <!-- HEADER PÚBLICO -->
         <header>
             <div class="header-sakkola py-2 text-white">
                 <div class="py-2 d-flex align-items-center justify-content-between mx-4">
-                    <!-- Logo -->
                     <a class="navbar-brand text-white fw-bold fs-3 me-3" asp-area="" asp-controller="Home" asp-action="Index">
                         <img src="~/img/Logo-Escrito-White.png" class="logo-header ms-0 justify-content-start" />
                     </a>
-
-                    <!-- Barra de Pesquisa -->
                     <form class="flex-grow-1 mx-5" asp-controller="Produtos" asp-action="Index" method="get">
                         <div class="input-group">
                             <input type="search" class="form-control rounded-pill px-3 pe-5" placeholder="Buscar produtos..." name="search" />
@@ -89,8 +85,6 @@
                     </ul>
                 </div>
             </nav>
-
-            <!-- OFFCANVAS DE CATEGORIAS RESTAURADO -->
             <div class="offcanvas offcanvas-start" tabindex="-1" id="menuCategorias" aria-labelledby="menuCategoriasLabel" style="width:334px;">
                 <div class="offcanvas-header flex-column align-items-start pb-2">
                     <div class="d-flex justify-content-around w-100 align-items-center mb-2">
@@ -141,7 +135,6 @@
     }
     else
     {
-        <!-- HEADER EXCLUSIVO ADMIN -->
         <header class="bg-dark text-white py-3 shadow-sm mb-4">
             <div class="container-fluid d-flex justify-content-between align-items-center px-4">
                 <div class="d-flex align-items-center gap-3">
@@ -169,42 +162,39 @@
         </div>
     </div>
 
-    <div>
-        <main role="main" class="pb-3 mb-5">
+    <div class="flex-grow-1">
+        <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
     @if (string.IsNullOrEmpty(colaboradorEmail))
     {
-        <footer class="mt-5 mb-0 pb-0 header-sakkola footer">
-            <div class="d-flex align-items-center justify-content-between mx-4 py-2">
-                <!-- Logo Footer com tamanho controlado -->
+        <footer class="mt-auto mb-0 pb-0 header-sakkola footer">
+            <div class="d-flex align-items-center justify-content-between mx-4">
                 <a class="navbar-brand text-white fw-bold me-3" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/img/Logo-Escrito-White.png" class="logo-footer ms-0" style="height: 35px;" />
+                    <img src="/img/Logo-Escrito-White.png" class="logo-footer ms-0" style="height: 35px;"/>
                 </a>
-            
-                <div class="ms-5 gap-3 justify-content-end d-flex align-items-center fs-5">
-                    <a asp-controller="Carrinho" asp-action="Index" class="text-white">
+                <div class="ms-5 gap-4 justify-content-end d-flex align-items-center gap-3 fs-5">
+                    <a asp-controller="carrinho" asp-action="Index" class="text-white">
                         <i class="bi bi-geo-alt"></i>
                     </a>
-                    <a asp-controller="Account" asp-action="Login" class="text-white">
+                    <a asp-controller="continha" asp-action="login" class="text-white">
                         <i class="bi bi-telephone"></i>
                     </a>
-                    <a asp-controller="Account" asp-action="Login" class="text-white">
+                    <a asp-controller="continha" asp-action="login" class="text-white">
                         <i class="bi bi-instagram"></i>
                     </a>
                 </div>
             </div>
-
-            <nav class="footer-nav d-flex align-items-center justify-content-center header-sakkola-2 text-white py-1">
+            <nav class="footer-nav d-flex align-items-center justify-content-center header-sakkola-2 text-white">
                 <div class="container d-flex justify-content-center">
-                    <ul class="nav mb-0">
+                    <ul class="nav">
                         <li>
-                            <a class="font-footer nav-link text-white p-0 opacity-75 small">&copy; 2026 Copyright</a>
+                            <a class="font-footer nav-link text-white p-0 opacity-75">&copy; 2026 Copyright</a>
                         </li>
-                        <li class="ms-2">
-                            <a asp-controller="Home" asp-action="Index" class="font-footer nav-link text-white p-0 small">Sakkola.com</a>
+                        <li>
+                            <a class="font-footer nav-link text-white py-0">Sakkola.com</a>
                         </li>
                     </ul>
                 </div>
@@ -212,6 +202,7 @@
         </footer>
     }
 
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js" defer></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
