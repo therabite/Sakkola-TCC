@@ -11,12 +11,12 @@ namespace Sakkola.Controllers
         {
             _produtoRepository = produtoRepository;
         }
-
         public async Task<IActionResult> Index()
         {
             var produtos = await _produtoRepository.ObterTodosAsync();
             return View(produtos);
         }
+
         public async Task<IActionResult> Categoria(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -24,9 +24,7 @@ namespace Sakkola.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            string slugLower = id.ToLower().Trim();
-
-            ViewData["TemaCategoria"] = slugLower switch
+            ViewData["TemaCategoria"] = id.ToLower() switch
             {
                 "acougue" => "tema-acougue",
                 "hortifruti" => "tema-hortifruti",
@@ -39,7 +37,7 @@ namespace Sakkola.Controllers
                 _ => ""
             };
 
-            string nomeCategoriaOficial = slugLower switch
+            ViewData["NomeCategoria"] = id.ToLower() switch
             {
                 "acougue" => "Açougue",
                 "hortifruti" => "Hortifrúti",
@@ -52,12 +50,13 @@ namespace Sakkola.Controllers
                 _ => id
             };
 
-            ViewData["NomeCategoria"] = nomeCategoriaOficial;
-            ViewData["IdCategoria"] = slugLower;
-            var produtos = await _produtoRepository.ObterPorCategoriaAsync(nomeCategoriaOficial);
+            ViewData["IdCategoria"] = id.ToLower();
+
+            var produtos = await _produtoRepository.ObterPorCategoriaAsync(id);
 
             return View(produtos);
         }
+
         public async Task<IActionResult> Detalhes(int id)
         {
             var produto = await _produtoRepository.ObterPorIdAsync(id);
@@ -81,6 +80,7 @@ namespace Sakkola.Controllers
             ViewData["NomeCategoria"] = produto.Categoria?.categoria ?? "Produtos";
             ViewData["IdCategoria"] = nomeCatSlug;
 
+            // Busca as sugestões utilizando os IDs inteiros corretos
             var sugestoes = await _produtoRepository.ObterPorCategoriaExcetoIdAsync(produto.id_categoria, produto.id, 4);
             ViewBag.Sugestoes = sugestoes;
 

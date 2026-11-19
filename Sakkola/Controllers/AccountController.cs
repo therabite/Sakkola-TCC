@@ -114,6 +114,33 @@ namespace Sakkola.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AtualizarDados(string nome, string telefone, string cep, string endereco, string numero, string complemento)
+        {
+            var emailUsuario = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(emailUsuario))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            await _clientRepository.AtualizarDadosUsuarioAsync(emailUsuario, nome, telefone, cep, endereco, numero, complemento);
+            var claims = new List<System.Security.Claims.Claim>
+            {
+                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, nome),
+                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Email, emailUsuario),
+                new System.Security.Claims.Claim("Telefone", telefone),
+                new System.Security.Claims.Claim("CEP", cep),
+                new System.Security.Claims.Claim("Endereco", endereco),
+                new System.Security.Claims.Claim("Numero", numero),
+                new System.Security.Claims.Claim("Complemento", complemento ?? "")
+            };
+
+            var claimsIdentity = new System.Security.Claims.ClaimsIdentity(claims, Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignInAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme, new System.Security.Claims.ClaimsPrincipal(claimsIdentity));
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

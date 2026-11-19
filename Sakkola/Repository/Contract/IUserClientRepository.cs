@@ -8,5 +8,6 @@ namespace Sakkola.Repository.Interfaces
         Task CadastrarClienteAsync(RegisterClient client, Endereco endereco);
         Task<RegisterClient> ValidarUserAsync(string email, string senha); 
         Task<bool> UserExistsAsync(string email);
+        Task AtualizarDadosUsuarioAsync(string email, string nome, string telefone, string cep, string endereco, string numero, string complemento);
     }
 }
