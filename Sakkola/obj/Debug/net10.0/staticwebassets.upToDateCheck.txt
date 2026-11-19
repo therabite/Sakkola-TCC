@@ -8,6 +8,11 @@ wwwroot\img\banners\limpeza.jpeg
 wwwroot\img\banners\mercearia.jpeg
 wwwroot\img\banners\padaria.jpeg
 wwwroot\img\banners\promocao.jpg
+wwwroot\img\Logo-Escrito-Black.png
+wwwroot\img\Logo-Escrito-White.png
+wwwroot\img\logo-sakkola-color-no-text.png
+wwwroot\img\logo-sakkola-color.png
+wwwroot\img\Logo.png
 wwwroot\img\img-produtos\1.png
 wwwroot\img\img-produtos\10.png
 wwwroot\img\img-produtos\100.png
@@ -110,11 +115,6 @@ wwwroot\img\img-produtos\96.png
 wwwroot\img\img-produtos\97.png
 wwwroot\img\img-produtos\98.png
 wwwroot\img\img-produtos\99.png
-wwwroot\img\Logo-Escrito-Black.png
-wwwroot\img\Logo-Escrito-White.png
-wwwroot\img\logo-sakkola-color-no-text.png
-wwwroot\img\logo-sakkola-color.png
-wwwroot\img\Logo.png
 wwwroot\img\sakkola-banner-1.png
 wwwroot\img\sakkola-banner-2.png
 wwwroot\img\sakkola-banner-3.png

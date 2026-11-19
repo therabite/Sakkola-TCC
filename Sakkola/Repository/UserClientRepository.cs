@@ -95,30 +95,5 @@ namespace Sakkola.Repository
             }
             return null;
         }
-        public async Task AtualizarDadosUsuarioAsync(string email, string nome, string telefone, string cep, string endereco, string numero, string complemento)
-        {
-            using (var conn = new MySqlConnection(_connectionString))
-            {
-                await conn.OpenAsync();
-
-                string sql = @"
-                    UPDATE tbUsuario 
-                    SET nome = @Nome, telefone = @Telefone, cep = @Cep, endereco = @Endereco, numero = @Numero, complemento = @Complemento
-                    WHERE email = @Email;";
-
-                using (var cmd = new MySqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Nome", nome ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@Telefone", telefone ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@Cep", cep ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@Endereco", endereco ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@Numero", numero ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@Complemento", complemento ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Email", email);
-
-                    await cmd.ExecuteNonQueryAsync();
-                }
-            }
-        }
     }
 }
