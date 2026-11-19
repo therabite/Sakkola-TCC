@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Sakkola.Models.ViewCarrinho;
 using Sakkola.Repository.Contract;
 using System.Security.Claims;
 
@@ -29,5 +30,20 @@ namespace Sakkola.Controllers
             TempData["SucessoCliente"] = "Pedido cancelado com sucesso.";
             return RedirectToAction("MeusPedidos", "Carrinho");
         }
+        [HttpPost]
+        public async Task<IActionResult> AtualizarDados(Carrinho model)
+        {
+            model.Email = User.Identity?.Name;
+
+            if (!ModelState.IsValid)
+            {
+                return View("Perfil", model);
+            }
+            await _userRepository.AtualizarClienteAsync(model);
+
+            TempData["MensagemSucesso"] = "Dados atualizados com sucesso!";
+            return RedirectToAction("Perfil");
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MySqlConnector;
 using Sakkola.Models;
+using Sakkola.Models.ViewCarrinho;
 using Sakkola.Models.ViewModel;
 using Sakkola.Repository.Interfaces;
 using System.Net;
@@ -17,83 +18,69 @@ namespace Sakkola.Repository
             ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public async Task CadastrarClienteAsync(RegisterClient client, Endereco endereco)
+        public async Task<Carrinho?> ObterPorEmailAsync(string email)
         {
-            using (var conn = new MySqlConnection(_connectionString))
+            using var conn = new MySqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            // Ajuste os nomes das colunas e tabelas conforme o seu banco de dados
+            string sql = @"SELECT nome AS NomeCliente, email AS Email, telefone AS Telefone, 
+                          cep AS Cep, logradouro AS Logradouro, numero AS Numero, 
+                          bairro AS Bairro, cidade AS Cidade, estado AS Estado 
+                   FROM tbCliente 
+                   WHERE email = @Email;";
+
+            using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
             {
-                await conn.OpenAsync();
-
-                string sql = @"
-                    INSERT INTO tbAddress (CEP) VALUES (@cep);
-                    INSERT INTO tbUser (nome, data_nasc, telefone, CPF, email, senha) 
-                    VALUES (@nome, @data_nasc, @telefone, @CPF, @email, @senha);
-                    INSERT INTO tbClient (id_client) VALUES (LAST_INSERT_ID());";
-
-                using (var cmd = new MySqlCommand(sql, conn))
+                return new Carrinho
                 {
-                    string cepLimpo = Regex.Replace(endereco.Cep ?? "", @"\D", "");
-                    string cpfLimpo = Regex.Replace(client.cpf ?? "", @"\D", "");
-                    string telefoneLimpo = Regex.Replace(client.telefone ?? "", @"\D", "");
-
-                    cmd.Parameters.AddWithValue("@cep", cepLimpo);
-                    cmd.Parameters.AddWithValue("@nome", client.nome);
-                    cmd.Parameters.AddWithValue("@data_nasc", client.data_nasc);
-                    cmd.Parameters.AddWithValue("@telefone", telefoneLimpo);
-                    cmd.Parameters.AddWithValue("@CPF", cpfLimpo);
-                    cmd.Parameters.AddWithValue("@email", client.email);
-                    cmd.Parameters.AddWithValue("@senha", client.senha);
-
-                    await cmd.ExecuteNonQueryAsync();
-                }
+                    NomeCliente = reader["NomeCliente"].ToString(),
+                    Email = reader["Email"].ToString(),
+                    Telefone = reader["Telefone"].ToString(),
+                    Cep = reader["Cep"].ToString(),
+                    Logradouro = reader["Logradouro"].ToString(),
+                    Numero = reader["Numero"].ToString(),
+                    Bairro = reader["Bairro"].ToString(),
+                    Cidade = reader["Cidade"].ToString(),
+                    Estado = reader["Estado"].ToString()
+                };
             }
-        }
 
-        public async Task<bool> UserExistsAsync(string email)
-        {
-            using (var conn = new MySqlConnection(_connectionString))
-            {
-                await conn.OpenAsync();
-
-                string sql = "SELECT COUNT(1) FROM tbuser WHERE email = @email;";
-
-                using(var cmd = new MySqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@email", email);
-
-                    var result = Convert.ToInt32(await cmd.ExecuteScalarAsync());
-                    return result > 0;
-                }
-            }
-        }
-
-        public async Task<RegisterClient> ValidarUserAsync(string email, string senha)
-        {
-            using (var conn = new MySqlConnection(_connectionString))
-            {
-                await conn.OpenAsync();
-
-                string sql = @"SELECT Id_user, nome, email FROM tbUser WHERE email = @email AND senha = @senha LIMIT 1;";
-
-                using (var cmd = new MySqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@email", email);
-                    cmd.Parameters.AddWithValue("@senha", senha);
-
-                    using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        if (await reader.ReadAsync())
-                        {
-                            return new RegisterClient
-                            {
-                                Id_user = reader.GetInt32("Id_user"),
-                                nome = reader.GetString("nome"),
-                                email = reader.GetString("email")
-                            };
-                        }
-                    }
-                }
-            }
             return null;
+        }
+
+        public async Task AtualizarClienteAsync(Carrinho cliente)
+        {
+            using var conn = new MySqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            string sql = @"UPDATE tbCliente 
+                   SET nome = @Nome, 
+                       telefone = @Telefone, 
+                       cep = @Cep, 
+                       logradouro = @Logradouro, 
+                       numero = @Numero, 
+                       bairro = @Bairro, 
+                       cidade = @Cidade, 
+                       estado = @Estado
+                   WHERE email = @Email;";
+
+            using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@Nome", cliente.NomeCliente);
+            cmd.Parameters.AddWithValue("@Telefone", cliente.Telefone);
+            cmd.Parameters.AddWithValue("@Cep", cliente.Cep);
+            cmd.Parameters.AddWithValue("@Logradouro", cliente.Logradouro);
+            cmd.Parameters.AddWithValue("@Numero", cliente.Numero);
+            cmd.Parameters.AddWithValue("@Bairro", cliente.Bairro ?? "");
+            cmd.Parameters.AddWithValue("@Cidade", cliente.Cidade);
+            cmd.Parameters.AddWithValue("@Estado", cliente.Estado ?? "");
+            cmd.Parameters.AddWithValue("@Email", cliente.Email);
+
+            await cmd.ExecuteNonQueryAsync();
         }
     }
 }
