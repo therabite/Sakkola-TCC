@@ -110,8 +110,6 @@ namespace Sakkola.Repository
                     try
                     {
                         int idCarrinho = await ObterOuCriarCarrinhoIdAsync(conn, tran, idUsuario);
-
-                        // Verifica se o produto já existe no carrinho do usuário
                         string sqlCheck = "SELECT id_item, quantidade FROM tbCarrinhoItem WHERE id_carrinho = @idCarrinho AND id_produto = @idProduto;";
                         using (var cmdCheck = new MySqlCommand(sqlCheck, conn, tran))
                         {
@@ -139,7 +137,6 @@ namespace Sakkola.Repository
                             }
                         }
 
-                        // Se não existe, insere novo item
                         string sqlInsert = "INSERT INTO tbCarrinhoItem (id_carrinho, id_produto, quantidade) VALUES (@idCarrinho, @idProduto, @quantidade);";
                         using (var cmdInsert = new MySqlCommand(sqlInsert, conn, tran))
                         {

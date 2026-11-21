@@ -17,18 +17,22 @@ namespace Sakkola.Controllers
             _clientRepository = clientRepository;
         }
         [HttpGet]
-        public IActionResult Perfil()
+        public async Task<IActionResult> Perfil()
         {
-            if (User.Identity == null || !User.Identity.IsAuthenticated)
+            var emailUsuario = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(emailUsuario))
             {
                 return RedirectToAction("Login", "Account");
             }
-            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+
+            var cliente = await _clientRepository.ObterPorEmailAsync(emailUsuario);
+
+            if (cliente == null)
             {
-                return RedirectToAction("Login", "Account");
+                cliente = new Sakkola.Models.Client { Email = emailUsuario };
             }
-            return View();
+
+            return View(cliente); 
         }
 
         [HttpGet]
@@ -126,6 +130,22 @@ namespace Sakkola.Controllers
                 return View(loginClient);
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AtualizarDados(Client model)
+        {
+            model.Email = User.Identity?.Name;
+
+            if (!ModelState.IsValid)
+            {
+                return View("Perfil", model);
+            }
+            await _clientRepository.AtualizarClienteAsync(model);
+
+            TempData["MensagemSucesso"] = "Dados atualizados com sucesso!";
+            return RedirectToAction("Perfil");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()

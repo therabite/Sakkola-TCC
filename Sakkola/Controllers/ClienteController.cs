@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Sakkola.Models;
 using Sakkola.Models.ViewCarrinho;
 using Sakkola.Repository.Contract;
+using Sakkola.Repository.Interfaces;
 using System.Security.Claims;
 
 namespace Sakkola.Controllers
@@ -8,10 +10,12 @@ namespace Sakkola.Controllers
     public class ClienteController : Controller
     {
         private readonly IPedidoRepository _pedidoRepository;
+        private readonly IUserClientRepository _clientRepository;
 
-        public ClienteController(IPedidoRepository pedidoRepository)
+        public ClienteController(IPedidoRepository pedidoRepository, IUserClientRepository clientRepository)
         {
             _pedidoRepository = pedidoRepository;
+            _clientRepository = clientRepository;
         }
 
         [HttpGet]
@@ -21,7 +25,6 @@ namespace Sakkola.Controllers
             var pedidos = await _pedidoRepository.ObterPedidosPorUsuarioAsync(userId);
             return View(pedidos);
         }
-
         [HttpPost]
         public async Task<IActionResult> CancelarPedido(int idPedido)
         {
@@ -31,7 +34,7 @@ namespace Sakkola.Controllers
             return RedirectToAction("MeusPedidos", "Carrinho");
         }
         [HttpPost]
-        public async Task<IActionResult> AtualizarDados(Carrinho model)
+        public async Task<IActionResult> AtualizarDados(Client model)
         {
             model.Email = User.Identity?.Name;
 
@@ -39,7 +42,7 @@ namespace Sakkola.Controllers
             {
                 return View("Perfil", model);
             }
-            await _userRepository.AtualizarClienteAsync(model);
+            await _clientRepository.AtualizarClienteAsync(model);
 
             TempData["MensagemSucesso"] = "Dados atualizados com sucesso!";
             return RedirectToAction("Perfil");

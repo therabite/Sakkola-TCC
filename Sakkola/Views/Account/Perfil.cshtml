@@ -1,35 +1,28 @@
-﻿@model Sakkola.Models.ViewCarrinho.Carrinho
+﻿@model Sakkola.Models.Client
 
 @{
-    ViewData["Title"] = "Minha Conta - ";
-}
-@if (TempData["MensagemSucesso"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="bi bi-check-circle-fill me-2"></i> @TempData["MensagemSucesso"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+    ViewData["Title"] = "Minha Conta";
 }
 
 <div class="container py-5" style="max-width: 850px;">
     <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
         
-        <!-- Cabeçalho / Saudação -->
+        <!-- Saudação -->
         <div class="text-center mb-4">
             <h2 class="fw-bold text-secondary">Minha Conta</h2>
-            <p class="text-muted mb-1">Bem-vindo(a), <strong>@Model?.NomeCliente</strong>! 👋</p>
+            <p class="text-muted mb-1">Bem-vindo(a), <strong>@(Model?.Nome ?? "Usuário")</strong>! 👋</p>
             <p class="text-muted small">Visualize e edite suas informações pessoais e endereço de entrega abaixo.</p>
         </div>
 
         <!-- Formulário de Edição -->
-        <form asp-controller="Account" asp-action="AtualizarDados" method="post" id="formEditarPerfil">
+        <form asp-controller="Account" asp-action="AtualizarPerfil" method="post" id="formEditarPerfil">
             
             <!-- Seção: Dados Pessoais -->
             <h5 class="fw-bold mb-3" style="color: var(--suquinho-de-laranja);">Dados Pessoais</h5>
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
                     <label class="form-label small fw-semibold text-secondary">Nome Completo</label>
-                    <input type="text" class="form-control" name="Nome" value="@Model?.NomeCliente" required />
+                    <input type="text" class="form-control" name="Nome" value="@Model?.Nome" required />
                 </div>
                 <div class="col-md-6">
                     <label class="form-label small fw-semibold text-secondary">E-mail</label>
@@ -43,32 +36,32 @@
 
             <hr class="text-muted opacity-25 my-4" />
 
-            <!-- Seção: Informações de Entrega -->
+            <!-- Seção: Informações de Entrega (Mapeado com EnderecoEntrega) -->
             <h5 class="fw-bold mb-3" style="color: var(--suquinho-de-laranja);">Informações de Entrega</h5>
             <div class="row g-3 mb-4">
                 <div class="col-md-4">
                     <label class="form-label small fw-semibold text-secondary">CEP</label>
-                    <input type="text" class="form-control" id="Cep" name="CEP" value="@Model?.Cep" placeholder="00000-000" maxlength="9" required />
+                    <input type="text" class="form-control" id="Cep" name="EnderecoEntrega.Cep" value="@Model?.EnderecoEntrega?.Cep" placeholder="00000-000" maxlength="9" required />
                 </div>
                 <div class="col-md-8">
                     <label class="form-label small fw-semibold text-secondary">Rua / Logradouro</label>
-                    <input type="text" class="form-control" id="Rua" name="Endereco" value="@Model?.Logradouro" required />
+                    <input type="text" class="form-control" id="Rua" name="EnderecoEntrega.Logradouro" value="@Model?.EnderecoEntrega?.Logradouro" required />
                 </div>
                 <div class="col-md-4">
                     <label class="form-label small fw-semibold text-secondary">Número</label>
-                    <input type="text" class="form-control" name="Numero" value="@Model?.Numero" required />
+                    <input type="text" class="form-control" name="EnderecoEntrega.Numero" value="@Model?.EnderecoEntrega?.Numero" required />
                 </div>
                 <div class="col-md-8">
                     <label class="form-label small fw-semibold text-secondary">Bairro</label>
-                    <input type="text" class="form-control" id="Bairro" name="Bairro" value="@Model?.Bairro"/>
+                    <input type="text" class="form-control" id="Bairro" name="EnderecoEntrega.Bairro" value="@Model?.EnderecoEntrega?.Bairro"/>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label small fw-semibold text-secondary">Cidade</label>
-                    <input type="text" class="form-control" id="Cidade" name="Cidade" value="@Model?.Cidade" required />
+                    <input type="text" class="form-control" id="Cidade" name="EnderecoEntrega.Cidade" value="@Model?.EnderecoEntrega?.Cidade" required />
                 </div>
                 <div class="col-md-8">
                     <label class="form-label small fw-semibold text-secondary">Estado</label>
-                    <input type="text" class="form-control" id="Estado" name="Estado" value="@Model?.Estado" />
+                    <input type="text" class="form-control" id="Estado" name="EnderecoEntrega.Estado" value="@Model?.EnderecoEntrega?.Estado" />
                 </div>
             </div>
 
@@ -80,40 +73,20 @@
             </div>
         </form>
 
-        <hr class="text-muted opacity-25 my-2" />
-
-        <!-- Ações Inferiores (Meus Pedidos e Sair) -->
-        <div class="d-flex justify-content-between align-items-center pt-3">
-            <a asp-controller="Pedidos" asp-action="MeusPedidos" class="btn btn-secondary px-4">
-                Meus Pedidos
-            </a>
-
-            <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
-                <button type="submit" class="btn btn-danger px-4">
-                    Sair / Deslogar
-                </button>
-            </form>
-        </div>
-
     </div>
 </div>
 
 @section Scripts {
-    <!-- Importação do Plugin de Máscara -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Aplicação das máscaras de Telefone e CEP
             $('#modalTelefone').mask('(00) 00000-0000');
             $('#Cep').mask('00000-000');
 
-            // Consulta automática ViaCEP
             $('#Cep').blur(function () {
                 var cep = $(this).val().replace(/\D/g, '');
-
                 if (cep != "") {
                     var validacep = /^[0-9]{8}$/;
-
                     if(validacep.test(cep)) {
                         $('#Rua').val("Carregando...");
                         $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
