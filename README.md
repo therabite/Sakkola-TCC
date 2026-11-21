@@ -36,11 +36,11 @@ O sistema atende a diferentes perfis de acesso:
 
 ## 👥 Integrantes do Grupo
 
-* **[Ana Júlia Marques do Prado]** — *Analista de dados* — [GitHub](https://github.com/)
+* **[Ana Júlia Marques do Prado]** — *Analista de dados* — [GitHub](https://github.com/Anajuxgit23)
 * **[Débora Lopes de Souza]** — *Analista de dados* — [GitHub](https://github.com/therabite)
-* **[Guilherme Lineker Freitas Lima]** — *Analista de dados* — [GitHub](https://github.com/)
-* **[Leonardo de Oliveira Alves Bezerra]** — *Analista de dados* — [GitHub](https://github.com/)
-* **[Thiago Ferreira Silva]** — *Analista de dados* — [GitHub](https://github.com/)
+* **[Guilherme Lineker Freitas Lima]** — *Analista de dados* — [GitHub](https://github.com/Lineker280)
+* **[Leonardo de Oliveira Alves Bezerra]** — *Analista de dados* — [GitHub](https://github.com/LeonardoOAB)
+* **[Thiago Ferreira Silva]** — *Analista de dados* — [GitHub](https://github.com/ThiagoFerreiraSil)
 ---
 
 ## 🏫 Instituição
