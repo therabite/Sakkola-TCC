@@ -3,32 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\repository\\userclientrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\repository\\userclientrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\models\\endereco.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\models\\endereco.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\models\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\models\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\repository\\contract\\iuserclientrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\repository\\contract\\iuserclientrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\views\\account\\perfil.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\views\\account\\perfil.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\controllers\\clientecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\controllers\\clientecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\views\\shared\\_addressinfo.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\views\\shared\\_addressinfo.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\views\\account\\perfil.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\views\\account\\perfil.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\views\\shared\\_itemcarrinho.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\views\\shared\\_itemcarrinho.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\views\\carrinho\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\views\\carrinho\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|c:\\users\\jucy\\source\\repos\\sakkola-tcc\\sakkola\\repository\\userclientrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{409F0D7F-D69A-15B5-5C5C-E13BA9501C1B}|Sakkola\\Sakkola.csproj|solutionrelative:sakkola\\repository\\userclientrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,58 +38,72 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Endereco.cs",
-              "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Models\\Endereco.cs",
-              "RelativeDocumentMoniker": "Sakkola\\Models\\Endereco.cs",
-              "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Models\\Endereco.cs",
-              "RelativeToolTip": "Sakkola\\Models\\Endereco.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-21T02:33:02.007Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "Perfil.cshtml",
               "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Views\\Account\\Perfil.cshtml",
               "RelativeDocumentMoniker": "Sakkola\\Views\\Account\\Perfil.cshtml",
               "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Views\\Account\\Perfil.cshtml",
               "RelativeToolTip": "Sakkola\\Views\\Account\\Perfil.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAG0AAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAIQAAAAAAAAAAAAuwJEAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-11-21T02:26:04.361Z",
+              "WhenOpened": "2026-11-21T02:41:04.057Z",
+              "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ClienteController.cs",
-              "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Controllers\\ClienteController.cs",
-              "RelativeDocumentMoniker": "Sakkola\\Controllers\\ClienteController.cs",
-              "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Controllers\\ClienteController.cs",
-              "RelativeToolTip": "Sakkola\\Controllers\\ClienteController.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAWwAwAAABBAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-21T02:05:28.625Z",
+              "DocumentIndex": 2,
+              "Title": "_AddressInfo.cshtml",
+              "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Views\\Shared\\_AddressInfo.cshtml",
+              "RelativeDocumentMoniker": "Sakkola\\Views\\Shared\\_AddressInfo.cshtml",
+              "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Views\\Shared\\_AddressInfo.cshtml",
+              "RelativeToolTip": "Sakkola\\Views\\Shared\\_AddressInfo.cshtml",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-11-21T03:33:42.191Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Views\\Carrinho\\Index.cshtml",
+              "RelativeDocumentMoniker": "Sakkola\\Views\\Carrinho\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Views\\Carrinho\\Index.cshtml",
+              "RelativeToolTip": "Sakkola\\Views\\Carrinho\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-11-21T03:32:58.034Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "IUserClientRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Repository\\Contract\\IUserClientRepository.cs",
-              "RelativeDocumentMoniker": "Sakkola\\Repository\\Contract\\IUserClientRepository.cs",
-              "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Repository\\Contract\\IUserClientRepository.cs",
-              "RelativeToolTip": "Sakkola\\Repository\\Contract\\IUserClientRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAkAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-21T01:57:52.643Z",
+              "Title": "_ItemCarrinho.cshtml",
+              "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Views\\Shared\\_ItemCarrinho.cshtml",
+              "RelativeDocumentMoniker": "Sakkola\\Views\\Shared\\_ItemCarrinho.cshtml",
+              "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Views\\Shared\\_ItemCarrinho.cshtml",
+              "RelativeToolTip": "Sakkola\\Views\\Shared\\_ItemCarrinho.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-11-21T03:32:42.821Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "Sakkola\\wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "Sakkola\\wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-11-21T03:29:54.263Z",
               "EditorCaption": ""
             },
             {
@@ -110,41 +124,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Client.cs",
-              "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Models\\Client.cs",
-              "RelativeDocumentMoniker": "Sakkola\\Models\\Client.cs",
-              "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Models\\Client.cs",
-              "RelativeToolTip": "Sakkola\\Models\\Client.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABAAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-19T10:45:18.894Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "Sakkola\\Controllers\\AccountController.cs",
-              "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "Sakkola\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAIA1wCIAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-19T02:27:12.079Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
               "Title": "UserClientRepository.cs",
               "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Repository\\UserClientRepository.cs",
               "RelativeDocumentMoniker": "Sakkola\\Repository\\UserClientRepository.cs",
               "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Repository\\UserClientRepository.cs",
               "RelativeToolTip": "Sakkola\\Repository\\UserClientRepository.cs",
-              "ViewState": "AgIAALUAAAAAAAAAAAAuwMQAAABzAAAAAAAAAA==",
+              "ViewState": "AgIAAI8AAAAAAAAAAAAkwJwAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-19T02:26:23.089Z",
+              "WhenOpened": "2026-11-21T03:06:51.932Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Sakkola\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Sakkola\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAAwIsAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-21T02:49:13.696Z",
               "EditorCaption": ""
             }
           ]

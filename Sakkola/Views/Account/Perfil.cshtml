@@ -5,19 +5,15 @@
 }
 
 <div class="container py-5" style="max-width: 850px;">
-    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+    <div class="card border shadow-sm rounded-4 p-4 p-md-5">
         
-        <!-- Saudação -->
         <div class="text-center mb-4">
             <h2 class="fw-bold text-secondary">Minha Conta</h2>
-            <p class="text-muted mb-1">Bem-vindo(a), <strong>@(Model?.Nome ?? "Usuário")</strong>! 👋</p>
-            <p class="text-muted small">Visualize e edite suas informações pessoais e endereço de entrega abaixo.</p>
+            <h5 class="text-muted mb-1">Bem-vindo(a), <strong>@(Model?.Nome ?? "Usuário")</strong>! 👋</h5>
+            <h5 class="text-muted small">Visualize e edite suas informações pessoais e endereço de entrega abaixo.</h5>
         </div>
 
-        <!-- Formulário de Edição -->
-        <form asp-controller="Account" asp-action="AtualizarPerfil" method="post" id="formEditarPerfil">
-            
-            <!-- Seção: Dados Pessoais -->
+        <form asp-controller="Account" asp-action="AtualizarDados" method="post" id="formEditarPerfil">
             <h5 class="fw-bold mb-3" style="color: var(--suquinho-de-laranja);">Dados Pessoais</h5>
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
@@ -29,14 +25,12 @@
                     <input type="email" class="form-control bg-light" name="Email" value="@Model?.Email" readonly title="O e-mail não pode ser alterado" />
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label small fw-semibold text-secondary">Telefone / WhatsApp</label>
+                    <label class="form-label small fw-semibold text-secondary">Telefone</label>
                     <input type="text" class="form-control" id="modalTelefone" name="Telefone" value="@Model?.Telefone" placeholder="(00) 00000-0000" required />
                 </div>
             </div>
 
             <hr class="text-muted opacity-25 my-4" />
-
-            <!-- Seção: Informações de Entrega (Mapeado com EnderecoEntrega) -->
             <h5 class="fw-bold mb-3" style="color: var(--suquinho-de-laranja);">Informações de Entrega</h5>
             <div class="row g-3 mb-4">
                 <div class="col-md-4">
@@ -44,7 +38,7 @@
                     <input type="text" class="form-control" id="Cep" name="EnderecoEntrega.Cep" value="@Model?.EnderecoEntrega?.Cep" placeholder="00000-000" maxlength="9" required />
                 </div>
                 <div class="col-md-8">
-                    <label class="form-label small fw-semibold text-secondary">Rua / Logradouro</label>
+                    <label class="form-label small fw-semibold text-secondary">Rua</label>
                     <input type="text" class="form-control" id="Rua" name="EnderecoEntrega.Logradouro" value="@Model?.EnderecoEntrega?.Logradouro" required />
                 </div>
                 <div class="col-md-4">
@@ -65,14 +59,35 @@
                 </div>
             </div>
 
-            <!-- Botão Salvar -->
             <div class="d-flex justify-content-end mb-4">
-                <button type="submit" class="btn text-white px-4 fw-semibold py-2" style="background-color: #198754;">
+                <button type="submit" class="btn text-white px-4 fw-semibold py-2" style="background-color: var(--verdinha);">
                     <i class="bi bi-check-lg me-1"></i> Salvar Alterações
                 </button>
             </div>
         </form>
+        <hr class="text-muted opacity-25 my-2" />
 
+        <div class="d-flex justify-content-between align-items-center pt-3">
+            <a asp-controller="Pedidos" asp-action="MeusPedidos" class="btn btn-secondary px-4">
+                Meus Pedidos
+            </a>
+
+            <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                <button type="submit" class="btn btn-danger px-4">
+                    Sair / Deslogar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="toastPerfil" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="bi bi-check-circle-fill me-2"></i> Alteração realizada com sucesso!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
     </div>
 </div>
 
@@ -106,5 +121,37 @@
                 }
             });
         });
+        document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById('formEditarPerfil');
+        if (form) {
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const toastEl = document.getElementById('toastPerfil');
+                        if (toastEl) {
+                            new bootstrap.Toast(toastEl).show();
+
+                            setTimeout(function () {
+                            location.reload();
+                            }, 1520);
+                        }
+                    } else {
+                        alert("Erro ao salvar as alterações.");
+                    }
+                } catch (error) {
+                    console.error("Erro:", error);
+                    alert("Ocorreu um erro na requisição.");
+                }
+            });
+        }
+    });
     </script>
 }

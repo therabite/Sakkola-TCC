@@ -134,16 +134,17 @@ namespace Sakkola.Controllers
         [HttpPost]
         public async Task<IActionResult> AtualizarDados(Client model)
         {
-            model.Email = User.Identity?.Name;
-
-            if (!ModelState.IsValid)
+            if (string.IsNullOrEmpty(model.Email))
             {
-                return View("Perfil", model);
+                model.Email = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+            }
+            if (string.IsNullOrEmpty(model.Email))
+            {
+                return Unauthorized();
             }
             await _clientRepository.AtualizarClienteAsync(model);
 
-            TempData["MensagemSucesso"] = "Dados atualizados com sucesso!";
-            return RedirectToAction("Perfil");
+            return Ok();
         }
 
         [HttpPost]
