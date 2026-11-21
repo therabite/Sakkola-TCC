@@ -26,7 +26,6 @@ namespace Sakkola.Repository
                 }
             }
 
-            // Se não existir carrinho para este usuário, cria um
             string sqlInsert = "INSERT INTO tbCarrinho (id_usuario) VALUES (@idUsuario); SELECT LAST_INSERT_ID();";
             using (var cmdInsert = new MySqlCommand(sqlInsert, conn, tran))
             {
@@ -308,6 +307,29 @@ namespace Sakkola.Repository
             }
 
             return itens;
+        }
+        public async Task<decimal> ObterValorTotalCarrinhoAsync(int idUser)
+        {
+            decimal valorTotal = 0;
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                await conn.OpenAsync();
+                int idCarrinho = await ObterOuCriarCarrinhoIdAsync(conn, null, idUser);
+                string sql = @"SELECT SUM(ci.quantidade * p.preco) AS valor_total
+                               FROM tbCarrinhoItem ci
+                               INNER JOIN tbProduto p ON ci.id_produto = p.id_produto
+                               WHERE ci.id_carrinho = @idCarrinho;";
+                using (var cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@idCarrinho", idCarrinho);
+                    var result = await cmd.ExecuteScalarAsync();
+                    if (result != DBNull.Value && result != null)
+                    {
+                        valorTotal = Convert.ToDecimal(result);
+                    }
+                }
+            }
+            return valorTotal;
         }
         public async Task LimparCarrinhoAsync(int idUser)
         {

@@ -1,24 +1,69 @@
 ﻿@{
-    ViewData["Title"] = "Forma de Pagamento - Sakkola";
+    ViewData["Title"] = "Forma de Pagamento – Sakkola";
+    decimal valorTotal = ViewBag.ValorTotal ?? 0m;
 }
 
 <div class="container my-5" style="max-width: 600px;">
+<div class="mb-3">
+        <a asp-controller="Carrinho" asp-action="Index" class="text-dark fs-4 text-decoration-none">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+    </div>
     <div class="card border rounded-3 shadow-sm p-4">
         <h3 class="fw-bold mb-4" style="color: var(--suquinho-de-laranja);">Escolha a Forma de Pagamento</h3>
         
-        <form asp-controller="Carrinho" asp-action="ProcessarFinalizacao" method="post">
+        <div class="alert rounded-3 shadow-sm mb-4">
+            <strong>Valor Total do Carrinho:</strong> 
+            <span id="spanValorTotal" data-valor="@valorTotal">R$ @valorTotal.ToString("N2")</span>
+        </div>
+        <form asp-controller="Carrinho" asp-action="ProcessarFinalizacao" method="post" id="formPagamento">
+
+            <!-- Opção PIX -->
             <div class="mb-3 form-check border p-3 rounded-2">
                 <input class="form-check-input" type="radio" name="formaPagamento" id="pagamentoPix" value="PIX" checked>
-                <label class="form-check-label fw-semibold text-dark" for="pagamentoPix">
-                    <i class="bi bi-qr-code text-success me-2"></i> PIX (Aprovação Imediata - Status: Pago)
+                <label class="form-check-label fw-semibold text-dark w-100" for="pagamentoPix" style="cursor: pointer;">
+                    <i class="bi bi-qr-code text-success me-2"></i> PIX (Aprovação Imediata)
                 </label>
             </div>
 
-            <div class="mb-4 form-check border p-3 rounded-2">
-                <input class="form-check-input" type="radio" name="formaPagamento" id="pagamentoCartao" value="CartaoEntrega">
-                <label class="form-check-label fw-semibold text-dark" for="pagamentoCartao">
-                    <i class="bi bi-credit-card text-primary me-2"></i> Cartão na Entrega (Status: Pendente / Expira em 30 min)
+            <!-- Opção Cartão -->
+            <div class="mb-3 form-check border p-3 rounded-2">
+                <input class="form-check-input" type="radio" name="formaPagamento" id="pagamentoCartao" value="CartaoOnline">
+                <label class="form-check-label fw-semibold text-dark w-100" for="pagamentoCartao" style="cursor: pointer;">
+                    <i class="bi bi-credit-card text-primary me-2"></i> Cartão de Crédito / Débito
                 </label>
+            </div>
+            <div id="secaoCartao" class="border p-3 rounded-2 mb-4" style="display: none;">
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Número do Cartão</label>
+                    <div class="input-group">
+                        <input type="text" class="border rounded-sm form-control" id="numeroCartao" name="numeroCartao" placeholder="0000 0000 0000 0000" maxlength="19">
+                        <span class="input-group-text bg-white text-muted"><i class="bi bi-credit-card-2-front"></i></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Nome</label>
+                    <input type="text" class="form-control text-uppercase" name="nomeCartao" placeholder="EX: JOAO M SILVA">
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label small fw-semibold">Validade</label>
+                        <input type="text" class="form-control" id="validadeCartao" name="validadeCartao" placeholder="MM/AA" maxlength="5">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label small fw-semibold">CVV (Código de Segurança)</label>
+                        <input type="password" class="form-control" id="cvvCartao" name="cvvCartao" placeholder="123" maxlength="4">
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label small fw-semibold">Parcelamento</label>
+                    <select class="form-select" name="parcelas" id="selectParcelas">
+
+                    </select>
+                </div>
             </div>
 
             <button type="submit" class="btn text-white w-100 py-2 fw-bold" style="background-color: var(--batom-de-paty);">
@@ -27,3 +72,57 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const radioPix = document.getElementById("pagamentoPix");
+            const radioCartao = document.getElementById("pagamentoCartao");
+            const secaoCartao = document.getElementById("secaoCartao");
+            const inputsCartao = secaoCartao.querySelectorAll("input");
+            const selectParcelas = document.getElementById("selectParcelas");
+            const spanTotal = document.getElementById("spanValorTotal");
+            const valorTotalCarrinho = parseFloat(spanTotal.getAttribute("data-valor").replace(',', '.')) || 0;
+
+            function gerarOpcoesParcelas() {
+                selectParcelas.innerHTML = "";
+                for (let i = 1; i <= 4; i++) {
+                    let valorParcela = 0;
+                    let textoJuros = "sem juros";
+
+                    if (i <= 3) {
+                        valorParcela = valorTotalCarrinho / i;
+                    } else {
+                        const taxaJuros = 0.0199;
+                        valorParcela = (valorTotalCarrinho * taxaJuros * Math.pow(1 + taxaJuros, i)) / (Math.pow(1 + taxaJuros, i) - 1);
+                        textoJuros = "com juros";
+                    }
+
+                    const option = document.createElement("option");
+                    option.value = i;
+                    option.text = `${i}x de R$ ${valorParcela.toFixed(2).replace('.', ',')} (${textoJuros})`;
+                    selectParcelas.appendChild(option);
+                }
+            }
+            gerarOpcoesParcelas();    
+
+            function alternarSecaoCartao() {
+                if (radioCartao.checked) {
+                    secaoCartao.style.display = "block";
+                    inputsCartao.forEach(input => input.setAttribute("required", "true"));
+                } else {
+                    secaoCartao.style.display = "none";
+                    inputsCartao.forEach(input => input.removeAttribute("required"));
+                }
+            }
+
+            radioPix.addEventListener("change", alternarSecaoCartao);
+            radioCartao.addEventListener("change", alternarSecaoCartao);
+
+            $('#numeroCartao').mask('0000 0000 0000 0000');
+            $('#validadeCartao').mask('00/00');
+            $('#cvvCartao').mask('0000');
+        });
+    </script>
+}

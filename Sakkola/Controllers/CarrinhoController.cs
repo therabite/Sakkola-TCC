@@ -4,6 +4,7 @@ using Sakkola.Models.ViewCarrinho;
 using Sakkola.Repository;
 using Sakkola.Repository.Contract;
 using Sakkola.Repository.Interfaces;
+using System.Globalization;
 using System.Security.Claims;
 
 namespace Sakkola.Controllers
@@ -96,7 +97,7 @@ namespace Sakkola.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
-        public async Task<IActionResult> SelecionarPagamento()
+        public async Task<IActionResult> SelecionarPagamento(decimal valorTotalGeral)
         {
             string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdClaim)) return RedirectToAction("Login", "Account");
@@ -109,7 +110,16 @@ namespace Sakkola.Controllers
                 TempData["Erro"] = "O seu carrinho está vazio!";
                 return RedirectToAction("Index");
             }
+            if (valorTotalGeral > 0)
+            {
+                HttpContext.Session.SetString("ValorTotalPedido", valorTotalGeral.ToString(CultureInfo.InvariantCulture));
+            }
+            string valorSalvo = HttpContext.Session.GetString("ValorTotalPedido");
+            decimal totalFinal = !string.IsNullOrEmpty(valorSalvo)
+                ? Convert.ToDecimal(valorSalvo, CultureInfo.InvariantCulture)
+                : await _carrinhoRepository.ObterValorTotalCarrinhoAsync(userId); 
 
+            ViewBag.ValorTotal = totalFinal;
             return View();
         }
 
