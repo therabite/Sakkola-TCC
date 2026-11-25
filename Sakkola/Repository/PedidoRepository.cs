@@ -1,5 +1,6 @@
 ﻿using MySqlConnector;
 using Sakkola.Models;
+using Sakkola.Models.ViewProdutos;
 using Sakkola.Repository.Contract;
 
 namespace Sakkola.Repository
@@ -116,12 +117,11 @@ namespace Sakkola.Repository
                 foreach (var pedido in lista)
                 {
                     string sqlItens = @"
-                SELECT p.nome_produto AS NomeProduto, p.descricao AS Descricao, p.imagem_url AS ImagemUrl, 
-                       SUM(ip.quantidade) AS Quantidade, ip.preco_unidade AS PrecoUnitario
-                FROM tbItemPedido ip
-                INNER JOIN tbProduto p ON ip.fk_produto_id = p.id_produto
-                WHERE ip.fk_pedido_id = @IdPedido
-                GROUP BY p.id_produto, p.nome_produto, p.descricao, p.imagem_url, ip.preco_unidade;";
+                        SELECT p.nome AS NomeProduto, p.descricao AS Descricao, p.id_produto AS IdProduto, 
+                        ip.quantidade AS Quantidade, ip.preco_unidade AS PrecoUnitario
+                        FROM tbItemPedido ip
+                        INNER JOIN tbProduto p ON ip.fk_produto_id = p.id_produto
+                        WHERE ip.fk_pedido_id = @IdPedido;";
 
                     using (var cmdItens = new MySqlCommand(sqlItens, conexao))
                     {
@@ -131,11 +131,13 @@ namespace Sakkola.Repository
                         {
                             while (await readerItens.ReadAsync())
                             {
+                                int idProduto = readerItens.GetInt32("IdProduto");
+
                                 var item = new ItemPedidoViewModel
                                 {
                                     NomeProduto = readerItens.GetString("NomeProduto"),
                                     Descricao = readerItens.IsDBNull(readerItens.GetOrdinal("Descricao")) ? "" : readerItens.GetString("Descricao"),
-                                    ImagemUrl = readerItens.IsDBNull(readerItens.GetOrdinal("ImagemUrl")) ? "~/images/default.png" : readerItens.GetString("ImagemUrl"),
+                                    ImagemUrl = $"/images/produtos/{idProduto}.jpg",
                                     Quantidade = readerItens.GetInt32("Quantidade"),
                                     PrecoUnitario = readerItens.GetDecimal("PrecoUnitario")
                                 };
@@ -143,6 +145,7 @@ namespace Sakkola.Repository
                             }
                         }
                     }
+
                     if (pedido.Itens != null && pedido.Itens.Any())
                     {
                         pedido.ImagemUltimoItem = pedido.Itens.Last().ImagemUrl;
@@ -151,7 +154,6 @@ namespace Sakkola.Repository
             }
             return lista;
         }
-
         public async Task AtualizarStatusPedidoAsync(int idPedido, string novoStatus)
         {
             using (var conexao = new MySqlConnection(_connectionString))
@@ -165,6 +167,19 @@ namespace Sakkola.Repository
                     cmd.Parameters.AddWithValue("@NovoStatus", novoStatus);
                     cmd.Parameters.AddWithValue("@IdPedido", idPedido);
 
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
+        }
+        public async Task CancelarPedidoAsync(int idPedido)
+        {
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+                string sql = "UPDATE tbpedido SET status = 'Cancelado' WHERE id_pedido = @IdPedido;";
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    cmd.Parameters.AddWithValue("@IdPedido", idPedido);
                     await cmd.ExecuteNonQueryAsync();
                 }
             }

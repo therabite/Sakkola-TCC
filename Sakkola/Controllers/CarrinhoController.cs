@@ -123,7 +123,7 @@ namespace Sakkola.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> ProcessarFinalizacao(string formaPagamento, string parcelas)
+        public async Task<IActionResult> ProcessarFinalizacao(string formaPagamento, string parcelas, decimal valorTotalGeral)
         {
             string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdClaim)) return RedirectToAction("Login", "Account");
@@ -131,18 +131,13 @@ namespace Sakkola.Controllers
 
             var itens = await _carrinhoRepository.ObterItensPorUsuarioAsync(userId);
             if (itens == null || !itens.Any()) return RedirectToAction("Index");
-
-            string freteSalvo = HttpContext.Session.GetString("ValorFretePedido");
-            decimal valorFrete = !string.IsNullOrEmpty(freteSalvo)
-                ? Convert.ToDecimal(freteSalvo, System.Globalization.CultureInfo.InvariantCulture)
-                : 10.00m;
-
-            decimal subtotal = itens.Sum(i => i.PrecoUnitario * i.Quantidade);
-            decimal valorTotalGeral = subtotal + valorFrete;
+            if (valorTotalGeral <= 0)
+            {
+                valorTotalGeral = itens.Sum(i => i.PrecoUnitario * i.Quantidade) + 10.00m;
+            }
 
             string statusInicial = (formaPagamento == "PIX") ? "Pago" : "Pendente";
 
-            
             string descricaoPagamento = formaPagamento;
             if (formaPagamento != "PIX")
             {
@@ -152,8 +147,6 @@ namespace Sakkola.Controllers
 
             await _carrinhoRepository.FinalizarCompraAsync(userId, valorTotalGeral, descricaoPagamento, statusInicial);
             HttpContext.Session.Remove("ValorFretePedido");
-
-            TempData["SucessoCliente"] = $"Pedido realizado com sucesso! O status encontra-se: {statusInicial}.";
 
             return RedirectToAction("MeusPedidos", "Carrinho");
         }
@@ -166,6 +159,13 @@ namespace Sakkola.Controllers
 
             var pedidos = await _pedidoRepository.ObterPedidosPorUsuarioAsync(userId);
             return View(pedidos);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CancelarPedido(int idPedido)
+        {
+            await _pedidoRepository.CancelarPedidoAsync(idPedido);
+            TempData["SucessoCliente"] = "Pedido cancelado com sucesso. Eventualmente o estorno do valor será feito.";
+            return RedirectToAction("MeusPedidos", "Carrinho");
         }
     }
 }

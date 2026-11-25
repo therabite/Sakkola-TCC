@@ -3,7 +3,13 @@
 @{
     ViewData["Title"] = "Minhas Compras - Sakkola";
 }
-
+@if (TempData["SucessoCliente"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <i class="bi bi-info-circle-fill me-2"></i> @TempData["SucessoCliente"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 <div class="container my-5" style="max-width: 900px;">
     <!-- Cabeçalho -->
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -27,19 +33,19 @@
             {
                 <div class="card border shadow-sm rounded-4 p-4 bg-white">
                     <div class="row align-items-center">
-                        
                         <div class="col-md-2 text-center">
-                            @if (!string.IsNullOrEmpty(pedido.ImagemUltimoItem))
-                            {
-                                <img src="@Url.Content(pedido.ImagemUltimoItem)" alt="Produto" class="w-100 h-100 object-fit-cover" 
-                                    onerror="this.src='/img/Logo.png'" />
-                            }
-                            else
-                            {
-                                <img src="~/img/Logo.png" alt="Produto" class="w-100 h-100 object-fit-cover" />
-                            }
+                            <div class="bg-light border rounded-3 p-1 d-inline-flex align-items-center justify-content-center shadow-sm overflow-hidden" style="width: 75px; height: 75px;">
+                                @if (!string.IsNullOrEmpty(pedido.ImagemUltimoItem))
+                                {
+                                    <img src="@Url.Content(pedido.ImagemUltimoItem)" alt="Produto" class="w-100 h-100 object-fit-cover" 
+                                         onerror="this.src='/img/logo-sakkola-color-no-text.png';" />
+                                }
+                                else
+                                {
+                                    <img src="~/img/logo-sakkola-color-no-text.png" alt="Produto" class="w-100 h-100 object-fit-cover" />
+                                }
+                            </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="mb-1">
                                 @if (pedido.StatusPedido == "Pago")
@@ -57,11 +63,11 @@
                             </div>
                             
                             <h5 class="fw-bold text-dark mb-1">
-                                Pedido realizado em @pedido.DataPedido.ToString("dd 'de' MMMM 'às' HH:mm")
+                                Pedido realizado em @pedido.DataPedido.ToString("dd 'de' MMMM 'de' yyyy 'às' HH:mm")
                             </h5>
                             
+                            <p class="text-muted small m-0">Forma de Pagamento: <strong>@pedido.FormaPagamento</strong></p>
                         </div>
-
                         <div class="col-md-4 text-end">
                             <button type="button" class="btn text-white btn-sm fw-semibold py-2 px-4 rounded-pill shadow-sm" style="background-color: var(--batom-de-paty);" data-bs-toggle="modal" data-bs-target="#modalDetalhes-@pedido.IdPedido">
                                 Ver Compra
@@ -69,7 +75,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="modal fade" id="modalDetalhes-@pedido.IdPedido" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content border-0 rounded-4 shadow">
@@ -89,7 +94,6 @@
                                 </div>
 
                                 <h6 class="fw-bold text-secondary mb-3">Produtos do Pedido</h6>
-                                
                                 <div class="list-group list-group-flush mb-4 border rounded-3 overflow-hidden">
                                     @if (pedido.Itens != null && pedido.Itens.Any())
                                     {
@@ -97,10 +101,10 @@
                                         {
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-3 bg-white">
                                                 <div class="d-flex align-items-center gap-3">
-                                                        <div class="border rounded p-1" style="width: 50px; height: 50px;">
-                                                            <img src="@Url.Content(item.ImagemUrl)" alt="Img" class="w-100 h-100 object-fit-cover" 
-                                                                onerror="this.src='/images/default.png'" />
-                                                        </div>
+                                                    <div class="border rounded p-1" style="width: 50px; height: 50px;">
+                                                        <img src="@Url.Content(string.IsNullOrEmpty(item.ImagemUrl) ? "~/img/logo-sakkola-color-no-text.png" : item.ImagemUrl)" alt="Img" class="w-100 h-100 object-fit-cover" 
+                                                             onerror="this.src='/img/logo-sakkola-color-no-text.png';" />
+                                                    </div>
                                                     <div>
                                                         <h6 class="mb-0 fw-semibold text-dark">@item.NomeProduto</h6>
                                                         <small class="text-muted">@item.Descricao</small><br />
@@ -116,33 +120,77 @@
                                         <div class="p-3 text-center text-muted">Nenhum item detalhado encontrado.</div>
                                     }
                                 </div>
+                               @{
+                                   decimal subtotalProdutos = pedido.Itens != null ? pedido.Itens.Sum(i => i.PrecoUnitario * i.Quantidade) : 0m;
+                                   decimal freteCalculado = pedido.ValorTotal - subtotalProdutos;
+                                   if (freteCalculado < 0) { freteCalculado = 0; }
+                               }
 
                                 <div class="bg-light p-3 rounded-3 border">
                                     <div class="d-flex justify-content-between text-muted small mb-2">
                                         <span>Subtotal dos Produtos:</span>
-                                        <span class="fw-semibold">R$ @pedido.ValorTotal.ToString("N2")</span>
+                                        <span class="fw-semibold">R$ @subtotalProdutos.ToString("N2")</span>
                                     </div>
                                     <div class="d-flex justify-content-between text-muted small mb-2">
                                         <span>Custo de Frete:</span>
-                                        <span class="fw-semibold text-success">R$ 10,00</span>
+                                        <span class="fw-semibold text-success">R$ @freteCalculado.ToString("N2")</span>
                                     </div>
                                     <hr class="my-2" />
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span class="fw-bold text-dark">Custo Total:</span>
                                         <span class="fw-bold fs-5 text-dark" style="color: var(--suquinho-de-laranja) !important;">
-                                            R$ @((pedido.ValorTotal + 10.00m).ToString("N2"))
+                                            R$ @pedido.ValorTotal.ToString("N2")
                                         </span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="modal-footer border-0 px-4 pb-4">
-                                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-4" data-bs-dismiss="modal">Fechar</button>
+                            <div class="modal-footer border-0 px-4 pb-4 d-flex justify-content-between align-items-center">-
+                                <div>
+                                    @if (pedido.StatusPedido == "Cancelado")
+                                    {
+                                        <span class="text-danger small fw-semibold">
+                                            <i class="bi bi-exclamation-circle me-1"></i> Pedido cancelado. O estorno será processado.
+                                        </span> 
+                                    }
+                                </div>
+
+                                <div class="d-flex gap-2">  
+                                    <button type="button" class="btn btn-secondary btn-sm rounded-pill px-4" data-bs-dismiss="modal">Fechar</button>
+        
+                                    @if (pedido.StatusPedido != "Cancelado")
+                                    {
+                                        <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalConfirmarCancelamento-@pedido.IdPedido" data-bs-dismiss="modal">
+                                        Cancelar
+                                        </button>
+                                    }
+                                </div>  
                             </div>
 
                         </div>
                     </div>
                 </div>
+                <div class="modal fade" id="modalConfirmarCancelamento-@pedido.IdPedido" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 shadow rounded-4">
+                            <div class="modal-header border-0 pb-0">
+                                <h5 class="modal-title fw-bold text-dark">Deseja cancelar este pedido?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-secondary">
+                                Tem certeza de que deseja cancelar esta compra? O status será alterado para <strong>Cancelado</strong> e, se aplicável, o estorno do valor será processado eventualmente.
+                            </div>
+                            <div class="modal-footer border-0 pt-0">
+                                <button type="button" class="btn btn-secondary px-4 rounded-pill btn-sm" data-bs-toggle="modal" data-bs-target="#modalDetalhes-@pedido.IdPedido">Não, voltar</button>
+                
+                                <form asp-controller="Carrinho" asp-action="CancelarPedido" method="post" class="d-inline">
+                                    <input type="hidden" name="idPedido" value="@pedido.IdPedido" />
+                                    <button type="submit" class="btn btn-danger px-4 rounded-pill btn-sm">Sim, cancelar pedido</button>
+                                </form>
+                            </div>
+                        </div>  
+                    </div>
+                </div>      
             }
         </div>
     }

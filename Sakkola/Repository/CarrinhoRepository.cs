@@ -43,7 +43,6 @@ namespace Sakkola.Repository
                 await conn.OpenAsync();
                 int idCarrinho = await ObterOuCriarCarrinhoIdAsync(conn, null, idUsuario);
 
-                // 1. Buscar dados do cliente e endereço
                 string sqlUsuario = @"SELECT u.nome, u.telefone, 
                                      e.cep, e.logradouro, e.numero, e.bairro, e.cidade, e.estado
                               FROM tbUser u
@@ -68,8 +67,6 @@ namespace Sakkola.Repository
                         }
                     }
                 }
-
-                // 2. Buscar os itens do carrinho alinhados com a estrutura da tabela
                 string sqlItens = @"SELECT ci.id_item, ci.id_produto, p.nome, p.preco, p.descricao, ci.quantidade 
                               FROM tbCarrinhoItem ci
                               INNER JOIN tbProduto p ON ci.id_produto = p.id_produto
@@ -356,7 +353,7 @@ namespace Sakkola.Repository
                     try
                     {
                         int idCarrinho = 0;
-                        string sqlCarrinho = "SELECT id_carrinho FROM tbCarrinho WHERE id_user = @UserId LIMIT 1;";
+                        string sqlCarrinho = "SELECT id_carrinho FROM tbCarrinho WHERE id_usuario = @UserId LIMIT 1;";
                         using (var cmd = new MySqlCommand(sqlCarrinho, conn, transaction))
                         {
                             cmd.Parameters.AddWithValue("@UserId", userId);
