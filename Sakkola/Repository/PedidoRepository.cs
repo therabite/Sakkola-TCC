@@ -56,13 +56,17 @@ namespace Sakkola.Repository
             using (var conn = new MySqlConnection(_connectionString))
             {
                 await conn.OpenAsync();
-                string sql = "INSERT INTO tbPedido (id_user, valor_total, forma_pagamento, status) VALUES (@clienteId, @total, @pagamento, 'Pendente'); SELECT LAST_INSERT_ID();";
+
+                string statusInicial = pedido.FormaPagamento != null && pedido.FormaPagamento.Contains("PIX") ? "Pago" : "Pendente";
+
+                string sql = "INSERT INTO tbPedido (id_user, valor_total, forma_pagamento, status, data_pedido) VALUES (@clienteId, @total, @pagamento, @status, NOW()); SELECT LAST_INSERT_ID();";
 
                 using (var cmd = new MySqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@clienteId", pedido.IdCliente);
                     cmd.Parameters.AddWithValue("@total", pedido.ValorTotal);
                     cmd.Parameters.AddWithValue("@pagamento", pedido.FormaPagamento);
+                    cmd.Parameters.AddWithValue("@status", statusInicial);
 
                     return Convert.ToInt32(await cmd.ExecuteScalarAsync());
                 }
@@ -85,18 +89,63 @@ namespace Sakkola.Repository
                     {
                         while (await reader.ReadAsync())
                         {
+                            var dataPedido = reader.GetDateTime("data_pedido");
+                            string status = reader.GetString("status");
+                            string formaPagamento = reader.IsDBNull(reader.GetOrdinal("forma_pagamento")) ? "PIX" : reader.GetString("forma_pagamento");
+
+                            if (status == "Pendente" && (DateTime.Now - dataPedido).TotalMinutes >= 5)
+                            {
+                                status = "Pago";
+                            }
+
                             var pedido = new Pedido
                             {
                                 IdPedido = reader.GetInt32("id_pedido"),
                                 IdCliente = reader.GetInt32("id_user"),
                                 ValorTotal = reader.GetDecimal("valor_total"),
-                                DataPedido = reader.GetDateTime("data_pedido"),
-                                StatusPedido = reader.GetString("status"),
-                                FormaPagamento = reader.IsDBNull(reader.GetOrdinal("forma_pagamento")) ? "PIX" : reader.GetString("forma_pagamento")
+                                DataPedido = dataPedido,
+                                StatusPedido = status,
+                                FormaPagamento = formaPagamento,
+                                Itens = new List<ItemPedidoViewModel>()
                             };
 
                             lista.Add(pedido);
                         }
+                    }
+                }
+                foreach (var pedido in lista)
+                {
+                    string sqlItens = @"
+                SELECT p.nome_produto AS NomeProduto, p.descricao AS Descricao, p.imagem_url AS ImagemUrl, 
+                       SUM(ip.quantidade) AS Quantidade, ip.preco_unidade AS PrecoUnitario
+                FROM tbItemPedido ip
+                INNER JOIN tbProduto p ON ip.fk_produto_id = p.id_produto
+                WHERE ip.fk_pedido_id = @IdPedido
+                GROUP BY p.id_produto, p.nome_produto, p.descricao, p.imagem_url, ip.preco_unidade;";
+
+                    using (var cmdItens = new MySqlCommand(sqlItens, conexao))
+                    {
+                        cmdItens.Parameters.AddWithValue("@IdPedido", pedido.IdPedido);
+
+                        using (var readerItens = await cmdItens.ExecuteReaderAsync())
+                        {
+                            while (await readerItens.ReadAsync())
+                            {
+                                var item = new ItemPedidoViewModel
+                                {
+                                    NomeProduto = readerItens.GetString("NomeProduto"),
+                                    Descricao = readerItens.IsDBNull(readerItens.GetOrdinal("Descricao")) ? "" : readerItens.GetString("Descricao"),
+                                    ImagemUrl = readerItens.IsDBNull(readerItens.GetOrdinal("ImagemUrl")) ? "~/images/default.png" : readerItens.GetString("ImagemUrl"),
+                                    Quantidade = readerItens.GetInt32("Quantidade"),
+                                    PrecoUnitario = readerItens.GetDecimal("PrecoUnitario")
+                                };
+                                pedido.Itens.Add(item);
+                            }
+                        }
+                    }
+                    if (pedido.Itens != null && pedido.Itens.Any())
+                    {
+                        pedido.ImagemUltimoItem = pedido.Itens.Last().ImagemUrl;
                     }
                 }
             }

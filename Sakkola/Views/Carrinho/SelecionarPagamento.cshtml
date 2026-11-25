@@ -5,7 +5,7 @@
 
 <div class="container my-5" style="max-width: 600px;">
 <div class="mb-3">
-        <a asp-controller="Carrinho" asp-action="Index" class="text-dark fs-4 text-decoration-none">
+        <a href="#" class="text-dark fs-4 text-decoration-none" data-bs-toggle="modal" data-bs-target="#modalCancelarCompra">
             <i class="bi bi-arrow-left"></i>
         </a>
     </div>
@@ -70,6 +70,24 @@
                 Confirmar e Finalizar Pedido
             </button>
         </form>
+    </div>
+    <!-- Modal de Confirmação de Cancelamento -->
+    <div class="modal fade" id="modalCancelarCompra" tabindex="-1" aria-labelledby="modalCancelarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-dark" id="modalCancelarLabel">Deseja cancelar a compra?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-secondary">
+                    Se voltar agora, o seu pedido não será finalizado e você retornará para o carrinho. Tem certeza?
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Não</button>
+                    <a asp-controller="Carrinho" asp-action="Index" class="btn text-white px-4" style="background-color: var(--batom-de-paty);">Sim, voltar</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

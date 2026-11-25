@@ -346,43 +346,85 @@ namespace Sakkola.Repository
                 }
             }
         }
-        public async Task FinalizarCompraAsync(int idUser, decimal valorTotal, string formaPagamento = "PIX", string status = "Pendente")
+        public async Task FinalizarCompraAsync(int userId, decimal valorTotalGeral, string formaPagamento, string statusInicial)
         {
             using (var conn = new MySqlConnection(_connectionString))
             {
                 await conn.OpenAsync();
-
                 using (var transaction = await conn.BeginTransactionAsync())
                 {
                     try
                     {
-                        string sqlPedido = @"INSERT INTO tbpedido (id_user, valor_total, data_pedido, status, forma_pagamento) 
-                                     VALUES (@idUser, @valorTotal, NOW(), @status, @formaPagamento);";
-
-                        using (var cmdPedido = new MySqlCommand(sqlPedido, conn, transaction))
+                        int idCarrinho = 0;
+                        string sqlCarrinho = "SELECT id_carrinho FROM tbCarrinho WHERE id_user = @UserId LIMIT 1;";
+                        using (var cmd = new MySqlCommand(sqlCarrinho, conn, transaction))
                         {
-                            cmdPedido.Parameters.AddWithValue("@idUser", idUser);
-                            cmdPedido.Parameters.AddWithValue("@valorTotal", valorTotal);
-                            cmdPedido.Parameters.AddWithValue("@status", status);
-                            cmdPedido.Parameters.AddWithValue("@formaPagamento", formaPagamento);
-                            await cmdPedido.ExecuteNonQueryAsync();
+                            cmd.Parameters.AddWithValue("@UserId", userId);
+                            var res = await cmd.ExecuteScalarAsync();
+                            if (res != null) idCarrinho = Convert.ToInt32(res);
                         }
 
-                        // Limpa primeiro os itens do carrinho para não dar erro de FK na tbCarrinhoItem
-                        string sqlLimparItens = @"DELETE FROM tbCarrinhoItem 
-                                          WHERE id_carrinho IN (SELECT id_carrinho FROM tbCarrinho WHERE id_usuario = @idUser);";
-                        using (var cmdLimparItens = new MySqlCommand(sqlLimparItens, conn, transaction))
+                        if (idCarrinho == 0) return;
+
+                        string sqlPedido = @"
+                        INSERT INTO tbPedido (id_user, valor_total, forma_pagamento, status, data_pedido) 
+                        VALUES (@UserId, @ValorTotal, @FormaPagamento, @Status, NOW());
+                        SELECT LAST_INSERT_ID();";
+
+                        long idPedido = 0;
+                        using (var cmd = new MySqlCommand(sqlPedido, conn, transaction))
                         {
-                            cmdLimparItens.Parameters.AddWithValue("@idUser", idUser);
-                            await cmdLimparItens.ExecuteNonQueryAsync();
+                            cmd.Parameters.AddWithValue("@UserId", userId);
+                            cmd.Parameters.AddWithValue("@ValorTotal", valorTotalGeral);
+                            cmd.Parameters.AddWithValue("@FormaPagamento", formaPagamento);
+                            cmd.Parameters.AddWithValue("@Status", statusInicial);
+                            idPedido = Convert.ToInt64(await cmd.ExecuteScalarAsync());
                         }
 
-                        // Depois limpa o cabeçalho do carrinho
-                        string sqlLimparCarrinho = "DELETE FROM tbCarrinho WHERE id_usuario = @idUser;";
-                        using (var cmdLimpar = new MySqlCommand(sqlLimparCarrinho, conn, transaction))
+                        string sqlItensCarrinho = "SELECT id_produto, quantidade FROM tbCarrinhoItem WHERE id_carrinho = @IdCarrinho;";
+                        var itensParaCopiar = new List<(int idProduto, int quantidade)>();
+
+                        using (var cmd = new MySqlCommand(sqlItensCarrinho, conn, transaction))
                         {
-                            cmdLimpar.Parameters.AddWithValue("@idUser", idUser);
-                            await cmdLimpar.ExecuteNonQueryAsync();
+                            cmd.Parameters.AddWithValue("@IdCarrinho", idCarrinho);
+                            using (var reader = await cmd.ExecuteReaderAsync())
+                            {
+                                while (await reader.ReadAsync())
+                                {
+                                    itensParaCopiar.Add((reader.GetInt32("id_produto"), reader.GetInt32("quantidade")));
+                                }
+                            }
+                        }
+
+                        foreach (var item in itensParaCopiar)
+                        {
+                            decimal precoUnitario = 0;
+                            string sqlPreco = "SELECT preco FROM tbProduto WHERE id_produto = @IdProduto;";
+                            using (var cmd = new MySqlCommand(sqlPreco, conn, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@IdProduto", item.idProduto);
+                                precoUnitario = Convert.ToDecimal(await cmd.ExecuteScalarAsync());
+                            }
+
+                            string sqlInsereItem = @"
+                            INSERT INTO tbItemPedido (fk_pedido_id, fk_produto_id, quantidade, preco_unidade) 
+                            VALUES (@IdPedido, @IdProduto, @Quantidade, @PrecoUnidade);";
+
+                            using (var cmd = new MySqlCommand(sqlInsereItem, conn, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@IdPedido", idPedido);
+                                cmd.Parameters.AddWithValue("@IdProduto", item.idProduto);
+                                cmd.Parameters.AddWithValue("@Quantidade", item.quantidade);
+                                cmd.Parameters.AddWithValue("@PrecoUnidade", precoUnitario);
+                                await cmd.ExecuteNonQueryAsync();
+                            }
+                        }
+
+                        string sqlLimpaCarrinho = "DELETE FROM tbCarrinhoItem WHERE id_carrinho = @IdCarrinho;";
+                        using (var cmd = new MySqlCommand(sqlLimpaCarrinho, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@IdCarrinho", idCarrinho);
+                            await cmd.ExecuteNonQueryAsync();
                         }
 
                         await transaction.CommitAsync();

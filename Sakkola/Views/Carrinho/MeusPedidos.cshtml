@@ -25,30 +25,21 @@
         <div class="d-flex flex-column gap-4">
             @foreach (var pedido in Model)
             {
-                <!-- Data do Pedido com Horário no Topo -->
-                <div class="text-secondary fw-bold small mb-n2">
-                    <i class="bi bi-calendar-event me-1"></i> @pedido.DataPedido.ToString("dd 'de' MMMM 'de' yyyy 'às' HH:mm")
-                </div>
-
-                <!-- Card da Compra -->
                 <div class="card border shadow-sm rounded-4 p-4 bg-white">
                     <div class="row align-items-center">
                         
-                        <!-- Foto do Último Item Adicionado -->
                         <div class="col-md-2 text-center">
-                            <div class="bg-light border rounded-3 p-1 d-inline-flex align-items-center justify-content-center shadow-sm overflow-hidden" style="width: 75px; height: 75px;">
-                                @if (!string.IsNullOrEmpty(pedido.ImagemUltimoItem))
-                                {
-                                    <img src="@Url.Content(pedido.ImagemUltimoItem)" alt="Produto" class="w-100 h-100 object-fit-cover" />
-                                }
-                                else
-                                {
-                                    <i class="bi bi-box-seam fs-2 text-secondary"></i>
-                                }
-                            </div>
+                            @if (!string.IsNullOrEmpty(pedido.ImagemUltimoItem))
+                            {
+                                <img src="@Url.Content(pedido.ImagemUltimoItem)" alt="Produto" class="w-100 h-100 object-fit-cover" 
+                                    onerror="this.src='/img/Logo.png'" />
+                            }
+                            else
+                            {
+                                <img src="~/img/Logo.png" alt="Produto" class="w-100 h-100 object-fit-cover" />
+                            }
                         </div>
 
-                        <!-- Detalhes do Status -->
                         <div class="col-md-6">
                             <div class="mb-1">
                                 @if (pedido.StatusPedido == "Pago")
@@ -64,12 +55,13 @@
                                     </span>
                                 }
                             </div>
-                            <!-- Removido o ID numérico daqui, exibindo apenas o texto padrão ou descritivo -->
-                            <h5 class="fw-bold text-dark mb-1">Pedido realizado</h5>
-                            <p class="text-muted small m-0">Forma de Pagamento: <strong>@pedido.FormaPagamento</strong></p>
+                            
+                            <h5 class="fw-bold text-dark mb-1">
+                                Pedido realizado em @pedido.DataPedido.ToString("dd 'de' MMMM 'às' HH:mm")
+                            </h5>
+                            
                         </div>
 
-                        <!-- Botão Ver Compra -->
                         <div class="col-md-4 text-end">
                             <button type="button" class="btn text-white btn-sm fw-semibold py-2 px-4 rounded-pill shadow-sm" style="background-color: var(--batom-de-paty);" data-bs-toggle="modal" data-bs-target="#modalDetalhes-@pedido.IdPedido">
                                 Ver Compra
@@ -78,13 +70,11 @@
                     </div>
                 </div>
 
-                <!-- MODAL DE DETALHES DA COMPRA -->
                 <div class="modal fade" id="modalDetalhes-@pedido.IdPedido" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content border-0 rounded-4 shadow">
                             
                             <div class="modal-header bg-light border-bottom px-4 py-3">
-                                <!-- Exibe apenas "Detalhes do Pedido" sem hashtag e sem número, conforme solicitado -->
                                 <h5 class="modal-title fw-bold text-dark">
                                     Detalhes do Pedido
                                 </h5>
@@ -94,12 +84,12 @@
                             <div class="modal-body p-4">
                                 <div class="mb-3 d-flex justify-content-between text-muted small border-bottom pb-2">
                                     <span>Data: <strong>@pedido.DataPedido.ToString("dd/MM/yyyy HH:mm")</strong></span>
+                                    <span>Pagamento: <strong class="text-dark">@pedido.FormaPagamento</strong></span>
                                     <span>Status: <strong class="text-dark">@pedido.StatusPedido</strong></span>
                                 </div>
 
                                 <h6 class="fw-bold text-secondary mb-3">Produtos do Pedido</h6>
                                 
-                                <!-- Lista Real dos Produtos do Pedido -->
                                 <div class="list-group list-group-flush mb-4 border rounded-3 overflow-hidden">
                                     @if (pedido.Itens != null && pedido.Itens.Any())
                                     {
@@ -107,9 +97,10 @@
                                         {
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-3 bg-white">
                                                 <div class="d-flex align-items-center gap-3">
-                                                    <div class="border rounded p-1" style="width: 50px; height: 50px;">
-                                                        <img src="@Url.Content(item.ImagemUrl)" alt="Img" class="w-100 h-100 object-fit-cover" />
-                                                    </div>
+                                                        <div class="border rounded p-1" style="width: 50px; height: 50px;">
+                                                            <img src="@Url.Content(item.ImagemUrl)" alt="Img" class="w-100 h-100 object-fit-cover" 
+                                                                onerror="this.src='/images/default.png'" />
+                                                        </div>
                                                     <div>
                                                         <h6 class="mb-0 fw-semibold text-dark">@item.NomeProduto</h6>
                                                         <small class="text-muted">@item.Descricao</small><br />
@@ -126,7 +117,6 @@
                                     }
                                 </div>
 
-                                <!-- Resumo de Custos -->
                                 <div class="bg-light p-3 rounded-3 border">
                                     <div class="d-flex justify-content-between text-muted small mb-2">
                                         <span>Subtotal dos Produtos:</span>

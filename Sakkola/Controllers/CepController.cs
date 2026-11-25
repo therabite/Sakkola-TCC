@@ -29,6 +29,7 @@ namespace Sakkola.Controllers
             {
                 valorFrete = 25.00m;
             }
+            HttpContext.Session.SetString("ValorFretePedido", valorFrete.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
             return Json(new
             {

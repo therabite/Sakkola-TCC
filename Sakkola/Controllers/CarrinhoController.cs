@@ -97,7 +97,7 @@ namespace Sakkola.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
-        public async Task<IActionResult> SelecionarPagamento(decimal valorTotalGeral)
+        public async Task<IActionResult> SelecionarPagamento()
         {
             string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdClaim)) return RedirectToAction("Login", "Account");
@@ -110,21 +110,20 @@ namespace Sakkola.Controllers
                 TempData["Erro"] = "O seu carrinho está vazio!";
                 return RedirectToAction("Index");
             }
-            if (valorTotalGeral > 0)
-            {
-                HttpContext.Session.SetString("ValorTotalPedido", valorTotalGeral.ToString(CultureInfo.InvariantCulture));
-            }
-            string valorSalvo = HttpContext.Session.GetString("ValorTotalPedido");
-            decimal totalFinal = !string.IsNullOrEmpty(valorSalvo)
-                ? Convert.ToDecimal(valorSalvo, CultureInfo.InvariantCulture)
-                : await _carrinhoRepository.ObterValorTotalCarrinhoAsync(userId); 
 
-            ViewBag.ValorTotal = totalFinal;
+            string freteSalvo = HttpContext.Session.GetString("ValorFretePedido");
+            decimal valorFrete = !string.IsNullOrEmpty(freteSalvo)
+                ? Convert.ToDecimal(freteSalvo, System.Globalization.CultureInfo.InvariantCulture)
+                : 10.00m;
+
+            decimal subtotal = itens.Sum(i => i.PrecoUnitario * i.Quantidade);
+            decimal valorTotalGeral = subtotal + valorFrete;
+
+            ViewBag.ValorTotal = valorTotalGeral;
             return View();
         }
-
         [HttpPost]
-        public async Task<IActionResult> ProcessarFinalizacao(string formaPagamento)
+        public async Task<IActionResult> ProcessarFinalizacao(string formaPagamento, string parcelas)
         {
             string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdClaim)) return RedirectToAction("Login", "Account");
@@ -133,19 +132,31 @@ namespace Sakkola.Controllers
             var itens = await _carrinhoRepository.ObterItensPorUsuarioAsync(userId);
             if (itens == null || !itens.Any()) return RedirectToAction("Index");
 
+            string freteSalvo = HttpContext.Session.GetString("ValorFretePedido");
+            decimal valorFrete = !string.IsNullOrEmpty(freteSalvo)
+                ? Convert.ToDecimal(freteSalvo, System.Globalization.CultureInfo.InvariantCulture)
+                : 10.00m;
+
             decimal subtotal = itens.Sum(i => i.PrecoUnitario * i.Quantidade);
-            decimal valorFrete = 10.00m;
             decimal valorTotalGeral = subtotal + valorFrete;
 
             string statusInicial = (formaPagamento == "PIX") ? "Pago" : "Pendente";
 
-            await _carrinhoRepository.FinalizarCompraAsync(userId, valorTotalGeral, formaPagamento, statusInicial);
+            
+            string descricaoPagamento = formaPagamento;
+            if (formaPagamento != "PIX")
+            {
+                string qtdParcelas = string.IsNullOrEmpty(parcelas) ? "1" : parcelas;
+                descricaoPagamento = $"Cartão de Crédito ({qtdParcelas}x)";
+            }
+
+            await _carrinhoRepository.FinalizarCompraAsync(userId, valorTotalGeral, descricaoPagamento, statusInicial);
+            HttpContext.Session.Remove("ValorFretePedido");
 
             TempData["SucessoCliente"] = $"Pedido realizado com sucesso! O status encontra-se: {statusInicial}.";
 
-            return RedirectToAction("MeusPedidos", "Carrinho"); 
+            return RedirectToAction("MeusPedidos", "Carrinho");
         }
-
         [HttpGet]
         public async Task<IActionResult> MeusPedidos()
         {

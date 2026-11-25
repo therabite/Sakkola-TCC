@@ -8,6 +8,10 @@
     --suquinho-de-laranja: #FF7843;
     --vulva-da-estelar: #F24806;
 }
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+}
 body {
     -webkit-user-select: none;
     -moz-user-select: none; 
