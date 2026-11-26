@@ -131,10 +131,14 @@ namespace Sakkola.Controllers
 
             var itens = await _carrinhoRepository.ObterItensPorUsuarioAsync(userId);
             if (itens == null || !itens.Any()) return RedirectToAction("Index");
-            if (valorTotalGeral <= 0)
-            {
-                valorTotalGeral = itens.Sum(i => i.PrecoUnitario * i.Quantidade) + 10.00m;
-            }
+
+            string freteSalvo = HttpContext.Session.GetString("ValorFretePedido");
+            decimal valorFrete = !string.IsNullOrEmpty(freteSalvo)
+                ? Convert.ToDecimal(freteSalvo, System.Globalization.CultureInfo.InvariantCulture)
+                : 10.00m;
+
+            decimal subtotal = itens.Sum(i => i.PrecoUnitario * i.Quantidade);
+            decimal totalReal = subtotal + valorFrete; 
 
             string statusInicial = (formaPagamento == "PIX") ? "Pago" : "Pendente";
 
@@ -144,8 +148,8 @@ namespace Sakkola.Controllers
                 string qtdParcelas = string.IsNullOrEmpty(parcelas) ? "1" : parcelas;
                 descricaoPagamento = $"Cartão de Crédito ({qtdParcelas}x)";
             }
+            await _carrinhoRepository.FinalizarCompraAsync(userId, totalReal, descricaoPagamento, statusInicial);
 
-            await _carrinhoRepository.FinalizarCompraAsync(userId, valorTotalGeral, descricaoPagamento, statusInicial);
             HttpContext.Session.Remove("ValorFretePedido");
 
             return RedirectToAction("MeusPedidos", "Carrinho");
