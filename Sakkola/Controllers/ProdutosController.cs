@@ -16,7 +16,6 @@ namespace Sakkola.Controllers
             var produtos = await _produtoRepository.ObterTodosAsync();
             return View(produtos);
         }
-
         public async Task<IActionResult> Categoria(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -56,7 +55,6 @@ namespace Sakkola.Controllers
 
             return View(produtos);
         }
-
         public async Task<IActionResult> Detalhes(int id)
         {
             var produto = await _produtoRepository.ObterPorIdAsync(id);
@@ -85,6 +83,20 @@ namespace Sakkola.Controllers
             ViewBag.Sugestoes = sugestoes;
 
             return View(produto);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Buscar(string termo)
+        {
+            if (string.IsNullOrWhiteSpace(termo))
+            {
+                return RedirectToAction("Index", "Produtos");
+            }
+
+            var produtos = await _produtoRepository.BuscarProdutosAsync(termo);
+
+            ViewBag.TermoPesquisa = termo;
+
+            return View("Index", produtos);
         }
     }
 }

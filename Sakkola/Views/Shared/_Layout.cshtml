@@ -26,9 +26,9 @@
                     <a class="navbar-brand text-white fw-bold fs-3 me-3" asp-area="" asp-controller="Home" asp-action="Index">
                         <img src="~/img/Logo-Escrito-White.png" class="logo-header ms-0 justify-content-start" />
                     </a>
-                    <form class="flex-grow-1 mx-5" asp-controller="Produtos" asp-action="Index" method="get">
+                    <form class="flex-grow-1 mx-5" asp-controller="Produtos" asp-action="Buscar" method="get">
                         <div class="input-group">
-                            <input type="search" class="form-control rounded-pill px-3 pe-5" placeholder="Buscar produtos..." name="search" />
+                            <input type="text" name="termo" class="form-control rounded-pill px-3 pe-5" placeholder="Buscar produtos..."/>
                             <button class="btn btn-search-icon position-absolute end-0 top-50 translate-middle-y z-3 border-0 bg-transparent" type="submit">
                                 <i class="bi bi-search text-secondary"></i>
                             </button>

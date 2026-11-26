@@ -140,5 +140,35 @@ namespace Sakkola.Repository
             };
         }
 
+        public async Task<IEnumerable<Produtos>> BuscarProdutosAsync(string termo)
+        {
+            var lista = new List<Produtos>();
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+                string sql = "SELECT * FROM tbProduto WHERE nome LIKE @Termo OR descricao LIKE @Termo;";
+
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    cmd.Parameters.AddWithValue("@Termo", $"%{termo}%");
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var produto = new Produtos
+                            {
+                                id = reader.GetInt32("id_produto"),
+                                nome = reader.GetString("nome"),
+                                descricao = reader.IsDBNull(reader.GetOrdinal("descricao")) ? "" : reader.GetString("descricao"),
+                                preco = reader.GetDecimal("preco")
+                            };
+                            lista.Add(produto);
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
     }
 }

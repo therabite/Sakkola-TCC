@@ -8,5 +8,6 @@ namespace Sakkola.Repository.Interfaces
         Task<List<Produtos>> ObterPorCategoriaAsync(string nomeCategoria);
         Task<Produtos> ObterPorIdAsync(int id);
         Task<List<Produtos>> ObterPorCategoriaExcetoIdAsync(int idCategoria, int idProdutoAtual, int limite = 4);
+        Task<IEnumerable<Produtos>> BuscarProdutosAsync(string termo);
     }
 }
