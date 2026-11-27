@@ -20,28 +20,18 @@ O projeto está organizado em pastas estruturadas no padrão ASP.NET Core MVC, f
 
 Sakkola/
 │
+├── Areas/                         # Painel administrativo e áreas restritas por perfil
 ├── Controllers/                   # Controladores responsáveis pelo fluxo de requisições web
-│
 ├── Data/                          # Configuração do contexto do banco de dados (AppDbContext)
-│
 ├── Libraries/                     # Filtros de autorização personalizados e utilitários
-│
 ├── Models/                        # Classes de domínio e ViewModels de transporte de dados
-│
 ├── Repository/                    # Camada de persistência e contratos de acesso ao banco
-│
 ├── Sessao/                        # Gerenciamento de dados de sessão e carrinho de compras
-│
 ├── Views/                         # Páginas, componentes e interfaces visuais (Razor)
-│
 ├── wwwroot/                       # Arquivos estáticos (CSS customizado, JS, Plugins, Imagens e Ícones)
-│
 ├── .gitignore                     # Arquivos ignorados pelo controle de versão Git
-│
 ├── appsettings.json               # Configurações de conexão com o banco e parâmetros da aplicação
-│
 ├── Program.cs                     # Inicialização, injeção de dependências, middleware de sessão e rotas
-│
 └── README.md                      # Documentação oficial do projeto
 
 ---
