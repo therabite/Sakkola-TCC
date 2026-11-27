@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Carrinho - Sakkola";
 }
-
 <div class="container my-4" style="max-width: 1200px;">
     <!-- Botão de Retorno -->
     <div class="mb-3">
@@ -27,7 +26,7 @@
             {
                 @foreach (var item in Model.Itens)
                 {
-                    <partial name="_ItemCarrinho" model="item" />
+                    <partial name="~/Views/Shared/Carrinho/_ItemCarrinho.cshtml" model="item" />
                 }
             }
             else
@@ -41,7 +40,7 @@
 
     <div class="mb-5 row g-4">
         <div class="col-lg-8">
-            <partial name="_AddressInfo" model="Model" />
+            <partial name="~/Views/Shared/Carrinho/_AddressInfo.cshtml" model="Model" />
         </div> 
 
         <!-- Total a Pagar -->
@@ -78,7 +77,6 @@
                 @if (Model != null && Model.Itens != null && Model.Itens.Any())
                 {
                     <form asp-controller="Carrinho" asp-action="SelecionarPagamento" method="get" id="formFinalizar">
-                        <!-- Corrigido para passar o Model.ValorTotal com InvariantCulture (ponto decimal) -->
                         <input type="hidden" name="valorTotalGeral" id="inputValorTotalGeral" value="@Model.ValorTotal.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
                         <button type="submit" class="btn text-white w-100 fw-medium py-2" style="background-color: var(--batom-de-paty);">
                             Finalizar Pedido

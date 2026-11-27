@@ -29,10 +29,10 @@ namespace Sakkola.Controllers
 
             if (cliente == null)
             {
-                cliente = new Sakkola.Models.ViewModel.Client { Email = emailUsuario };
+                cliente = new Client { Email = emailUsuario };
             }
 
-            return View(cliente); 
+            return View(cliente);
         }
 
         [HttpGet]
