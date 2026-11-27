@@ -18,6 +18,7 @@ O sistema conta com fluxos dinâmicos e controle de permissões por níveis de a
 
 O projeto está organizado em pastas estruturadas no padrão ASP.NET Core MVC, facilitando a manutenção, escalabilidade e separação de responsabilidades:
 
+```text
 Sakkola/
 │
 ├── Areas/                         # Painel administrativo e áreas restritas por perfil
@@ -33,6 +34,7 @@ Sakkola/
 ├── appsettings.json               # Configurações de conexão com o banco e parâmetros da aplicação
 ├── Program.cs                     # Inicialização, injeção de dependências, middleware de sessão e rotas
 └── README.md                      # Documentação oficial do projeto
+```
 
 ---
 
