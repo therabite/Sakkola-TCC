@@ -44,13 +44,11 @@ namespace Sakkola.Controllers
 
             return RedirectToAction("PainelPedidos", "Colaborador");
         }
-
         [HttpGet]
         public IActionResult Cadastro()
         {
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> Cadastro(RegisterColaborador colaborador)
         {
@@ -67,7 +65,6 @@ namespace Sakkola.Controllers
             TempData["Sucesso"] = "Funcionário cadastrado com sucesso!";
             return RedirectToAction("Login");
         }
-
         [ColaboradorAutorizacao]
         [HttpGet]
         public async Task<IActionResult> PainelPedidos(string status)
@@ -81,13 +78,36 @@ namespace Sakkola.Controllers
 
             return View(pedidos);
         }
-
         [HttpGet]
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("EmailColaborador");
 
             return RedirectToAction("Login", "Colaborador");
+        }
+        [ColaboradorAutorizacao]
+        [HttpPost]
+        public async Task<IActionResult> AtualizarStatus(int idPedido, string novoStatus)
+        {
+            if (idPedido <= 0 || string.IsNullOrWhiteSpace(novoStatus))
+            {
+                TempData["Erro"] = "Dados inválidos para atualizar o status do pedido.";
+                return RedirectToAction(nameof(PainelPedidos));
+            }
+            var statusPermitidos = new[] { "Pendente", "Pago", "Aprovado", "Cancelado" };
+            if (!statusPermitidos.Contains(novoStatus, StringComparer.OrdinalIgnoreCase))
+            {
+                TempData["Erro"] = "Status de pedido não permitido.";
+                return RedirectToAction(nameof(PainelPedidos));
+            }
+
+            await _pedidoRepository.AtualizarStatusPedidoAsync(idPedido, novoStatus);
+
+            TempData["Sucesso"] = novoStatus.Equals("Cancelado", StringComparison.OrdinalIgnoreCase)
+                ? $"Pedido #{idPedido} cancelado com sucesso."
+                : $"Pedido #{idPedido} atualizado para '{novoStatus}'.";
+
+            return RedirectToAction(nameof(PainelPedidos));
         }
     }
 }

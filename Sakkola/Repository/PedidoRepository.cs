@@ -28,6 +28,8 @@ namespace Sakkola.Repository
                     sql += " WHERE status = @Status";
                 }
 
+                sql += " ORDER BY id_pedido DESC;";
+
                 using (var cmd = new MySqlCommand(sql, conexao))
                 {
                     if (filtrar)
@@ -37,13 +39,22 @@ namespace Sakkola.Repository
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
+                        int ordinalData = reader.GetOrdinal("data_pedido");
+
                         while (await reader.ReadAsync())
                         {
+                            DateTime dataPedido = DateTime.MinValue;
+                            if (!await reader.IsDBNullAsync(ordinalData))
+                            {
+                                dataPedido = reader.GetDateTime(ordinalData);
+                            }
+
                             lista.Add(new Pedido
                             {
                                 IdPedido = reader.GetInt32("id_pedido"),
                                 IdCliente = reader.GetInt32("id_user"),
                                 ValorTotal = reader.GetDecimal("valor_total"),
+                                DataPedido = dataPedido,
                                 StatusPedido = reader.GetString("status")
                             });
                         }

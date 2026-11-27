@@ -64,14 +64,32 @@ namespace Sakkola.Repository
                 {
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
+                        int ordinalData = reader.GetOrdinal("data_pedido");
+
                         while (await reader.ReadAsync())
                         {
+                            DateTime dataPedido = DateTime.MinValue;
+                            if (!await reader.IsDBNullAsync(ordinalData))
+                            {
+                                try
+                                {
+                                    dataPedido = reader.GetDateTime(ordinalData);
+                                }
+                                catch
+                                {
+                                    if (DateTime.TryParse(reader[ordinalData]?.ToString(), out var parsed))
+                                    {
+                                        dataPedido = parsed;
+                                    }
+                                }
+                            }
+
                             pedidos.Add(new Pedido
                             {
                                 IdPedido = Convert.ToInt32(reader["id_pedido"]),
                                 IdCliente = Convert.ToInt32(reader["id_user"]),
                                 ValorTotal = Convert.ToDecimal(reader["valor_total"]),
-                                DataPedido = Convert.ToDateTime(reader["data_pedido"]),
+                                DataPedido = dataPedido,
                                 StatusPedido = reader["status"]?.ToString() ?? "Pendente"
                             });
                         }
