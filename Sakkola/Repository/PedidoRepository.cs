@@ -117,7 +117,7 @@ namespace Sakkola.Repository
                 foreach (var pedido in lista)
                 {
                     string sqlItens = @"
-                        SELECT p.nome AS NomeProduto, p.descricao AS Descricao, p.id_produto AS IdProduto, 
+                        SELECT p.id_produto AS IdProduto, p.nome AS NomeProduto, p.descricao AS Descricao, 
                         ip.quantidade AS Quantidade, ip.preco_unidade AS PrecoUnitario
                         FROM tbItemPedido ip
                         INNER JOIN tbProduto p ON ip.fk_produto_id = p.id_produto
@@ -137,7 +137,7 @@ namespace Sakkola.Repository
                                 {
                                     NomeProduto = readerItens.GetString("NomeProduto"),
                                     Descricao = readerItens.IsDBNull(readerItens.GetOrdinal("Descricao")) ? "" : readerItens.GetString("Descricao"),
-                                    ImagemUrl = $"/images/produtos/{idProduto}.jpg",
+                                    ImagemUrl = idProduto,
                                     Quantidade = readerItens.GetInt32("Quantidade"),
                                     PrecoUnitario = readerItens.GetDecimal("PrecoUnitario")
                                 };

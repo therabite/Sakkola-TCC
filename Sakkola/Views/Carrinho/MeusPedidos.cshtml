@@ -4,7 +4,7 @@
     ViewData["Title"] = "Minhas Compras - Sakkola";
 }
 
-<div class="container my-5" style="max-width: 900px;">
+<div class="container my-5" style="max-width: 150vh;">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold text-dark">Minhas Compras</h2>
@@ -27,15 +27,15 @@
                 <div class="card border shadow-sm rounded-4 p-4 bg-white">
                     <div class="row align-items-center">
                         <div class="col-md-2 text-center">
-                            <div class="bg-light border rounded-3 p-1 d-inline-flex align-items-center justify-content-center shadow-sm overflow-hidden" style="width: 75px; height: 75px;">
-                                @if (!string.IsNullOrEmpty(pedido.ImagemUltimoItem))
+                            <div class="bg-light border rounded-3 p-1 d-inline-flex align-items-center justify-content-center overflow-hidden shadow-sm" style="width: 115px; height: 115px;">
+                                @if (pedido.ImagemUltimoItem > 0)
                                 {
-                                    <img src="@Url.Content(pedido.ImagemUltimoItem)" alt="Produto" class="w-100 h-100 object-fit-cover"
-                                         onerror="this.src='/img/logo-sakkola-color-no-text.png';" />
+                                    <img src="~/img/img-produtos/@(pedido.ImagemUltimoItem).png" alt="Produto" class="object-fit-cover w-100 h-100" 
+                                    onerror="this.src='/img/logo-sakkola-color-no-text.png';" />
                                 }
                                 else
                                 {
-                                    <img src="~/img/logo-sakkola-color-no-text.png" alt="Produto" class="w-100 h-100 object-fit-cover" />
+                                    <img src="~/img/logo-sakkola-color-no-text.png" alt="Produto" class="object-fit-cover w-100 h-100" />
                                 }
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                                             <div class="list-group-item d-flex justify-content-between align-items-center py-3 bg-white">
                                                 <div class="d-flex align-items-center gap-3">
                                                     <div class="border rounded p-1" style="width: 50px; height: 50px;">
-                                                        <img src="@Url.Content(string.IsNullOrEmpty(item.ImagemUrl) ? "~/img/logo-sakkola-color-no-text.png" : item.ImagemUrl)" alt="Img" class="w-100 h-100 object-fit-cover"
+                                                        <img src="~/img/img-produtos/@(item.ImagemUrl).png" alt="Img" class="w-100 h-100 object-fit-cover"
                                                              onerror="this.src='/img/logo-sakkola-color-no-text.png';" />
                                                     </div>
                                                     <div>

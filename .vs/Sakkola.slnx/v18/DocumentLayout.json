@@ -14,8 +14,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MeusPedidos.cshtml",
+              "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Views\\Carrinho\\MeusPedidos.cshtml",
+              "RelativeDocumentMoniker": "Sakkola\\Views\\Carrinho\\MeusPedidos.cshtml",
+              "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Views\\Carrinho\\MeusPedidos.cshtml",
+              "RelativeToolTip": "Sakkola\\Views\\Carrinho\\MeusPedidos.cshtml",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAAACgAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-11-27T00:13:44.985Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
@@ -31,19 +44,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MeusPedidos.cshtml",
-              "DocumentMoniker": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Views\\Carrinho\\MeusPedidos.cshtml",
-              "RelativeDocumentMoniker": "Sakkola\\Views\\Carrinho\\MeusPedidos.cshtml",
-              "ToolTip": "C:\\Users\\Jucy\\source\\repos\\Sakkola-TCC\\Sakkola\\Views\\Carrinho\\MeusPedidos.cshtml",
-              "RelativeToolTip": "Sakkola\\Views\\Carrinho\\MeusPedidos.cshtml",
-              "ViewState": "AgIAAK0AAAAAAAAAAAAUwLwAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-11-25T02:27:52.677Z",
-              "EditorCaption": ""
             }
           ]
         },

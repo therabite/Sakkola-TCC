@@ -9,6 +9,6 @@
         public string StatusPedido { get; set; }
         public string FormaPagamento { get; set; }
         public List<ItemPedidoViewModel> Itens { get; set; } = new List<ItemPedidoViewModel>();
-        public string ImagemUltimoItem { get; set; }
+        public int ImagemUltimoItem { get; set; }
     }
 }
