@@ -3,6 +3,7 @@ using Sakkola.Models;
 using Sakkola.Models.ViewModel;
 using Sakkola.Models.ViewProdutos;
 using Sakkola.Repository.Interfaces;
+using System.Globalization;
 
 namespace Sakkola.Repository
 {
@@ -197,6 +198,8 @@ namespace Sakkola.Repository
         public async Task<int> InserirProdutoAsync(ProdutoCadastrarViewModel model)
         {
             int idGerado = 0;
+            decimal precoConvertido = 0;
+            decimal.TryParse(model.Preco, NumberStyles.Any, CultureInfo.GetCultureInfo("pt-BR"), out precoConvertido);
 
             using (var conexao = new MySqlConnection(_connectionString))
             {
@@ -208,7 +211,7 @@ namespace Sakkola.Repository
                 {
                     cmd.Parameters.AddWithValue("@Nome", model.Nome);
                     cmd.Parameters.AddWithValue("@Descricao", model.Descricao);
-                    cmd.Parameters.AddWithValue("@Preco", model.Preco);
+                    cmd.Parameters.AddWithValue("@Preco", precoConvertido);
                     cmd.Parameters.AddWithValue("@Estoque", model.Estoque);
                     cmd.Parameters.AddWithValue("@Categoria", model.Categoria);
 
@@ -221,16 +224,25 @@ namespace Sakkola.Repository
             }
             return idGerado;
         }
-        public async Task<IEnumerable<Produtos>> ObterTodosProdutosAsync()
+        public async Task<IEnumerable<Produtos>> ObterTodosProdutosAsync(string termoBusca = null, string categoria = null)
         {
             var lista = new List<Produtos>();
             using (var conexao = new MySqlConnection(_connectionString))
             {
                 await conexao.OpenAsync();
-                string sql = "SELECT id_produto, nome, descricao, preco, estoque, id_categoria FROM tbProduto;";
+
+                string sql = @"
+                    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.estoque, p.id_categoria 
+                    FROM tbProduto p
+                    INNER JOIN tbCategoria c ON p.id_categoria = c.id_categoria
+                    WHERE (@Termo IS NULL OR p.nome LIKE @Termo OR p.descricao LIKE @Termo)
+                    AND (@Categoria IS NULL OR c.nome = @Categoria);";
 
                 using (var cmd = new MySqlCommand(sql, conexao))
                 {
+                    cmd.Parameters.AddWithValue("@Termo", string.IsNullOrEmpty(termoBusca) ? (object)DBNull.Value : $"%{termoBusca}%");
+                    cmd.Parameters.AddWithValue("@Categoria", string.IsNullOrEmpty(categoria) ? (object)DBNull.Value : categoria);
+
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
@@ -264,27 +276,35 @@ namespace Sakkola.Repository
                 }
             }
         }
-        public async Task AtualizarProdutoAsync(int id, ProdutoCadastrarViewModel model)
+        public async Task AtualizarProdutoAsync(ProdutoCadastrarViewModel model)
         {
+            decimal precoConvertido = 0;
+
+            if (!string.IsNullOrEmpty(model.Preco))
+            {
+                string precoTratado = model.Preco.Replace(".", "").Replace(",", ".");
+                decimal.TryParse(precoTratado, NumberStyles.Any, CultureInfo.InvariantCulture, out precoConvertido);
+            }
+
             using (var conexao = new MySqlConnection(_connectionString))
             {
                 await conexao.OpenAsync();
                 string sql = @"
-                    UPDATE tbProduto p
-                    JOIN tbCategoria c ON c.nome = @Categoria
-                    SET p.nome = @Nome, 
-                        p.descricao = @Descricao, 
-                        p.preco = @Preco, 
-                        p.estoque = @Estoque, 
-                        p.id_categoria = c.id_categoria
-                    WHERE p.id_produto = @Id;";
+            UPDATE tbProduto p
+            JOIN tbCategoria c ON LOWER(c.nome) = LOWER(@Categoria)
+            SET p.nome = @Nome, 
+                p.descricao = @Descricao, 
+                p.preco = @Preco, 
+                p.estoque = @Estoque, 
+                p.id_categoria = c.id_categoria
+            WHERE p.id_produto = @Id;";
 
                 using (var cmd = new MySqlCommand(sql, conexao))
                 {
-                    cmd.Parameters.AddWithValue("@Id", id);
+                    cmd.Parameters.AddWithValue("@Id", model.IdProduto);
                     cmd.Parameters.AddWithValue("@Nome", model.Nome);
                     cmd.Parameters.AddWithValue("@Descricao", model.Descricao);
-                    cmd.Parameters.AddWithValue("@Preco", model.Preco);
+                    cmd.Parameters.AddWithValue("@Preco", precoConvertido);
                     cmd.Parameters.AddWithValue("@Estoque", model.Estoque);
                     cmd.Parameters.AddWithValue("@Categoria", model.Categoria);
 
@@ -310,11 +330,12 @@ namespace Sakkola.Repository
                     {
                         if (await reader.ReadAsync())
                         {
+                            decimal precoDb = reader.GetDecimal("preco");
                             return new ProdutoCadastrarViewModel
                             {
                                 Nome = reader.GetString("nome"),
                                 Descricao = reader.GetString("descricao"),
-                                Preco = reader.GetDecimal("preco"),
+                                Preco = precoDb.ToString("N2", CultureInfo.GetCultureInfo("pt-BR")),
                                 Estoque = reader.GetInt32("estoque"),
                                 Categoria = reader.GetString("categoria")
                             };
@@ -323,6 +344,53 @@ namespace Sakkola.Repository
                 }
             }
             return null;
+        }
+        public async Task<IEnumerable<UsuarioViewModel>> ObterTodosUsuariosAsync()
+        {
+            var lista = new List<UsuarioViewModel>();
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+                string sql = "SELECT id_user, nome, email, telefone, CPF FROM tbuser ORDER BY nome ASC;";
+
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            lista.Add(new UsuarioViewModel
+                            {
+                                IdUser = reader.GetInt32("id_user"),
+                                Nome = reader.GetString("nome"),
+                                Email = reader.GetString("email"),
+                                Telefone = reader.IsDBNull(reader.GetOrdinal("telefone")) ? "" : reader.GetString("telefone"),
+                                Cpf = reader.IsDBNull(reader.GetOrdinal("CPF")) ? "" : reader.GetString("CPF")
+                            });
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
+        public async Task AtualizarUsuarioAsync(UsuarioViewModel model)
+        {
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+                string sql = "UPDATE tbuser SET nome = @Nome, email = @Email, telefone = @Telefone, CPF = @Cpf WHERE id_user = @Id;";
+
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    cmd.Parameters.AddWithValue("@Id", model.IdUser);
+                    cmd.Parameters.AddWithValue("@Nome", model.Nome);
+                    cmd.Parameters.AddWithValue("@Email", model.Email);
+                    cmd.Parameters.AddWithValue("@Telefone", model.Telefone);
+                    cmd.Parameters.AddWithValue("@Cpf", model.Cpf);
+
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
         }
     }
 }

@@ -72,7 +72,6 @@ namespace Sakkola.Controllers
         [HttpGet]
         public async Task<IActionResult> PainelPedidos(string status)
         {
-            // Guarda o status atual na ViewBag para manter o select selecionado na tela
             ViewBag.StatusSelecionado = status;
 
             var pedidos = string.IsNullOrEmpty(status) || status == "Todos"
@@ -160,14 +159,19 @@ namespace Sakkola.Controllers
             return RedirectToAction("CadastrarProduto");
         }
         [HttpGet]
-        public async Task<IActionResult> GerenciarProdutos()
+        public async Task<IActionResult> GerenciarProdutos(string termoBusca, string categoria)
         {
             if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
             {
                 return RedirectToAction("PainelPedidos", "Colaborador");
             }
+            ViewBag.TermoBusca = termoBusca;
+            ViewBag.CategoriaSelecionada = categoria;
 
-            var produtos = await _colaboradorRepository.ObterTodosProdutosAsync();
+            var categorias = await _colaboradorRepository.ObterCategoriasAsync();
+            ViewBag.Categorias = new SelectList(categorias, categoria);
+
+            var produtos = await _colaboradorRepository.ObterTodosProdutosAsync(termoBusca, categoria);
             return View(produtos);
         }
 
@@ -197,6 +201,7 @@ namespace Sakkola.Controllers
                 return NotFound();
             }
 
+            produto.IdProduto = id;
             var categorias = await _colaboradorRepository.ObterCategoriasAsync();
             ViewBag.Categorias = new SelectList(categorias, produto.Categoria);
 
@@ -204,20 +209,16 @@ namespace Sakkola.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Editar(ProdutoCadastrarViewModel model, int id, [FromServices] IWebHostEnvironment env)
+        public async Task<IActionResult> Editar(int id, ProdutoCadastrarViewModel model, [FromServices] IWebHostEnvironment env)
         {
             if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
             {
                 return RedirectToAction("PainelPedidos", "Colaborador");
             }
+            model.IdProduto = id;
 
-            if (!ModelState.IsValid)
-            {
-                var categorias = await _colaboradorRepository.ObterCategoriasAsync();
-                ViewBag.Categorias = new SelectList(categorias);
-                return View(model);
-            }
-            await _colaboradorRepository.AtualizarProdutoAsync(id, model);
+            await _colaboradorRepository.AtualizarProdutoAsync(model);
+
             if (model.Imagem != null && model.Imagem.Length > 0)
             {
                 string pastaDestino = Path.Combine(env.WebRootPath, "img", "img-produtos");
@@ -226,7 +227,7 @@ namespace Sakkola.Controllers
                     Directory.CreateDirectory(pastaDestino);
                 }
 
-                string caminhoArquivo = Path.Combine(pastaDestino, $"{id}.png");
+                string caminhoArquivo = Path.Combine(pastaDestino, $"{model.IdProduto}.png");
                 using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
                 {
                     await model.Imagem.CopyToAsync(stream);
@@ -237,14 +238,26 @@ namespace Sakkola.Controllers
             return RedirectToAction("GerenciarProdutos");
         }
         [HttpGet]
-        public IActionResult GerenciarClientes()
+        public IActionResult GerenciarUsuarios()
+        {
+            if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
+            {
+                return RedirectToAction("PainelPedidos", "Colaborador");
+            }
+            var usuarios = await _colaboradorRepository.ObterTodosUsuariosAsync();
+            return View(usuarios);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditarCliente(UsuarioViewModel model)
         {
             if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
             {
                 return RedirectToAction("PainelPedidos", "Colaborador");
             }
 
-            return View();
+            await _colaboradorRepository.AtualizarUsuarioAsync(model);
+            TempData["Sucesso"] = "Dados do usuário atualizados com sucesso!";
+            return RedirectToAction("GerenciarClientes");
         }
     }
 }
