@@ -34,10 +34,10 @@ O sistema atende a diferentes perfis de acesso:
 
 ## 👥 Integrantes do Grupo
 
-* **[Ana Júlia Marques do Prado]** — *Analista de dados* — [GitHub](https://github.com/Anajuxgit23)
-* **[Débora Lopes de Souza]** — *Analista de dados* — [GitHub](https://github.com/therabite)
-* **[Guilherme Lineker Freitas Lima]** — *Analista de dados* — [GitHub](https://github.com/Lineker280)
-* **[Leonardo de Oliveira Alves Bezerra]** — *Analista de dados* — [GitHub](https://github.com/LeonardoOAB)
+* **[Ana Júlia Marques do Prado]** — *Gerente de Projeto* — [GitHub](https://github.com/Anajuxgit23)
+* **[Débora Lopes de Souza]** — *Dev FullStack* — [GitHub](https://github.com/therabite)
+* **[Guilherme Lineker Freitas Lima]** — *Dev Front-End* — [GitHub](https://github.com/Lineker280)
+* **[Leonardo de Oliveira Alves Bezerra]** — *Dev Back-End* — [GitHub](https://github.com/LeonardoOAB)
 * **[Thiago Ferreira Silva]** — *Analista de dados* — [GitHub](https://github.com/ThiagoFerreiraSil)
 ---
 
