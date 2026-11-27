@@ -1,0 +1,85 @@
+﻿@model Sakkola.Models.ViewModel.Colaborador.RegisterColaborador
+@{
+    ViewData["Title"] = "Cadastro de Colaborador";
+    Layout = "~/Views/Shared/_LayoutAcesso.cshtml";
+}
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100 py-4">
+    <div class="row justify-content-center w-100">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card p-4 border rounded-1 shadow-sm">
+                
+                <h3 class="text-center fw-bold mb-4 text-dark">Cadastro de Funcionário</h3>
+
+                <form asp-area="Colaborador" asp-controller="Colaborador" asp-action="Cadastro" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Nome" class="form-label fw-medium text-dark mb-1 small">Nome Completo</label>
+                        <input asp-for="Nome" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Escreva aqui seu nome completo" />
+                        <span asp-validation-for="Nome" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DataNasc" class="form-label fw-medium text-dark mb-1 small">Data de Nascimento</label>
+                        <input asp-for="DataNasc" id="DataNasc" type="text" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="dd/mm/yyyy" />
+                        <span asp-validation-for="DataNasc" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Telefone" class="form-label fw-medium text-dark mb-1 small">Telefone</label>
+                        <input asp-for="Telefone" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Digite seu telefone" />
+                        <span asp-validation-for="Telefone" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Cpf" class="form-label fw-medium text-dark mb-1 small">CPF</label>
+                        <input asp-for="Cpf" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Digite seu CPF" />
+                        <span asp-validation-for="Cpf" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-medium text-dark mb-1 small">E-mail Corporativo</label>
+                        <input asp-for="Email" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="usuario@admin" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Senha" class="form-label fw-medium text-dark mb-1 small">Senha</label>
+                        <input asp-for="Senha" type="password" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Digite sua senha" />
+                        <span asp-validation-for="Senha" class="text-danger small"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="ConfirmarSenha" class="form-label fw-medium text-dark mb-1 small">Confirmar Senha</label>
+                        <input asp-for="ConfirmarSenha" type="password" class="form-control rounded-2 sem-foco" style="height: 50px;" placeholder="Confirme sua senha" />
+                        <span asp-validation-for="ConfirmarSenha" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="isAdmin" value="true" class="form-check-input" id="checkAdmin" />
+                        <label class="form-check-label" for="checkAdmin">Conceder privilégios de Administrador</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100 py-2 fw-semibold rounded-3 shadow-sm">Cadastrar Funcionário</button>
+                    
+                    <div class="text-center small">
+                        <span class="text-dark">Já possui cadastro? </span>
+                        <a asp-area="Colaborador" asp-controller="Colaborador" asp-action="Login" class="fw-bold text-decoration-none" style="color: #4CAF50;">ENTRAR</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#DataNasc').mask('00/00/0000');
+            $('#Cpf').mask('000.000.000-00', { reverse: true });
+            $('#Telefone').mask('(00) 00000-0000');
+        });
+    </script>
+}

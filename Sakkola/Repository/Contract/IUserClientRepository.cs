@@ -1,6 +1,6 @@
 ﻿using Sakkola.Models;
 using Sakkola.Models.ViewCarrinho;
-using Sakkola.Models.ViewModel;
+using Sakkola.Models.ViewModel.Client.Client;
 
 namespace Sakkola.Repository.Interfaces
 {

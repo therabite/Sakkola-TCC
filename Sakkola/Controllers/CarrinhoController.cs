@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sakkola.Models;
 using Sakkola.Models.ViewCarrinho;
 using Sakkola.Repository;
-using Sakkola.Repository.Contract;
-using Sakkola.Repository.Interfaces;
+using Sakkola.Repository.Contract.Client;
 using System.Globalization;
 using System.Security.Claims;
 

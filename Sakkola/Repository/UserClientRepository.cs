@@ -1,7 +1,7 @@
 ﻿using MySqlConnector;
 using Sakkola.Models;
 using Sakkola.Models.ViewCarrinho;
-using Sakkola.Models.ViewModel;
+using Sakkola.Models.ViewModel.Client;
 using Sakkola.Repository.Interfaces;
 using System.Net;
 using System.Text.RegularExpressions;

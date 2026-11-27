@@ -143,8 +143,8 @@
                                     <i class="bi bi-shield-lock me-1"></i> Administração
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-3 mt-2">
-                                    <li><a class="dropdown-item py-2" asp-controller="Colaborador" asp-action="GerenciarProdutos">Gerenciar Produtos</a></li>
-                                    <li><a class="dropdown-item py-2" asp-controller="Colaborador" asp-action="GerenciarUsuarios">Gerenciar Usuários</a></li>
+                                    <li><a class="dropdown-item py-2" asp-area="Colaborador" asp-controller="Colaborador" asp-action="GerenciarProdutos">Gerenciar Produtos</a></li>
+                                    <li><a class="dropdown-item py-2" asp-area="Colaborador" asp-controller="Colaborador" asp-action="GerenciarUsuarios">Gerenciar Usuários</a></li>
                                 </ul>
                             </li>
                         }
@@ -152,7 +152,7 @@
 
                     <div class="d-flex align-items-center gap-3 border-start ps-3 border-secondary">
                         <span class="small text-light">Logado como: <strong>@colaboradorEmail</strong></span>
-                        <a asp-controller="Colaborador" asp-action="Logout" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                        <a asp-area="Colaborador" asp-controller="Colaborador" asp-action="Logout" class="btn btn-outline-light btn-sm rounded-pill px-3">
                             <i class="bi bi-box-arrow-right"></i> Sair
                         </a>
                     </div>

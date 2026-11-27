@@ -2,7 +2,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Sakkola.Data;
 using Sakkola.Repository;
-using Sakkola.Repository.Contract;
+using Sakkola.Repository.Client;
+using Sakkola.Repository.Colaborador;
+using Sakkola.Repository.Contract.Client;
+using Sakkola.Repository.Contract.Colaborador;
+using Sakkola.Repository.Contract.ColaboradorContract;
 using Sakkola.Repository.Interfaces;
 
 namespace Sakkola
@@ -26,6 +30,10 @@ namespace Sakkola
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
+            });
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute());
             });
 
             // Add services to the container.
@@ -64,6 +72,9 @@ namespace Sakkola
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Colaborador}/{action=Login}/{id?}");
 
             app.Run();
         }

@@ -1,0 +1,17 @@
+﻿using Sakkola.Models.ViewCarrinho;
+namespace Sakkola.Repository.Contract.Client
+{
+    public interface ICarrinhoRepository
+    {
+        Task<Carrinho> ObterCarrinhoPorUsuarioAsync(string userId);
+        Task AdicionarItemAsync(string userId, int idProduto, int quantidade);
+        Task AtualizarQuantidadeItemAsync(int idItem, int quantidade);
+        Task RemoverItemAsync(string userId, int idItem);
+        Task AtualizarDadosEntregaAsync(string userIdStr, Carrinho carrinho);
+        Task<List<ItemCarrinho>> ObterItensPorUsuarioAsync(int idUser);
+        Task<decimal> ObterValorTotalCarrinhoAsync(int idUser);
+        Task LimparCarrinhoAsync(int idUser);
+        Task FinalizarCompraAsync(int idUser, decimal valorTotal, string formaPagamento = "PIX", string status = "Pendente");
+        Task<bool> UsuarioExisteAsync(int idUser);
+    }
+}

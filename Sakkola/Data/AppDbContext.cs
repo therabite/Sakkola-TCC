@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Sakkola.Models.ViewModel.Client;
 
 namespace Sakkola.Data
 {
@@ -9,7 +10,7 @@ namespace Sakkola.Data
 
         }
         public DbSet<Models.Usuario> tbUser { get; set; }
-        public DbSet<Models.Client> tbClient { get; set; }
+        public DbSet<Client> tbClient { get; set; }
         public DbSet<Models.Endereco> tbAddress { get; set; }
     }
 }
