@@ -10,8 +10,7 @@ O **Sakkola** é uma plataforma de e-commerce focada em facilitar as compras de 
 
 O sistema atende a diferentes perfis de acesso:
 * **Cliente:** Navega pelo catálogo, pesquisa produtos, gerencia o carrinho e acompanha os pedidos.
-* **Funcionário:** Atualiza produtos, separa pedidos e controla as entregas.
-* **Administrador:** Gerencia usuários e categorias de produtos.
+* **Funcionário/Administrador:** Controla pedidos e entregas.
 
 ---
 
@@ -22,13 +21,12 @@ O sistema atende a diferentes perfis de acesso:
 * **Front-end:** [HTML5, CSS3, JavaScript]
 * **Back-end:** [C#]
 * **Banco de Dados:** [MySQL]
-* **Modelagem:** Diagrama de Entidade-Relacionamento (DER) e Diagrama de Classes UML.
-
+  
 ---
 
 ## 🚀 Funcionalidades Principais
 
-* [x] Cadastro e Login com níveis de permissão (`Cliente`, `Funcionário`, `Admin`)
+* [x] Cadastro e Login com níveis de permissão (`Cliente`, `Admin`,)
 * [x] Busca e filtragem de produtos por categoria
 * [x] Carrinho de compras interativo com cálculo de valor total
 
@@ -36,10 +34,10 @@ O sistema atende a diferentes perfis de acesso:
 
 ## 👥 Integrantes do Grupo
 
-* **[Ana Júlia Marques do Prado]** — *Analista de dados* — [GitHub](https://github.com/Anajuxgit23)
-* **[Débora Lopes de Souza]** — *Analista de dados* — [GitHub](https://github.com/therabite)
-* **[Guilherme Lineker Freitas Lima]** — *Analista de dados* — [GitHub](https://github.com/Lineker280)
-* **[Leonardo de Oliveira Alves Bezerra]** — *Analista de dados* — [GitHub](https://github.com/LeonardoOAB)
+* **[Ana Júlia Marques do Prado]** — *Gerente de Projeto* — [GitHub](https://github.com/Anajuxgit23)
+* **[Débora Lopes de Souza]** — *Dev FullStack* — [GitHub](https://github.com/therabite)
+* **[Guilherme Lineker Freitas Lima]** — *Dev Front-End* — [GitHub](https://github.com/Lineker280)
+* **[Leonardo de Oliveira Alves Bezerra]** — *Dev Back-End* — [GitHub](https://github.com/LeonardoOAB)
 * **[Thiago Ferreira Silva]** — *Analista de dados* — [GitHub](https://github.com/ThiagoFerreiraSil)
 ---
 
