@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sakkola.Models.ViewModel.Client
+namespace Sakkola.Models.ViewModel
 {
     public class RegisterClient : Endereco
     {

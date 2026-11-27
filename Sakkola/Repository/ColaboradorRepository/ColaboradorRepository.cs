@@ -1,9 +1,7 @@
 ﻿using MySqlConnector;
-using Sakkola.Models.ViewModel.Colaborador;
-using Sakkola.Models.ViewModel.ColaboradorModel;
+using Sakkola.Models.ViewModel;
 using Sakkola.Models.ViewPedidos;
 using Sakkola.Models.ViewProdutos;
-using Sakkola.Repository.Contract.ColaboradorContract;
 using System.Globalization;
 
 namespace Sakkola.Repository.Contract.ColaboradorContract

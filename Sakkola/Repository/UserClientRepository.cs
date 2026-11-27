@@ -1,9 +1,7 @@
 ﻿using MySqlConnector;
 using Sakkola.Models;
-using Sakkola.Models.ViewCarrinho;
-using Sakkola.Models.ViewModel.Client;
+using Sakkola.Models.ViewModel;
 using Sakkola.Repository.Interfaces;
-using System.Net;
 using System.Text.RegularExpressions;
 
 namespace Sakkola.Repository
@@ -93,7 +91,7 @@ namespace Sakkola.Repository
             }
             return null;
         }
-        public async Task<Client?> ObterPorEmailAsync(string email)
+        public async Task<Sakkola.Models.ViewModel.Client?> ObterPorEmailAsync(string email)
         {
             using var conn = new MySqlConnection(_connectionString);
             await conn.OpenAsync();
@@ -116,7 +114,7 @@ namespace Sakkola.Repository
             using var reader = await cmd.ExecuteReaderAsync();
             if (await reader.ReadAsync())
             {
-                return new Client
+                return new Sakkola.Models.ViewModel.Client
                 {
                     Id_client = reader["id_user"] != DBNull.Value ? Convert.ToInt32(reader["id_user"]) : 0,
                     Nome = reader["NomeCliente"] != DBNull.Value ? reader["NomeCliente"].ToString() : string.Empty,
@@ -137,7 +135,7 @@ namespace Sakkola.Repository
 
             return null;
         }
-        public async Task AtualizarClienteAsync(Client cliente)
+        public async Task AtualizarClienteAsync(Sakkola.Models.ViewModel.Client? cliente)
         {
             using var conn = new MySqlConnection(_connectionString);
             await conn.OpenAsync();

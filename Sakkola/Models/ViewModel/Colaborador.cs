@@ -1,4 +1,4 @@
-﻿namespace Sakkola.Models.ViewModel.Colaborador
+﻿namespace Sakkola.Models.ViewModel
 {
     public class Colaborador : Usuario
     {

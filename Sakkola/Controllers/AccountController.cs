@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Sakkola.Models;
-using Sakkola.Models.ViewModel.Client;
+using Sakkola.Models.ViewModel;
 using Sakkola.Repository.Interfaces;
 using System.Security.Claims;
 
@@ -29,7 +29,7 @@ namespace Sakkola.Controllers
 
             if (cliente == null)
             {
-                cliente = new Sakkola.Models.Client { Email = emailUsuario };
+                cliente = new Sakkola.Models.ViewModel.Client { Email = emailUsuario };
             }
 
             return View(cliente); 

@@ -1,6 +1,4 @@
 ﻿using Sakkola.Models.ViewModel;
-using Sakkola.Models.ViewModel.Colaborador;
-using Sakkola.Models.ViewModel.ColaboradorModel;
 using Sakkola.Models.ViewPedidos;
 using Sakkola.Models.ViewProdutos;
 

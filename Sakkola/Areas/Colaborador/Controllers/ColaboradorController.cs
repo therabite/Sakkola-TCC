@@ -2,11 +2,9 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Sakkola.Libraries.Filtro;
 using Sakkola.Models.ViewModel;
-using Sakkola.Models.ViewModel.Colaborador;
 using Sakkola.Models.ViewProdutos;
 using Sakkola.Repository;
 using Sakkola.Repository.Contract.Client;
-using Sakkola.Repository.Contract.ClientContract;
 using Sakkola.Repository.Contract.ColaboradorContract;
 
 namespace Sakkola.Areas.Colaborador.Controllers

@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Sakkola.Models.ViewModel.Client
+namespace Sakkola.Models.ViewModel
 {
     [Table("tbClient")]
     public class Client : Usuario

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Sakkola.Models;
+using Sakkola.Models.ViewModel;
 using Sakkola.Models.ViewCarrinho;
-using Sakkola.Models.ViewModel.Client;
 using Sakkola.Repository.Contract.Client;
 using Sakkola.Repository.Interfaces;
 using System.Security.Claims;

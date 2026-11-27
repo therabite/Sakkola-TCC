@@ -3,9 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Sakkola.Data;
 using Sakkola.Repository;
 using Sakkola.Repository.Client;
-using Sakkola.Repository.Colaborador;
 using Sakkola.Repository.Contract.Client;
-using Sakkola.Repository.Contract.Colaborador;
 using Sakkola.Repository.Contract.ColaboradorContract;
 using Sakkola.Repository.Interfaces;
 

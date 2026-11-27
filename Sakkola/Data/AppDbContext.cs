@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sakkola.Models.ViewModel.Client;
+using Sakkola.Models.ViewModel;
 
 namespace Sakkola.Data
 {
