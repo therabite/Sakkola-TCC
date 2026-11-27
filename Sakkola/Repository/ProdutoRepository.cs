@@ -139,7 +139,6 @@ namespace Sakkola.Repository
                 }
             };
         }
-
         public async Task<IEnumerable<Produtos>> BuscarProdutosAsync(string termo)
         {
             var lista = new List<Produtos>();

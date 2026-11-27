@@ -1,6 +1,7 @@
 ﻿using MySqlConnector;
 using Sakkola.Models;
 using Sakkola.Models.ViewModel;
+using Sakkola.Models.ViewProdutos;
 using Sakkola.Repository.Interfaces;
 
 namespace Sakkola.Repository
@@ -13,37 +14,33 @@ namespace Sakkola.Repository
         {
             _connectionString = configuration.GetConnectionString("conexaoMySQL");
         }
-        public async Task<LoginColaborador> ValidarColaboradorAsync(string email, string senha)
+        public async Task<Colaborador> ValidarColaboradorAsync(string email, string senha)
         {
-            using (var conn = new MySqlConnection(_connectionString))
+            using (var conexao = new MySqlConnection(_connectionString))
             {
-                await conn.OpenAsync();
+                await conexao.OpenAsync();
+                string sql = @"
+                    SELECT f.id_employed, f.is_admin, u.nome, u.email, u.senha 
+                    FROM tbfuncionario f
+                    INNER JOIN tbuser u ON f.id_employed = u.id_user
+                    WHERE u.email = @Email AND u.senha = @Senha;";
 
-                string sql = @"SELECT u.id_user, u.email, u.senha, f.is_admin 
-                       FROM tbFuncionario f 
-                       INNER JOIN tbUser u ON f.id_employed = u.id_user 
-                       WHERE u.email = @email AND u.senha = @senha;";
-
-                using (var cmd = new MySqlCommand(sql, conn))
+                using (var cmd = new MySqlCommand(sql, conexao))
                 {
-                    cmd.Parameters.AddWithValue("@email", email);
-                    cmd.Parameters.AddWithValue("@senha", senha);
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("@Senha", senha);
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
                         if (await reader.ReadAsync())
                         {
-                            bool isAdmin = Convert.ToBoolean(reader["is_admin"]);
-
-                            if (!isAdmin)
+                            return new Colaborador
                             {
-                                return null;
-                            }
-
-                            return new LoginColaborador
-                            {
-                                Email = reader["email"].ToString(),
-                                Senha = reader["senha"].ToString()
+                                Id_colaborador = reader.GetInt32("id_employed"),
+                                Nome = reader.GetString("nome"),
+                                Email = reader.GetString("email"),
+                                Senha = reader.GetString("senha"),
+                                Administrador = reader.GetBoolean("is_admin")
                             };
                         }
                     }
@@ -174,6 +171,158 @@ namespace Sakkola.Repository
                     }
                 }
             }
+        }
+        public async Task<IEnumerable<string>> ObterCategoriasAsync()
+        {
+            var lista = new List<string>();
+
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+                string sql = "SELECT nome FROM tbCategoria ORDER BY nome ASC;";
+
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            lista.Add(reader.GetString("nome"));
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
+        public async Task<int> InserirProdutoAsync(ProdutoCadastrarViewModel model)
+        {
+            int idGerado = 0;
+
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+
+                string sql = "CALL sp_InserirProduto(@Nome, @Descricao, @Preco, @Estoque, @Categoria); SELECT LAST_INSERT_ID();";
+
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    cmd.Parameters.AddWithValue("@Nome", model.Nome);
+                    cmd.Parameters.AddWithValue("@Descricao", model.Descricao);
+                    cmd.Parameters.AddWithValue("@Preco", model.Preco);
+                    cmd.Parameters.AddWithValue("@Estoque", model.Estoque);
+                    cmd.Parameters.AddWithValue("@Categoria", model.Categoria);
+
+                    var resultado = await cmd.ExecuteScalarAsync();
+                    if (resultado != null)
+                    {
+                        idGerado = Convert.ToInt32(resultado);
+                    }
+                }
+            }
+            return idGerado;
+        }
+        public async Task<IEnumerable<Produtos>> ObterTodosProdutosAsync()
+        {
+            var lista = new List<Produtos>();
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+                string sql = "SELECT id_produto, nome, descricao, preco, estoque, id_categoria FROM tbProduto;";
+
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            lista.Add(new Produtos
+                            {
+                                id = reader.GetInt32("id_produto"),
+                                nome = reader.GetString("nome"),
+                                descricao = reader.GetString("descricao"),
+                                preco = reader.GetDecimal("preco"),
+                                estoque = reader.GetInt32("estoque"),
+                                id_categoria = reader.GetInt32("id_categoria")
+                            });
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
+        public async Task DeletarProdutoAsync(int id)
+        {
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+                string sql = "DELETE FROM tbProduto WHERE id_produto = @Id;";
+
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
+        }
+        public async Task AtualizarProdutoAsync(int id, ProdutoCadastrarViewModel model)
+        {
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+                string sql = @"
+                    UPDATE tbProduto p
+                    JOIN tbCategoria c ON c.nome = @Categoria
+                    SET p.nome = @Nome, 
+                        p.descricao = @Descricao, 
+                        p.preco = @Preco, 
+                        p.estoque = @Estoque, 
+                        p.id_categoria = c.id_categoria
+                    WHERE p.id_produto = @Id;";
+
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    cmd.Parameters.AddWithValue("@Nome", model.Nome);
+                    cmd.Parameters.AddWithValue("@Descricao", model.Descricao);
+                    cmd.Parameters.AddWithValue("@Preco", model.Preco);
+                    cmd.Parameters.AddWithValue("@Estoque", model.Estoque);
+                    cmd.Parameters.AddWithValue("@Categoria", model.Categoria);
+
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
+        }
+        public async Task<ProdutoCadastrarViewModel> ObterProdutoPorIdAsync(int id)
+        {
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+                string sql = @"
+                    SELECT p.nome, p.descricao, p.preco, p.estoque, c.nome AS categoria 
+                    FROM tbProduto p
+                    INNER JOIN tbCategoria c ON p.id_categoria = c.id_categoria
+                    WHERE p.id_produto = @Id;";
+
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            return new ProdutoCadastrarViewModel
+                            {
+                                Nome = reader.GetString("nome"),
+                                Descricao = reader.GetString("descricao"),
+                                Preco = reader.GetDecimal("preco"),
+                                Estoque = reader.GetInt32("estoque"),
+                                Categoria = reader.GetString("categoria")
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
         }
     }
 }

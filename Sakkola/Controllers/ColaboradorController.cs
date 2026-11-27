@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Sakkola.Libraries.Filtro;
 using Sakkola.Models.ViewModel;
+using Sakkola.Models.ViewProdutos;
 using Sakkola.Repository;
 using Sakkola.Repository.Contract;
 using Sakkola.Repository.Interfaces;
@@ -31,6 +33,7 @@ namespace Sakkola.Controllers
                 ModelState.AddModelError(string.Empty, "Acesso restrito. O e-mail deve pertencer ao domínio @admin.com");
                 return View(model);
             }
+
             var colaborador = await _colaboradorRepository.ValidarColaboradorAsync(model.Email, model.Senha);
 
             if (colaborador == null)
@@ -38,9 +41,9 @@ namespace Sakkola.Controllers
                 ModelState.AddModelError(string.Empty, "E-mail ou senha de colaborador inválidos.");
                 return View(model);
             }
-
             HttpContext.Session.SetString("Senha", colaborador.Senha);
             HttpContext.Session.SetString("EmailColaborador", colaborador.Email);
+            HttpContext.Session.SetString("ColaboradorAdmin", colaborador.Administrador ? "True" : "False");
 
             return RedirectToAction("PainelPedidos", "Colaborador");
         }
@@ -108,6 +111,140 @@ namespace Sakkola.Controllers
                 : $"Pedido #{idPedido} atualizado para '{novoStatus}'.";
 
             return RedirectToAction(nameof(PainelPedidos));
+        }
+        [HttpGet]
+        public async Task<IActionResult> CadastrarProduto()
+        {
+            if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
+            {
+                return RedirectToAction("PainelPedidos", "Colaborador");
+            }
+
+            var categorias = await _colaboradorRepository.ObterCategoriasAsync();
+            ViewBag.Categorias = new SelectList(categorias);
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CadastrarProduto(ProdutoCadastrarViewModel model, [FromServices] IWebHostEnvironment env)
+        {
+            if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
+            {
+                return RedirectToAction("PainelPedidos", "Colaborador");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            int idProduto = await _colaboradorRepository.InserirProdutoAsync(model);
+
+            if (model.Imagem != null && model.Imagem.Length > 0 && idProduto > 0)
+            {
+                string pastaDestino = Path.Combine(env.WebRootPath, "img", "img-produtos");
+
+                if (!Directory.Exists(pastaDestino))
+                {
+                    Directory.CreateDirectory(pastaDestino);
+                }
+
+                string caminhoArquivo = Path.Combine(pastaDestino, $"{idProduto}.png");
+
+                using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
+                {
+                    await model.Imagem.CopyToAsync(stream);
+                }
+            }
+
+            TempData["Sucesso"] = "Produto cadastrado com sucesso!";
+            return RedirectToAction("CadastrarProduto");
+        }
+        [HttpGet]
+        public async Task<IActionResult> GerenciarProdutos()
+        {
+            if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
+            {
+                return RedirectToAction("PainelPedidos", "Colaborador");
+            }
+
+            var produtos = await _colaboradorRepository.ObterTodosProdutosAsync();
+            return View(produtos);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletarProduto(int id)
+        {
+            if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
+            {
+                return RedirectToAction("PainelPedidos", "Colaborador");
+            }
+
+            await _colaboradorRepository.DeletarProdutoAsync(id);
+            TempData["Sucesso"] = "Produto deletado com sucesso!";
+            return RedirectToAction("GerenciarProdutos");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Editar(int id)
+        {
+            if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
+            {
+                return RedirectToAction("PainelPedidos", "Colaborador");
+            }
+
+            var produto = await _colaboradorRepository.ObterProdutoPorIdAsync(id);
+            if (produto == null)
+            {
+                return NotFound();
+            }
+
+            var categorias = await _colaboradorRepository.ObterCategoriasAsync();
+            ViewBag.Categorias = new SelectList(categorias, produto.Categoria);
+
+            return View(produto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Editar(ProdutoCadastrarViewModel model, int id, [FromServices] IWebHostEnvironment env)
+        {
+            if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
+            {
+                return RedirectToAction("PainelPedidos", "Colaborador");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var categorias = await _colaboradorRepository.ObterCategoriasAsync();
+                ViewBag.Categorias = new SelectList(categorias);
+                return View(model);
+            }
+            await _colaboradorRepository.AtualizarProdutoAsync(id, model);
+            if (model.Imagem != null && model.Imagem.Length > 0)
+            {
+                string pastaDestino = Path.Combine(env.WebRootPath, "img", "img-produtos");
+                if (!Directory.Exists(pastaDestino))
+                {
+                    Directory.CreateDirectory(pastaDestino);
+                }
+
+                string caminhoArquivo = Path.Combine(pastaDestino, $"{id}.png");
+                using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
+                {
+                    await model.Imagem.CopyToAsync(stream);
+                }
+            }
+
+            TempData["Sucesso"] = "Produto atualizado com sucesso!";
+            return RedirectToAction("GerenciarProdutos");
+        }
+        [HttpGet]
+        public IActionResult GerenciarClientes()
+        {
+            if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
+            {
+                return RedirectToAction("PainelPedidos", "Colaborador");
+            }
+
+            return View();
         }
     }
 }

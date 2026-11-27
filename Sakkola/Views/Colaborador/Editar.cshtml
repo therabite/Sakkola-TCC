@@ -1,0 +1,66 @@
+﻿@model Sakkola.Models.ViewProdutos.ProdutoCadastrarViewModel
+
+@{
+    ViewData["Title"] = "Editar Produto - Sakkola";
+}
+
+<div class="container my-5" style="max-width: 900px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark">Editar Produto</h2>
+            <p class="text-muted m-0">Atualize as informações do item no catálogo.</p>
+        </div>
+        <a asp-controller="Colaborador" asp-action="GerenciarProdutos" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+            Voltar à Lista
+        </a>
+    </div>
+
+    <div class="card border shadow-sm rounded-4 p-4 bg-white">
+        <form asp-controller="Colaborador" asp-action="Editar" asp-route-id="@ViewContext.RouteData.Values["id"]" method="post" enctype="multipart/form-data">
+            
+            <div class="mb-3">
+                <label class="form-label fw-semibold text-secondary">Nome do Produto</label>
+                <input type="text" name="Nome" value="@Model.Nome" class="form-control rounded-3" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold text-secondary">Descrição</label>
+                <textarea name="Descricao" class="form-control rounded-3" rows="3" required>@Model.Descricao</textarea>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold text-secondary">Preço (R$)</label>
+                    <input type="number" step="0.01" name="Preco" value="@Model.Preco.ToString(System.Globalization.CultureInfo.InvariantCulture)" class="form-control rounded-3" required />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold text-secondary">Estoque</label>
+                    <input type="number" name="Estoque" value="@Model.Estoque" class="form-control rounded-3" required />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold text-secondary">Categoria</label>
+                    <select name="Categoria" class="form-select rounded-3" required>
+                        @if (ViewBag.Categorias != null)
+                        {
+                            foreach (var cat in ViewBag.Categorias)
+                            {
+                                <option value="@cat.Text" selected="@(cat.Text == Model.Categoria)">@cat.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold text-secondary">Alterar Imagem (Opcional)</label>
+                <input type="file" name="Imagem" class="form-control rounded-3" accept="image/*" />
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn text-white px-5 rounded-pill fw-semibold shadow-sm" style="background-color: var(--batom-de-paty);">
+                    Salvar Alterações
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

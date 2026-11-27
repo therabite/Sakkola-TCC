@@ -1,4 +1,4 @@
-﻿﻿@using Microsoft.AspNetCore.Http
+﻿@using Microsoft.AspNetCore.Http
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -134,11 +134,28 @@
                     <img src="~/img/Logo-Escrito-White.png" alt="Sakkola" style="height: 35px;" />
                     <span class="badge bg-danger">Painel do Colaborador</span>
                 </div>
-                <div class="d-flex align-items-center gap-3">
-                    <span class="small text-light">Logado como: <strong>@colaboradorEmail</strong></span>
-                    <a asp-controller="Colaborador" asp-action="Logout" class="btn btn-outline-light btn-sm">
-                        <i class="bi bi-box-arrow-right"></i> Sair
-                    </a>
+                <div class="d-flex align-items-center gap-4">
+                    <ul class="navbar-nav flex-row align-items-center gap-3 m-0">
+                        @if (Context.Session.GetString("ColaboradorAdmin") == "True")
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-light fw-semibold px-2 py-1 rounded" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-shield-lock me-1"></i> Administração
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-3 mt-2">
+                                    <li><a class="dropdown-item py-2" asp-controller="Colaborador" asp-action="CadastrarProduto">Cadastrar Produto</a></li>
+                                    <li><a class="dropdown-item py-2" asp-controller="Colaborador" asp-action="GerenciarClientes">Gerenciar Clientes</a></li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+
+                    <div class="d-flex align-items-center gap-3 border-start ps-3 border-secondary">
+                        <span class="small text-light">Logado como: <strong>@colaboradorEmail</strong></span>
+                        <a asp-controller="Colaborador" asp-action="Logout" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                            <i class="bi bi-box-arrow-right"></i> Sair
+                        </a>
+                    </div>
                 </div>
             </div>
         </header>

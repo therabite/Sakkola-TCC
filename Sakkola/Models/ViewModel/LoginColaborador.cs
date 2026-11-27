@@ -15,10 +15,5 @@ namespace Sakkola.Models.ViewModel
         [DataType(DataType.Password)]
         [StringLength(8, MinimumLength = 6, ErrorMessage = "A senha deve ter no mínimo 6 caracteres.")]
         public string Senha { get; set; } = string.Empty;
-        ///
-        ///
-        ///
-        [Display(Name = "Lembrar-me")]
-        public bool LembraDeMim { get; set; }
     }
 }
