@@ -18,6 +18,7 @@ namespace Sakkola.Repository.Interfaces
         Task AtualizarProdutoAsync(ProdutoCadastrarViewModel model);
         Task<ProdutoCadastrarViewModel> ObterProdutoPorIdAsync(int id);
         Task<IEnumerable<UsuarioViewModel>> ObterTodosUsuariosAsync();
-        public async Task AtualizarUsuarioAsync(UsuarioViewModel model);
+        Task AtualizarUsuarioAsync(UsuarioViewModel model);
+        Task DeletarUsuarioAsync(int id);
     }
 }

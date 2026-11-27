@@ -44,6 +44,7 @@ namespace Sakkola.Controllers
             HttpContext.Session.SetString("Senha", colaborador.Senha);
             HttpContext.Session.SetString("EmailColaborador", colaborador.Email);
             HttpContext.Session.SetString("ColaboradorAdmin", colaborador.Administrador ? "True" : "False");
+            HttpContext.Session.SetString("IdColaborador", colaborador.Id_colaborador.ToString());
 
             return RedirectToAction("PainelPedidos", "Colaborador");
         }
@@ -174,7 +175,6 @@ namespace Sakkola.Controllers
             var produtos = await _colaboradorRepository.ObterTodosProdutosAsync(termoBusca, categoria);
             return View(produtos);
         }
-
         [HttpPost]
         public async Task<IActionResult> DeletarProduto(int id)
         {
@@ -207,7 +207,6 @@ namespace Sakkola.Controllers
 
             return View(produto);
         }
-
         [HttpPost]
         public async Task<IActionResult> Editar(int id, ProdutoCadastrarViewModel model, [FromServices] IWebHostEnvironment env)
         {
@@ -238,7 +237,7 @@ namespace Sakkola.Controllers
             return RedirectToAction("GerenciarProdutos");
         }
         [HttpGet]
-        public IActionResult GerenciarUsuarios()
+        public async Task<IActionResult> GerenciarUsuarios()
         {
             if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
             {
@@ -257,7 +256,24 @@ namespace Sakkola.Controllers
 
             await _colaboradorRepository.AtualizarUsuarioAsync(model);
             TempData["Sucesso"] = "Dados do usuário atualizados com sucesso!";
-            return RedirectToAction("GerenciarClientes");
+            return RedirectToAction("GerenciarUsuarios");
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeletarCliente(int id)
+        {
+            if (HttpContext.Session.GetString("ColaboradorAdmin") != "True")
+            {
+                return RedirectToAction("PainelPedidos", "Colaborador");
+            }
+            string idLogadoStr = HttpContext.Session.GetString("IdColaborador");
+            if (!string.IsNullOrEmpty(idLogadoStr) && int.TryParse(idLogadoStr, out int idLogado) && idLogado == id)
+            {
+                HttpContext.Session.Clear();
+            }
+
+            await _colaboradorRepository.DeletarUsuarioAsync(id);
+            TempData["Sucesso"] = "Usuário deletado com sucesso!";
+            return RedirectToAction("GerenciarUsuarios");
         }
     }
 }

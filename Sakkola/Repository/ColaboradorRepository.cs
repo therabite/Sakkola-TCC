@@ -267,12 +267,31 @@ namespace Sakkola.Repository
             using (var conexao = new MySqlConnection(_connectionString))
             {
                 await conexao.OpenAsync();
-                string sql = "DELETE FROM tbProduto WHERE id_produto = @Id;";
 
-                using (var cmd = new MySqlCommand(sql, conexao))
+                using (var transaction = await conexao.BeginTransactionAsync())
                 {
-                    cmd.Parameters.AddWithValue("@Id", id);
-                    await cmd.ExecuteNonQueryAsync();
+                    try
+                    {
+                        string sqlItensPedido = "DELETE FROM tbitempedido WHERE fk_produto_id = @Id;";
+                        using (var cmdItens = new MySqlCommand(sqlItensPedido, conexao, transaction))
+                        {
+                            cmdItens.Parameters.AddWithValue("@Id", id);
+                            await cmdItens.ExecuteNonQueryAsync();
+                        }
+                        string sqlProduto = "DELETE FROM tbproduto WHERE id_produto = @Id;";
+                        using (var cmdProd = new MySqlCommand(sqlProduto, conexao, transaction))
+                        {
+                            cmdProd.Parameters.AddWithValue("@Id", id);
+                            await cmdProd.ExecuteNonQueryAsync();
+                        }
+
+                        await transaction.CommitAsync();
+                    }
+                    catch
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
                 }
             }
         }
@@ -389,6 +408,45 @@ namespace Sakkola.Repository
                     cmd.Parameters.AddWithValue("@Cpf", model.Cpf);
 
                     await cmd.ExecuteNonQueryAsync();
+                }
+            }
+        }
+        public async Task DeletarUsuarioAsync(int id)
+        {
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+                using (var transaction = await conexao.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        string sqlFunc = "DELETE FROM tbFuncionario WHERE id_employed = @Id;";
+                        using (var cmdFunc = new MySqlCommand(sqlFunc, conexao, transaction))
+                        {
+                            cmdFunc.Parameters.AddWithValue("@Id", id);
+                            await cmdFunc.ExecuteNonQueryAsync();
+                        }
+
+                        string sqlPedidos = "DELETE FROM tbPedido WHERE id_user = @Id;";
+                        using (var cmdPed = new MySqlCommand(sqlPedidos, conexao, transaction))
+                        {
+                            cmdPed.Parameters.AddWithValue("@Id", id);
+                            await cmdPed.ExecuteNonQueryAsync();
+                        }
+                        string sqlUser = "DELETE FROM tbuser WHERE id_user = @Id;";
+                        using (var cmdUser = new MySqlCommand(sqlUser, conexao, transaction))
+                        {
+                            cmdUser.Parameters.AddWithValue("@Id", id);
+                            await cmdUser.ExecuteNonQueryAsync();
+                        }
+
+                        await transaction.CommitAsync();
+                    }
+                    catch
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
                 }
             }
         }

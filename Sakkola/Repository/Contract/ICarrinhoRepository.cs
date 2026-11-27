@@ -12,5 +12,6 @@ namespace Sakkola.Repository.Interfaces
         Task<decimal> ObterValorTotalCarrinhoAsync(int idUser);
         Task LimparCarrinhoAsync(int idUser);
         Task FinalizarCompraAsync(int idUser, decimal valorTotal, string formaPagamento = "PIX", string status = "Pendente");
+        Task<bool> UsuarioExisteAsync(int idUser);
     }
 }

@@ -9,13 +9,11 @@
 
     <div class="row align-items-center">
         <div class="col-md-5 border-end">
-            <!-- Exibição do Nome e Telefone -->
             <p class="fw-medium text-dark mb-1">@(Model?.NomeCliente ?? "Nome não cadastrado")</p>
             <p class="text-muted mb-0">@(Model?.Telefone ?? "Telefone não cadastrado")</p>
         </div>
 
         <div class="col-md-7 ps-md-4">
-            <!-- Exibição do Endereço -->
             <p class="text-secondary mb-0">
                 @Model?.Logradouro, @Model?.Numero<br />
                 @Model?.Bairro, @Model?.Cidade - @Model?.Estado<br />
@@ -25,7 +23,6 @@
     </div>
 </div>
 
-<!-- Modal de Edição -->
 <div class="modal fade" id="modalEditarEntrega" tabindex="-1" aria-labelledby="modalEditarEntregaLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow rounded-4 p-3">
@@ -43,7 +40,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-secondary small fw-bold">Telefone</label>
-                            <input type="text" class="form-control" name="Telefone" value="@Model?.Telefone" required />
+                            <input type="text" id="Telefone" class="form-control" name="Telefone" value="@Model?.Telefone" required />
                         </div>
                         <div class="col-12">
                             <label class="form-label text-secondary small fw-bold">CEP</label>
@@ -78,9 +75,13 @@
         </div>
     </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 <script>
     $(document).ready(function () {
+        $('#Telefone').mask('(00) 00000-0000');
+
         $('#Cep').blur(function () {
             var cep = $(this).val().replace(/\D/g, '');
 
@@ -88,10 +89,8 @@
                 var validacep = /^[0-9]{8}$/;
 
                 if(validacep.test(cep)) {
-                    // Consulta o webservice viacep.com.br/
                     $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
                         if (!("erro" in dados)) {
-                            // Atualiza os campos com os valores retornado
                             $('#Rua').val(dados.logradouro);
                             $('#Bairro').val(dados.bairro);
                             $('#Cidade').val(dados.localidade);

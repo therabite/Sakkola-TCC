@@ -1,4 +1,6 @@
-﻿namespace Sakkola.Models.ViewCarrinho
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Sakkola.Models.ViewCarrinho
 {
     public class Carrinho
     {
@@ -7,6 +9,7 @@
         public int TotalItens => Itens.Sum(i => i.Quantidade);
 
         public string NomeCliente { get; set; }
+        [RegularExpression(@"^\(\d{2}\)\s\d{4,5}-\d{4}$", ErrorMessage = "Telefone inválido.")]
         public string Telefone { get; set; }
         public string Email { get; set; }
 

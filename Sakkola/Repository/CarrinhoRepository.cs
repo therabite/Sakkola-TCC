@@ -263,6 +263,20 @@ namespace Sakkola.Repository
                 }
             }
         }
+        public async Task<bool> UsuarioExisteAsync(int idUser)
+        {
+            using (var conexao = new MySqlConnection(_connectionString))
+            {
+                await conexao.OpenAsync();
+                string sql = "SELECT COUNT(1) FROM tbuser WHERE id_user = @Id;";
+                using (var cmd = new MySqlCommand(sql, conexao))
+                {
+                    cmd.Parameters.AddWithValue("@Id", idUser);
+                    long count = Convert.ToInt64(await cmd.ExecuteScalarAsync());
+                    return count > 0;
+                }
+            }
+        }
         public async Task<List<ItemCarrinho>> ObterItensPorUsuarioAsync(int idUser)
         {
             var itens = new List<ItemCarrinho>();
@@ -271,10 +285,7 @@ namespace Sakkola.Repository
             {
                 await conn.OpenAsync();
 
-                // 1. Descobre o id_carrinho correto do usuário
                 int idCarrinho = await ObterOuCriarCarrinhoIdAsync(conn, null, idUser);
-
-                // 2. Faz a consulta correta usando tbCarrinhoItem (ci) ligada à tbProduto (p)
                 string sql = @"SELECT ci.id_item, ci.id_carrinho, ci.id_produto, ci.quantidade, 
                               p.nome AS nome_produto, p.preco AS preco_unitario 
                        FROM tbCarrinhoItem ci

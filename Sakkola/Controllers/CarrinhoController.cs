@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Sakkola.Models;
 using Sakkola.Models.ViewCarrinho;
 using Sakkola.Repository;
@@ -25,19 +26,26 @@ namespace Sakkola.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            
+
             string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
             {
                 return RedirectToAction("Login", "Account");
             }
+            bool usuarioExiste = await _carrinhoRepository.UsuarioExisteAsync(userId);
+            if (!usuarioExiste)
+            {
+                await HttpContext.SignOutAsync();
+                return RedirectToAction("Login", "Account");
+            }
+
             var carrinho = await _carrinhoRepository.ObterCarrinhoPorUsuarioAsync(userId.ToString());
             if (carrinho == null)
             {
                 carrinho = new Sakkola.Models.ViewCarrinho.Carrinho();
             }
-            
+
             return View(carrinho);
         }
         [HttpPost]
