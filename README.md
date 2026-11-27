@@ -21,7 +21,6 @@ O projeto está organizado em pastas estruturadas no padrão ASP.NET Core MVC, f
 ```text
 Sakkola/
 │
-├── Areas/                         # Painel administrativo e áreas restritas por perfil
 ├── Controllers/                   # Controladores responsáveis pelo fluxo de requisições web
 ├── Data/                          # Configuração do contexto do banco de dados (AppDbContext)
 ├── Libraries/                     # Filtros de autorização personalizados e utilitários
