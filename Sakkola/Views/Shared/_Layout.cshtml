@@ -1,8 +1,7 @@
-﻿@using Microsoft.AspNetCore.Http
+﻿﻿@using Microsoft.AspNetCore.Http
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    @Html.AntiForgeryToken()
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] Mercado Sakkola</title>
@@ -29,7 +28,7 @@
                     </a>
                     <form class="flex-grow-1 mx-5" asp-controller="Produtos" asp-action="Buscar" method="get">
                         <div class="input-group">
-                            <input type="text" name="termo" class="form-control rounded-pill px-3 pe-5" placeholder="Buscar produtos..."/>
+                            <input type="text" name="termo" class="form-control rounded-pill px-3 pe-5" placeholder="Buscar produtos..." />
                             <button class="btn btn-search-icon position-absolute end-0 top-50 translate-middle-y z-3 border-0 bg-transparent" type="submit">
                                 <i class="bi bi-search text-secondary"></i>
                             </button>
@@ -144,8 +143,8 @@
                                     <i class="bi bi-shield-lock me-1"></i> Administração
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-3 mt-2">
-                                    <li><a class="dropdown-item py-2" asp-area="Colaborador" asp-controller="Colaborador" asp-action="GerenciarProdutos">Gerenciar Produtos</a></li>
-                                    <li><a class="dropdown-item py-2" asp-area="Colaborador" asp-controller="Colaborador" asp-action="GerenciarUsuarios">Gerenciar Usuários</a></li>
+                                    <li><a class="dropdown-item py-2" asp-controller="Colaborador" asp-action="GerenciarProdutos">Gerenciar Produtos</a></li>
+                                    <li><a class="dropdown-item py-2" asp-controller="Colaborador" asp-action="GerenciarUsuarios">Gerenciar Usuários</a></li>
                                 </ul>
                             </li>
                         }
@@ -153,7 +152,7 @@
 
                     <div class="d-flex align-items-center gap-3 border-start ps-3 border-secondary">
                         <span class="small text-light">Logado como: <strong>@colaboradorEmail</strong></span>
-                        <a asp-area="Colaborador" asp-controller="Colaborador" asp-action="Logout" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                        <a asp-controller="Colaborador" asp-action="Logout" class="btn btn-outline-light btn-sm rounded-pill px-3">
                             <i class="bi bi-box-arrow-right"></i> Sair
                         </a>
                     </div>
@@ -161,6 +160,18 @@
             </div>
         </header>
     }
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+        <div id="toastCarrinho" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-check-circle-fill me-2"></i> Produto adicionado ao carrinho com sucesso!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
     <div class="flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -172,7 +183,7 @@
         <footer class="mt-auto mb-0 pb-0 header-sakkola footer">
             <div class="d-flex align-items-center justify-content-between mx-4">
                 <a class="navbar-brand text-white fw-bold me-3" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="/img/Logo-Escrito-White.png" class="logo-footer ms-0" style="height: 35px;"/>
+                    <img src="/img/Logo-Escrito-White.png" class="logo-footer ms-0" style="height: 35px;" />
                 </a>
                 <div class="ms-5 gap-4 justify-content-end d-flex align-items-center gap-3 fs-5">
                     <a asp-controller="carrinho" asp-action="Index" class="text-white">
@@ -206,16 +217,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
-    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
-        <div id="toastCarrinho" class="toast align-items-center text-white border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body d-flex align-items-center gap-2" id="toastCarrinhoMensagem">           
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
-            </div>
-        </div>
-    </div>
-
 </body>
 </html>

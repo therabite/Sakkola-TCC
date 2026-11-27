@@ -1,4 +1,4 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
+﻿document.addEventListener("DOMContentLoaded", function() {
     inicializarCarrossel();
 });
 
@@ -26,7 +26,7 @@ async function enviarPostAjax(url) {
     }
 }
 
-window.alterarQtd = function (delta) {
+window.alterarQtd = function(delta) {
     const input = document.getElementById('quantidadeInput');
     if (!input) return;
 
@@ -34,74 +34,40 @@ window.alterarQtd = function (delta) {
     input.value = Math.max(1, valorAtual + delta);
 };
 
-function mostrarNotificacao(mensagem, tipo, duracaoMs, callbackAoFechar) {
-    const toastEl = document.getElementById('toastCarrinho');
-    const toastBody = document.getElementById('toastCarrinhoMensagem');
+window.adicionarAoCarrinho = async function(idProduto, quantidadeCustomizada) {
+    let quantidade = 1;
 
-    toastEl.classList.remove('bg-success', 'bg-danger');
-
-    if (tipo === 'sucesso') {
-        toastEl.classList.add('bg-success');
-        toastBody.innerHTML = `<i class="bi bi-check-circle-fill fs-5"></i> <span>${mensagem}</span>`;
+    if (quantidadeCustomizada !== undefined && quantidadeCustomizada > 0) {
+        quantidade = quantidadeCustomizada;
     } else {
-        toastEl.classList.add('bg-danger');
-        toastBody.innerHTML = `<i class="bi bi-exclamation-circle-fill fs-5"></i> <span>${mensagem}</span>`;
-    }
-    $(toastEl).off('hidden.bs.toast');
-
-    if (typeof callbackAoFechar === 'function') {
-        $(toastEl).one('hidden.bs.toast', function () {
-            callbackAoFechar();
-        });
-    }
-    const toastInstance = bootstrap.Toast.getOrCreateInstance(toastEl, {
-        autohide: true,
-        delay: duracaoMs
-    });
-    toastInstance.show();
-}
-
-function adicionarAoCarrinho(idProduto, quantidade = 1) {
-    if (!quantidade) {
-        const inputQtd = document.getElementById('quantidadeInput');
-        quantidade = inputQtd ? parseInt(inputQtd.value) || 1 : 1;
-    }
-
-    var token = $('input[name="__RequestVerificationToken"]').val();
-
-    $.ajax({
-        url: '/Carrinho/Adicionar',
-        type: 'POST',
-        headers: {
-            "RequestVerificationToken": token
-        },
-        data: {
-            idProduto: idProduto,
-            quantidade: quantidade
-        },
-        success: function (response) {
-            if (response.requiresLogin) {
-                mostrarNotificacao(response.message, 'erro', 2500, function () {
-                    window.location.href = response.redirect;
-                });
-            } else if (response.success) {
-                mostrarNotificacao("Produto adicionado ao carrinho!", 'sucesso', 3000);
-                
-                if (response.totalItens !== undefined) {
-                    $('#contador-carrinho').text(response.totalItens);
-                }
-            } else {
-                mostrarNotificacao("Não foi possível adicionar o produto.", 'erro', 3000);
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error("Erro AJAX:", status, error, xhr.responseText);
-            mostrarNotificacao("Erro de comunicação com o servidor.", 'erro', 3000);
+        const qtdInput = document.getElementById('quantidadeInput');
+        if (qtdInput) {
+            quantidade = Math.max(1, parseInt(qtdInput.value, 10) || 1);
         }
-    });
-}
+    }
 
-window.alterarQtdItem = async function (idItem, delta) {
+    const data = await enviarPostAjax(`/Carrinho/Adicionar?idProduto=${idProduto}&quantidade=${quantidade}`);
+    if (!data) return;
+
+    if (data.requiresLogin) {
+        alert(data.message);
+        window.location.href = data.redirect;
+    } else if (data.success) {
+        const toastEl = document.getElementById('toastCarrinho');
+        if (toastEl) {
+            new bootstrap.Toast(toastEl).show();
+        }
+
+        const badgeCarrinho = document.getElementById('cart-badge-count');
+        if (badgeCarrinho && data.totalItens !== undefined) {
+            badgeCarrinho.innerText = data.totalItens;
+        }
+    } else {
+        alert("Não foi possível adicionar o produto ao carrinho.");
+    }
+};
+
+window.alterarQtdItem = async function(idItem, delta) {
     const input = document.getElementById(`qtdItem_${idItem}`);
     if (!input) return;
 
